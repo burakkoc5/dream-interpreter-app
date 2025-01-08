@@ -1,0 +1,142 @@
+{
+  "core": {
+    "appName": "Rüya Günlüğü",
+    "mode": {
+      "darkMode": "Karanlık Mod",
+      "lightMode": "Aydınlık Mod"
+    },
+    "errors": {
+      "error": "Hata",
+      "userNotFound": "Kullanıcı bulunamadı",
+      "wrongPassword": "Geçersiz şifre",
+      "emailAlreadyInUse": "E-posta zaten kayıtlı",
+      "invalidEmail": "Geçersiz e-posta formatı",
+      "weakPassword": "Şifre çok zayıf",
+      "unknown": "Bilinmeyen bir hata oluştu",
+      "tryAgain": "Lütfen tekrar deneyin"
+    }
+  },
+  "registration": {
+    "welcomeText": "Hoş Geldiniz",
+    "email": {
+      "emailText": "E-posta",
+      "emailHint": "Lütfen e-posta adresinizi girin",
+      "emailValidation": "E-posta gerekli",
+      "emailInvalid": "Lütfen geçerli bir e-posta girin"
+    },
+    "password": {
+      "passwordText": "Şifre",
+      "passwordHint": "Lütfen şifrenizi girin",
+      "passwordValidation": "Şifre gerekli",
+      "passwordShort": "Şifre en az $minPasswordSize karakter olmalı",
+      "changePassword": {
+        "changePasswordText": "Şifreyi Değiştir",
+        "currentPassword": "Mevcut Şifre",
+        "currentPasswordValidator": "Lütfen mevcut şifrenizi girin",
+        "newPassword": "Yeni Şifre",
+        "newPasswordValidator": "Lütfen yeni şifrenizi girin",
+        "resetPasswordButton": "Şifreyi Sıfırla",
+        "confirmNewPassword": "Yeni Şifreyi Onayla",
+        "success": "Şifre başarıyla değiştirildi"
+      },
+      "resetPassword": {
+        "resetPasswordText": "Şifreyi Sıfırla",
+        "resetPasswordButton": "Sıfırlama linkini gönder",
+        "resetPasswordCaption": "E-posta adresinizi girin ve şifrenizi sıfırlamak için bir link gönderelim.",
+        "resetPasswordSuccess": "Şifre sıfırlama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin.",
+        "resetPasswordError": "Şifre sıfırlama e-postası gönderilirken hata oluştu",
+        "backToSignIn": "Giriş Sayfasına Geri Dön"
+      }
+    },
+    "confirmPassword": {
+      "confirmPasswordText": "Şifreyi Onayla",
+      "confirmPasswordHint": "Şifrenizi tekrar girin",
+      "confirmPasswordValidation": "Şifreyi tekrar girmeniz gerekiyor",
+      "confirmPasswordMismatch": "Şifreler eşleşmiyor"
+    },
+    "signUp": {
+      "signUpText": "Hesap Oluştur",
+      "signUpCaption": "Bugün Rüya Günlüğüne katılın",
+      "alreadyHaveAccount": "Zaten bir hesabınız var mı?"
+    },
+    "signIn": {
+      "signInText": "Giriş Yap",
+      "forgotPassword": "Şifrenizi mi unuttunuz?"
+    },
+    "signOut": {
+      "signOutText": "Çıkış Yap"
+    }
+  },
+  "dreamEntry": {
+    "newDream": "Yeni Rüya",
+    "saveDream": "Rüyayı Kaydet",
+    "dreamTitle": "Rüya Başlığı",
+    "dreamTitleHint": "Lütfen rüyanız için bir başlık girin",
+    "yourDream": "Sizin Rüyanız",
+    "tags": {
+      "tags": "Etiketler",
+      "Happiness": "mutluluk",
+      "Anxiety": "kaygı",
+      "Fear": "korku",
+      "Joy": "neşe",
+      "Anger": "öfke",
+      "Confusion": "karışıklık",
+      "Love": "sevgi",
+      "Peace": "barış",
+      "Sadness": "üzüntü",
+      "Excitement": "heyecan"
+    },
+    "moodRating": "Ruh Hali Değerlendirmesi",
+    "failedToSaveDream": "Rüya kaydedilemedi",
+    "dreamDetails": {
+      "addDetails": "Ayrıntı Ekle",
+      "addTags": "Etiketler Ekle",
+      "moodRating": "Ruh Hali Değerlendirmesi",
+      "confirmButton": "Onayla"
+    },
+    "dreamForm": {
+      "record": "Rüyanızı Kaydedin",
+      "content": "Rüya İçeriği",
+      "contentHint": "Lütfen rüya içeriğinizi girin",
+      "getInterpretation": "Yorum Al"
+    },
+    "interpretation": {
+      "title": "Rüya Yorumlaması",
+      "interpretationText": "Yorumlama",
+      "saveButton": "Yorumu Kaydet",
+      "shareButton": "Yorumu Paylaş"
+    }
+  },
+  "dreamDetail": "Rüya Açıklaması",
+  "dreamFilterOptions": {
+    "all": "Tüm",
+    "week": "Bu Hafta",
+    "month": "Bu Ay",
+    "favorites": "Favoriler"
+  },
+  "searchDreams": {
+    "searchDreams": "Rüyaları Ara",
+    "retryButton": "Tekrar Dene",
+    "noResults": "Hiç rüya bulunamadı",
+    "delete": "Sil",
+    "undoButton": "Geri Al"
+  },
+  "dreamHistory": {
+    "dreamHistory": "Rüya Günlüğü",
+    "noDreams": "Kaydedilen rüya yok",
+    "noDreamsCaption": "Henüz hiçbir rüya kaydetmediniz. Bugün rüyalarınızı kaydetmeye başlayın."
+  },
+  "profile": {
+    "profile": "Profil",
+    "username": "Kullanıcı Adı",
+    "profileNotFound": "Profil bulunamadı",
+    "dreamStats": "Rüya İstatistikleri",
+    "totalDreams": "Toplam Rüyalar",
+    "weeklyDreams": "Haftalık Rüyalar",
+    "completionRate": "Tamamlama Oranı",
+    "settings": "Ayarlar",
+    "notifications": "Bildirimler",
+    "changePassword": "Şifreyi Değiştir",
+    "logout": "Çıkış Yap"
+  }
+}

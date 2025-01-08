@@ -1,0 +1,144 @@
+{
+  "core": {
+    "appName": "Dream Journal",
+    "mode": {
+      "darkMode": "Dark Mode",
+      "lightMode": "Light Mode"
+    },
+    "errors": {
+      "error": "Error",
+      "userNotFound": "User not found",
+      "wrongPassword": "Invalid password",
+      "emailAlreadyInUse": "Email is already registered",
+      "invalidEmail": "Invalid email format",
+      "weakPassword": "Password is too weak",
+      "unknown": "An unknown error occurred",
+      "tryAgain": "Please try again"
+    }
+  },
+  "registration": {
+    "welcomeText": "Welcome Back",
+    "email": {
+      "emailText": "Email",
+      "emailHint": "Please enter your email",
+      "emailValidation": "Email is required",
+      "emailInvalid": "Please enter a valid email"
+    },
+    "password": {
+      "passwordText": "Password",
+      "passwordHint": "Please enter your password",
+      "passwordValidation": "Password is required",
+      "passwordShort": "Password must be at least $minPasswordSize characters",
+      "changePassword": {
+        "changePasswordText": "Change Password",
+        "currentPassword": "Current Password",
+        "currentPasswordValidator": "Please enter your current password",
+        "newPassword": "New Password",
+        "newPasswordValidator": "Please enter a new password",
+        "resetPasswordButton": "Reset Password",
+        "confirmNewPassword": "Confirm New Password",
+        "success": "Password successfully changed"
+      },
+      "resetPassword": {
+        "resetPasswordText": "Reset Password",
+        "resetPasswordButton": "Send Reset link",
+        "resetPasswordCaption": "Enter your email address and we'll send you a link to reset your password.",
+        "resetPasswordSuccess": "Password reset email sent. Please check your inbox.",
+        "resetPasswordError": "Error sending password reset email",
+        "backToSignIn": "Back to Sign In"
+      }
+    },
+    "confirmPassword": {
+      "confirmPasswordText": "Confirm Password",
+      "confirmPasswordHint": "Re-enter your password",
+      "confirmPasswordValidation": "Re-enter password is required",
+      "confirmPasswordMismatch": "Passwords do not match"
+    },
+    "signUp": {
+      "signUpText": "Create Account",
+      "signUpCaption": "Join Dream Journal today",
+      "alreadyHaveAccount": "Already have an account?"
+    },
+    "signIn": {
+      "signInText": "Sign In",
+      "forgotPassword": "Forgot Password?"
+    },
+
+    "signOut": {
+      "signOutText": "Sign Out"
+    }
+  },
+  "dreamEntry": {
+    "newDream": "New Dream",
+    "saveDream": "Save Dream",
+    "dreamTitle": "Dream Title",
+    "dreamTitleHint": "Please enter a title for your dream",
+    "yourDream": "Your Dream",
+
+    "tags": {
+      "tags": "Tags",
+      "Happiness": "happiness",
+      "Anxiety": "anxiety",
+      "Fear": "fear",
+      "Joy": "joy",
+      "Anger": "anger",
+      "Confusion": "confusion",
+      "Love": "love",
+      "Peace": "peace",
+      "Sadness": "sadness",
+      "Excitement": "excitement"
+    },
+    "moodRating": "Mood Rating",
+    "failedToSaveDream": "Failed to save dream",
+    "dreamDetails": {
+      "addDetails": "Add Details",
+      "addTags": "Add tags",
+      "moodRating": "Mood Rating",
+      "confirmButton": "Confirm"
+    },
+    "dreamForm": {
+      "record": "Record Your Dream",
+      "content": "Dream Content",
+      "contentHint": "Please enter your dream content",
+      "getInterpretation": "Get Interpretation"
+    },
+    "interpretation": {
+      "title": "Dream Interpretation",
+      "interpretationText": "Interpretation",
+      "saveButton": "Save Interpretation",
+      "shareButton": "Share Interpretation"
+    }
+  },
+  "dreamDetail": "Dream Description",
+  "dreamFilterOptions": {
+    "all": "All",
+    "week": "This Week",
+    "month": "This Month",
+    "favorites": "Favorites"
+  },
+  "searchDreams": {
+    "searchDreams": "Search Dreams",
+    "retryButton": "Retry",
+    "noResults": "No dreams found",
+    "delete": "Delete",
+    "undoButton": "Undo"
+  },
+  "dreamHistory": {
+    "dreamHistory": "Dream Journal",
+    "noDreams": "No dreams recorded",
+    "noDreamsCaption": "You haven't recorded any dreams yet. Start recording your dreams today."
+  },
+  "profile": {
+    "profile": "Profile",
+    "username": "Username",
+    "profileNotFound": "Profile not found",
+    "dreamStats": "Dream Statistics",
+    "totalDreams": "Total Dreams",
+    "weeklyDreams": "Weekly Dreams",
+    "completionRate": "Completion Rate",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "changePassword": "Change Password",
+    "logout": "Logout"
+  }
+}

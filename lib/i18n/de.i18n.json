@@ -1,0 +1,142 @@
+{
+  "core": {
+    "appName": "Traumtagebuch",
+    "mode": {
+      "darkMode": "Dunkler Modus",
+      "lightMode": "Heller Modus"
+    },
+    "errors": {
+      "error": "Fehler",
+      "userNotFound": "Benutzer nicht gefunden",
+      "wrongPassword": "Ungültiges Passwort",
+      "emailAlreadyInUse": "E-Mail ist bereits registriert",
+      "invalidEmail": "Ungültiges E-Mail-Format",
+      "weakPassword": "Passwort ist zu schwach",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten",
+      "tryAgain": "Bitte versuche es erneut"
+    }
+  },
+  "registration": {
+    "welcomeText": "Willkommen zurück",
+    "email": {
+      "emailText": "E-Mail",
+      "emailHint": "Bitte geben Sie Ihre E-Mail-Adresse ein",
+      "emailValidation": "E-Mail ist erforderlich",
+      "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
+    },
+    "password": {
+      "passwordText": "Passwort",
+      "passwordHint": "Bitte geben Sie Ihr Passwort ein",
+      "passwordValidation": "Passwort ist erforderlich",
+      "passwordShort": "Das Passwort muss mindestens $minPasswordSize Zeichen lang sein",
+      "changePassword": {
+        "changePasswordText": "Passwort ändern",
+        "currentPassword": "Aktuelles Passwort",
+        "currentPasswordValidator": "Bitte geben Sie Ihr aktuelles Passwort ein",
+        "newPassword": "Neues Passwort",
+        "newPasswordValidator": "Bitte geben Sie ein neues Passwort ein",
+        "resetPasswordButton": "Passwort zurücksetzen",
+        "confirmNewPassword": "Neues Passwort bestätigen",
+        "success": "Passwort erfolgreich geändert"
+      },
+      "resetPassword": {
+        "resetPasswordText": "Passwort zurücksetzen",
+        "resetPasswordButton": "Zurücksetz-Link senden",
+        "resetPasswordCaption": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.",
+        "resetPasswordSuccess": "E-Mail zum Zurücksetzen des Passworts gesendet. Bitte überprüfen Sie Ihren Posteingang.",
+        "resetPasswordError": "Fehler beim Senden der Passwort-Zurücksetzungs-E-Mail",
+        "backToSignIn": "Zurück zur Anmeldung"
+      }
+    },
+    "confirmPassword": {
+      "confirmPasswordText": "Passwort bestätigen",
+      "confirmPasswordHint": "Geben Sie Ihr Passwort erneut ein",
+      "confirmPasswordValidation": "Passwortbestätigung ist erforderlich",
+      "confirmPasswordMismatch": "Passwörter stimmen nicht überein"
+    },
+    "signUp": {
+      "signUpText": "Konto erstellen",
+      "signUpCaption": "Treten Sie noch heute dem Traumtagebuch bei",
+      "alreadyHaveAccount": "Haben Sie bereits ein Konto?"
+    },
+    "signIn": {
+      "signInText": "Anmelden",
+      "forgotPassword": "Passwort vergessen?"
+    },
+    "signOut": {
+      "signOutText": "Abmelden"
+    }
+  },
+  "dreamEntry": {
+    "newDream": "Neuer Traum",
+    "saveDream": "Traum speichern",
+    "dreamTitle": "Traumtitel",
+    "dreamTitleHint": "Bitte geben Sie einen Titel für Ihren Traum ein",
+    "yourDream": "Ihr Traum",
+    "tags": {
+      "tags": "Tags",
+      "Happiness": "Glück",
+      "Anxiety": "Angst",
+      "Fear": "Furcht",
+      "Joy": "Freude",
+      "Anger": "Wut",
+      "Confusion": "Verwirrung",
+      "Love": "Liebe",
+      "Peace": "Frieden",
+      "Sadness": "Traurigkeit",
+      "Excitement": "Aufregung"
+    },
+    "moodRating": "Stimmungsbewertung",
+    "failedToSaveDream": "Fehler beim Speichern des Traums",
+    "dreamDetails": {
+      "addDetails": "Details hinzufügen",
+      "addTags": "Tags hinzufügen",
+      "moodRating": "Stimmungsbewertung",
+      "confirmButton": "Bestätigen"
+    },
+    "dreamForm": {
+      "record": "Traum aufzeichnen",
+      "content": "Trauminhalt",
+      "contentHint": "Bitte geben Sie den Inhalt Ihres Traums ein",
+      "getInterpretation": "Deutung erhalten"
+    },
+    "interpretation": {
+      "title": "Traumdeutung",
+      "interpretationText": "Deutung",
+      "saveButton": "Deutung speichern",
+      "shareButton": "Deutung teilen"
+    }
+  },
+  "dreamDetail": "Traumbeschreibung",
+  "dreamFilterOptions": {
+    "all": "Alle",
+    "week": "Diese Woche",
+    "month": "Diesen Monat",
+    "favorites": "Favoriten"
+  },
+  "searchDreams": {
+    "searchDreams": "Träume suchen",
+    "retryButton": "Erneut versuchen",
+    "noResults": "Keine Träume gefunden",
+    "delete": "Löschen",
+    "undoButton": "Rückgängig machen"
+  },
+  "dreamHistory": {
+    "dreamHistory": "Traumtagebuch",
+    "noDreams": "Keine Träume aufgezeichnet",
+    "noDreamsCaption": "Sie haben noch keine Träume aufgezeichnet. Beginnen Sie noch heute, Ihre Träume zu protokollieren."
+  },
+  "profile": {
+    "profile": "Profil",
+    "username": "Benutzername",
+    "profileNotFound": "Profil nicht gefunden",
+    "dreamStats": "Traumstatistiken",
+    "totalDreams": "Gesamtträume",
+    "weeklyDreams": "Wöchentliche Träume",
+    "completionRate": "Abschlussrate",
+    "settings": "Einstellungen",
+    "notifications": "Benachrichtigungen",
+    "changePassword": "Passwort ändern",
+    "logout": "Abmelden"
+  }
+}
