@@ -12,7 +12,10 @@ import 'package:dream/features/dream_entry/presentation/interpretation_screen.da
 import 'package:dream/features/dream_history/models/dream_history_model.dart';
 import 'package:dream/features/dream_history/presentation/dream_detail_screen.dart';
 import 'package:dream/features/dream_history/presentation/dream_history_screen.dart';
+import 'package:dream/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:dream/features/profile/presentation/profile_screen.dart';
+import 'package:dream/features/profile/presentation/reminder_settings_screen.dart';
+import 'package:dream/features/splash/presentation/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -20,6 +23,7 @@ class AppRouter {
 
   AppRouter()
       : router = GoRouter(
+          initialLocation: AppRoute.splash,
           redirect: RouteGuard.guard,
           routes: [
             // Root route with auth check
@@ -77,6 +81,20 @@ class AppRouter {
               builder: (context, state) => DreamDetailScreen(
                 dream: state.extra as DreamHistoryModel,
               ),
+            ),
+            GoRoute(
+              path: AppRoute.splash,
+              builder: (context, state) => const SplashScreen(),
+            ),
+
+            // Onboarding route
+            GoRoute(
+              path: AppRoute.onboarding,
+              builder: (context, state) => const OnboardingScreen(),
+            ),
+            GoRoute(
+              path: AppRoute.reminderSettings,
+              builder: (context, state) => const ReminderSettingsScreen(),
             ),
           ],
         );

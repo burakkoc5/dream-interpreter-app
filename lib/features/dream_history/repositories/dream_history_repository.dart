@@ -12,42 +12,44 @@ class DreamHistoryRepository {
 
   static const int pageSize = 10;
 
-  Future<List<DreamHistoryModel>> getDreamHistory(String userId,
-      {int? lastDocumentIndex}) async {
+  Future<Map<String, dynamic>> getDreamHistory(
+    String userId, {
+    DocumentSnapshot? lastDocument,
+  }) async {
     try {
-      debugPrint(
-          'Fetching dreams for userId: $userId, lastIndex: $lastDocumentIndex');
-
       var query = _firestore
           .collection('dreams')
           .where('userId', isEqualTo: userId)
-          .orderBy('createdAt', descending: true)
+          .orderBy('createdAt', descending: false)
           .limit(pageSize);
+      print('Last document: ${lastDocument?.id}');
+      print('userId on repository: $userId');
 
-      if (lastDocumentIndex != null) {
-        final lastDocSnapshot = await _firestore
-            .collection('dreams')
-            .where('userId', isEqualTo: userId)
-            .orderBy('createdAt', descending: true)
-            .limit(1)
-            .get();
+      print('Fetching dream history query ready...');
 
-        if (lastDocSnapshot.docs.isNotEmpty) {
-          final lastDoc = lastDocSnapshot.docs.last;
-          query = query.startAfter(
-              [lastDoc['createdAt']]); // Use the 'createdAt' field value
-        }
+      if (lastDocument != null) {
+        query = query.startAfterDocument(lastDocument);
       }
-      print('Query: ${query.toString()}');
-      print(lastDocumentIndex);
+
+      print('Fetching dream history...');
 
       final snapshot = await query.get();
-      debugPrint('Found ${snapshot.docs.length} dreams');
+      print('Fetched ${snapshot.docs.length} dreams');
 
-      return snapshot.docs.map((doc) {
+      if (snapshot.docs.isEmpty) {
+        print('No dreams found');
+        return {
+          'dreams': [],
+          'lastDocument': lastDocument,
+          'isNewData': false, // No new data
+        };
+      }
+
+      print('Fetched ${snapshot.docs.length} dreams');
+
+      final dreams = snapshot.docs.map((doc) {
         final data = doc.data();
 
-        // Handle different date formats
         DateTime createdAt;
         final createdAtData = data['createdAt'];
         if (createdAtData is Timestamp) {
@@ -59,7 +61,6 @@ class DreamHistoryRepository {
           debugPrint(
               'Unexpected createdAt format for dream ${doc.id}: $createdAtData');
         }
-
         return DreamHistoryModel(
           id: doc.id,
           userId: data['userId'] as String,
@@ -72,11 +73,16 @@ class DreamHistoryRepository {
           isFavourite: data['isFavourite'] as bool? ?? false,
         );
       }).toList();
-    } catch (e, stackTrace) {
-      debugPrint('Error in getDreamHistory: $e');
-      debugPrint('StackTrace: $stackTrace');
-      debugPrint('UserId that caused error: $userId');
-      throw Exception('Failed to fetch dream history');
+
+      final lastFetchedDocument = snapshot.docs.last;
+
+      return {
+        'dreams': dreams,
+        'lastDocument': lastFetchedDocument,
+        'isNewData': true, // New data fetched
+      };
+    } catch (e) {
+      throw Exception('Failed to fetch dream history: $e');
     }
   }
 

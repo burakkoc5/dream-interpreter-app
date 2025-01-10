@@ -24,6 +24,8 @@ mixin _$DreamHistoryState {
   bool get isLoading => throw _privateConstructorUsedError;
   bool get isLoadingMore => throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
+  DocumentSnapshot<Object?>? get lastDocument =>
+      throw _privateConstructorUsedError;
   int get currentPage => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
 
@@ -48,6 +50,7 @@ abstract class $DreamHistoryStateCopyWith<$Res> {
       bool isLoading,
       bool isLoadingMore,
       bool hasMore,
+      DocumentSnapshot<Object?>? lastDocument,
       int currentPage,
       String? error});
 }
@@ -74,6 +77,7 @@ class _$DreamHistoryStateCopyWithImpl<$Res, $Val extends DreamHistoryState>
     Object? isLoading = null,
     Object? isLoadingMore = null,
     Object? hasMore = null,
+    Object? lastDocument = freezed,
     Object? currentPage = null,
     Object? error = freezed,
   }) {
@@ -106,6 +110,10 @@ class _$DreamHistoryStateCopyWithImpl<$Res, $Val extends DreamHistoryState>
           ? _value.hasMore
           : hasMore // ignore: cast_nullable_to_non_nullable
               as bool,
+      lastDocument: freezed == lastDocument
+          ? _value.lastDocument
+          : lastDocument // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
       currentPage: null == currentPage
           ? _value.currentPage
           : currentPage // ignore: cast_nullable_to_non_nullable
@@ -134,6 +142,7 @@ abstract class _$$DreamHistoryStateImplCopyWith<$Res>
       bool isLoading,
       bool isLoadingMore,
       bool hasMore,
+      DocumentSnapshot<Object?>? lastDocument,
       int currentPage,
       String? error});
 }
@@ -158,6 +167,7 @@ class __$$DreamHistoryStateImplCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? isLoadingMore = null,
     Object? hasMore = null,
+    Object? lastDocument = freezed,
     Object? currentPage = null,
     Object? error = freezed,
   }) {
@@ -190,6 +200,10 @@ class __$$DreamHistoryStateImplCopyWithImpl<$Res>
           ? _value.hasMore
           : hasMore // ignore: cast_nullable_to_non_nullable
               as bool,
+      lastDocument: freezed == lastDocument
+          ? _value.lastDocument
+          : lastDocument // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
       currentPage: null == currentPage
           ? _value.currentPage
           : currentPage // ignore: cast_nullable_to_non_nullable
@@ -213,6 +227,7 @@ class _$DreamHistoryStateImpl implements _DreamHistoryState {
       this.isLoading = false,
       this.isLoadingMore = false,
       this.hasMore = true,
+      this.lastDocument,
       this.currentPage = 0,
       this.error})
       : _dreams = dreams,
@@ -252,6 +267,8 @@ class _$DreamHistoryStateImpl implements _DreamHistoryState {
   @JsonKey()
   final bool hasMore;
   @override
+  final DocumentSnapshot<Object?>? lastDocument;
+  @override
   @JsonKey()
   final int currentPage;
   @override
@@ -259,7 +276,7 @@ class _$DreamHistoryStateImpl implements _DreamHistoryState {
 
   @override
   String toString() {
-    return 'DreamHistoryState(dreams: $dreams, filteredDreams: $filteredDreams, selectedFilter: $selectedFilter, searchQuery: $searchQuery, isLoading: $isLoading, isLoadingMore: $isLoadingMore, hasMore: $hasMore, currentPage: $currentPage, error: $error)';
+    return 'DreamHistoryState(dreams: $dreams, filteredDreams: $filteredDreams, selectedFilter: $selectedFilter, searchQuery: $searchQuery, isLoading: $isLoading, isLoadingMore: $isLoadingMore, hasMore: $hasMore, lastDocument: $lastDocument, currentPage: $currentPage, error: $error)';
   }
 
   @override
@@ -279,6 +296,8 @@ class _$DreamHistoryStateImpl implements _DreamHistoryState {
             (identical(other.isLoadingMore, isLoadingMore) ||
                 other.isLoadingMore == isLoadingMore) &&
             (identical(other.hasMore, hasMore) || other.hasMore == hasMore) &&
+            (identical(other.lastDocument, lastDocument) ||
+                other.lastDocument == lastDocument) &&
             (identical(other.currentPage, currentPage) ||
                 other.currentPage == currentPage) &&
             (identical(other.error, error) || other.error == error));
@@ -294,6 +313,7 @@ class _$DreamHistoryStateImpl implements _DreamHistoryState {
       isLoading,
       isLoadingMore,
       hasMore,
+      lastDocument,
       currentPage,
       error);
 
@@ -316,6 +336,7 @@ abstract class _DreamHistoryState implements DreamHistoryState {
       final bool isLoading,
       final bool isLoadingMore,
       final bool hasMore,
+      final DocumentSnapshot<Object?>? lastDocument,
       final int currentPage,
       final String? error}) = _$DreamHistoryStateImpl;
 
@@ -333,6 +354,8 @@ abstract class _DreamHistoryState implements DreamHistoryState {
   bool get isLoadingMore;
   @override
   bool get hasMore;
+  @override
+  DocumentSnapshot<Object?>? get lastDocument;
   @override
   int get currentPage;
   @override

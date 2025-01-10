@@ -1,7 +1,16 @@
 /// Defines the route names used throughout the app.
 abstract class AppRoute {
+  // Splash route
+  static const splash = '/splash';
+
+  // Onboarding routes
+  static const onboarding = '/onboarding';
+
   // Root route
   static const root = '/auth';
+
+  // Reminder settings
+  static const reminderSettings = '/reminder-settings';
 
   // Auth routes
   static const login = '/auth/login';

@@ -10,6 +10,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'
+    as _i163;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
@@ -32,10 +34,17 @@ import '../../features/dream_history/application/dream_history_cubit.dart'
     as _i127;
 import '../../features/dream_history/repositories/dream_history_repository.dart'
     as _i386;
+import '../../features/onboarding/cubit/onboarding_cubit.dart' as _i547;
 import '../../features/profile/application/profile_cubit.dart' as _i402;
 import '../../features/profile/application/stats_cubit.dart' as _i382;
 import '../../features/profile/repositories/profile_repository.dart' as _i155;
 import '../../features/profile/repositories/stats_repository.dart' as _i733;
+import '../../shared/repositories/notification_repository.dart' as _i517;
+import '../../shared/repositories/time_zone_repository.dart' as _i246;
+import '../../shared/services/android_notification_settings.dart' as _i368;
+import '../../shared/services/ios_notification_settings.dart' as _i558;
+import '../../shared/services/platform_notification_settings.dart' as _i411;
+import '../../shared/services/time_zone_service.dart' as _i604;
 import 'injection.dart' as _i464;
 
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -51,16 +60,33 @@ Future<_i174.GetIt> init(
   );
   final registerModule = _$RegisterModule();
   gh.factory<_i342.OpenAIService>(() => _i342.OpenAIService());
+  gh.factory<_i246.TimeZoneRepository>(() => _i246.TimeZoneRepository());
+  gh.factory<_i368.AndroidNotificationSettings>(
+      () => _i368.AndroidNotificationSettings());
+  gh.factory<_i558.IOSNotificationSettings>(
+      () => _i558.IOSNotificationSettings());
   await gh.singletonAsync<_i460.SharedPreferences>(
     () => registerModule.sharedPreferences,
     preResolve: true,
   );
   gh.singleton<_i59.FirebaseAuth>(() => registerModule.firebaseAuth);
   gh.singleton<_i974.FirebaseFirestore>(() => registerModule.firebaseFirestore);
+  gh.singleton<_i163.FlutterLocalNotificationsPlugin>(
+      () => registerModule.notifications);
+  gh.singleton<_i411.IPlatformNotificationSettings>(
+      () => registerModule.platformSettings);
+  gh.singleton<_i604.ITimeZoneService>(() => registerModule.timeZoneService);
   gh.singleton<_i567.LocalStorageService>(
       () => _i567.LocalStorageService(gh<_i460.SharedPreferences>()));
   gh.factory<_i223.ThemeCubit>(
       () => _i223.ThemeCubit(gh<_i460.SharedPreferences>()));
+  gh.factory<_i547.OnboardingCubit>(
+      () => _i547.OnboardingCubit(gh<_i460.SharedPreferences>()));
+  gh.singleton<_i517.NotificationRepository>(() => _i517.NotificationRepository(
+        gh<_i163.FlutterLocalNotificationsPlugin>(),
+        gh<_i411.IPlatformNotificationSettings>(),
+        gh<_i604.ITimeZoneService>(),
+      ));
   gh.factory<_i386.DreamHistoryRepository>(
       () => _i386.DreamHistoryRepository(gh<_i974.FirebaseFirestore>()));
   gh.factory<_i733.StatsRepository>(

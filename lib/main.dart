@@ -5,6 +5,8 @@ import 'package:dream/core/routing/app_router.dart';
 import 'package:dream/features/auth/application/auth_cubit.dart';
 import 'package:dream/features/dream_entry/application/dream_entry_cubit.dart';
 import 'package:dream/features/dream_history/application/dream_history_cubit.dart';
+import 'package:dream/features/onboarding/cubit/onboarding_cubit.dart';
+import 'package:dream/features/profile/application/profile_cubit.dart';
 import 'package:dream/firebase_options.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,6 +49,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<DreamHistoryCubit>(
           create: (context) => getIt<DreamHistoryCubit>(),
+        ),
+        BlocProvider<OnboardingCubit>(
+          create: (context) => getIt<OnboardingCubit>(),
+        ),
+        BlocProvider<ProfileCubit>(
+          create: (context) => getIt<ProfileCubit>(),
         ),
       ],
       child: BlocBuilder<ThemeCubit, bool>(

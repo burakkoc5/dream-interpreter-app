@@ -2,6 +2,7 @@ import 'package:dream/core/routing/app_route_names.dart';
 import 'package:dream/features/auth/application/auth_cubit.dart';
 import 'package:dream/features/auth/application/auth_state.dart';
 import 'package:dream/i18n/strings.g.dart';
+import 'package:dream/shared/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -100,9 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         : Text(t.registration.signIn.signInText),
                   ),
                 ),
-                TextButton(
+                AppButton(
                   onPressed: () => context.push(AppRoute.register),
-                  child: Text(t.registration.signUp.signUpText),
+                  text: (t.registration.signUp.signUpText),
                 ),
                 TextButton(
                   onPressed: () => context.push(AppRoute.passwordReset),

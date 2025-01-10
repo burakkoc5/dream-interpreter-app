@@ -13,6 +13,13 @@ class ProfileRepository {
   ProfileRepository(this._firestore);
 
   Stream<Profile> getProfile(String userId) {
+    print('ProfileRepository: Getting profile for user $userId');
+    (_firestore
+        .collection('users')
+        .doc(userId)
+        .snapshots()
+        .length
+        .then((value) => print('ProfileRepository: Profile length: $value')));
     return _firestore
         .collection('users')
         .doc(userId)
@@ -25,6 +32,14 @@ class ProfileRepository {
         .collection('users')
         .doc(profile.userId)
         .update(profile.toJson());
+  }
+
+  Future<void> updateProfilePreferences(Map<String, dynamic> data) async {
+    print('ProfileRepository: Updating profile preferences');
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) throw Exception('User not authenticated');
+
+    await _firestore.collection('users').doc(userId).update(data);
   }
 
   Future<void> createInitialProfile({
@@ -68,5 +83,6 @@ class ProfileRepository {
         .collection('users')
         .doc(user.uid)
         .update({'displayName': newName});
+    print('ProfileRepository: Display name updated successfully');
   }
 }

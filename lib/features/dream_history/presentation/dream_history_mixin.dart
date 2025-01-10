@@ -21,7 +21,12 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
   @override
   void initState() {
     super.initState();
-    context.read<DreamHistoryCubit>().loadDreams();
+    final cubit = context.read<DreamHistoryCubit>();
+    if (cubit.state.dreams.isEmpty) {
+      cubit.loadDreams();
+    } else {
+      cubit.loadDreams(refresh: false);
+    }
   }
 
   @override

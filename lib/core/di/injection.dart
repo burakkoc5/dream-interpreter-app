@@ -1,6 +1,13 @@
 // 1. Authentication
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dream/core/di/injection.config.dart';
+import 'package:dream/shared/repositories/time_zone_repository.dart';
+import 'package:dream/shared/services/android_notification_settings.dart';
+import 'package:dream/shared/services/ios_notification_settings.dart';
+import 'package:dream/shared/services/platform_notification_settings.dart';
+import 'package:dream/shared/services/time_zone_service.dart';
 
 // 2. Dream Entry
 
@@ -10,6 +17,7 @@ import 'package:dream/core/di/injection.config.dart';
 
 // 5. Third-party services
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +31,7 @@ final getIt = GetIt.instance;
 )
 Future<void> configureDependencies() async {
   // First, initialize the generated dependencies
+
   await init(getIt);
   // Third-party services
   // getIt.registerSingletonAsync<SharedPreferences>(
@@ -118,4 +127,16 @@ abstract class RegisterModule {
 
   @singleton
   FirebaseFirestore get firebaseFirestore => FirebaseFirestore.instance;
+
+  @singleton
+  FlutterLocalNotificationsPlugin get notifications =>
+      FlutterLocalNotificationsPlugin();
+
+  @singleton
+  IPlatformNotificationSettings get platformSettings => Platform.isIOS
+      ? IOSNotificationSettings()
+      : AndroidNotificationSettings();
+
+  @singleton
+  ITimeZoneService get timeZoneService => TimeZoneRepository();
 }
