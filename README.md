@@ -28,7 +28,7 @@ A Flutter mobile application that helps users record their dreams and receive AI
   - Customizable user profiles
   - Dream statistics and insights
   - Account management features
-  - Notification preferences (Coming Soon)
+  - Notification preferences
 
 ## Known Issues
 
