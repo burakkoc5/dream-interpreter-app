@@ -3,6 +3,7 @@ import 'package:dream/features/auth/application/auth_cubit.dart';
 import 'package:dream/features/auth/application/auth_state.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:dream/shared/widgets/app_button.dart';
+import 'package:dream/shared/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -40,10 +41,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(24.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -52,38 +55,36 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Text(
                   t.registration.welcomeText,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
+                  ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 32),
-                TextFormField(
+                const SizedBox(height: 40),
+                AppTextField(
                   controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: t.registration.email.emailText,
-                    border: OutlineInputBorder(),
-                  ),
+                  label: t.registration.email.emailText,
+                  prefixIcon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
                       return t.registration.email.emailValidation;
                     }
+                    if (!value!.contains('@')) {
+                      return t.registration.email.emailInvalid;
+                    }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
+                AppTextField(
                   controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: t.registration.password.passwordText,
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(_isPasswordVisible
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                      onPressed: () => setState(
-                          () => _isPasswordVisible = !_isPasswordVisible),
-                    ),
-                  ),
+                  label: t.registration.password.passwordText,
+                  prefixIcon: Icons.lock_outline,
+                  suffixIcon: _isPasswordVisible
+                      ? Icons.visibility_off
+                      : Icons.visibility,
                   obscureText: !_isPasswordVisible,
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
@@ -92,22 +93,30 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 32),
                 BlocBuilder<AuthCubit, AuthState>(
-                  builder: (context, state) => ElevatedButton(
-                    onPressed: state.isLoading ? null : _handleLogin,
-                    child: state.isLoading
-                        ? const CircularProgressIndicator()
-                        : Text(t.registration.signIn.signInText),
+                  builder: (context, state) => AppButton(
+                    text: t.registration.signIn.signInText,
+                    onPressed: _handleLogin,
+                    isLoading: state.isLoading,
+                    icon: Icons.login,
                   ),
                 ),
+                const SizedBox(height: 16),
                 AppButton(
+                  text: t.registration.signUp.signUpText,
                   onPressed: () => context.push(AppRoute.register),
-                  text: (t.registration.signUp.signUpText),
+                  variant: AppButtonVariant.ghost,
                 ),
+                const SizedBox(height: 16),
                 TextButton(
                   onPressed: () => context.push(AppRoute.passwordReset),
-                  child: Text(t.registration.signIn.forgotPassword),
+                  child: Text(
+                    t.registration.signIn.forgotPassword,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
                 ),
               ],
             ),

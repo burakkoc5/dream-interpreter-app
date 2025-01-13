@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user is accessing their own document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    match /dreams/{dreamId} {
+      // Allow reading the collection
+      allow list: if request.auth != null;
+      
+      // Allow reading individual documents if authenticated
+      allow get: if request.auth != null;
+      
+      // Allow creating and updating
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+      allow update: if request.auth != null && 
+                      request.auth.uid == resource.data.userId && 
+                      request.auth.uid == request.resource.data.userId;
+      
+      // Allow deleting own dreams
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    
+    // Rules for users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId);
+      
+      // Optional: Allow specific fields to be updated
+      allow update: if isOwner(userId) 
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['displayName', 'photoUrl', 'settings']);
+    }
+  }
+} 

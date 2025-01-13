@@ -98,6 +98,8 @@ class _TranslationsDreamFilterOptionsDe implements TranslationsDreamFilterOption
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
+	@override String get selectTag => 'Tag auswählen';
+	@override String get tags => 'Tags';
 	@override String get all => 'Alle';
 	@override String get week => 'Diese Woche';
 	@override String get month => 'Diesen Monat';
@@ -176,6 +178,7 @@ class _TranslationsCoreErrorsDe implements TranslationsCoreErrorsEn {
 	@override String get weakPassword => 'Passwort ist zu schwach';
 	@override String get unknown => 'Ein unbekannter Fehler ist aufgetreten';
 	@override String get tryAgain => 'Bitte versuche es erneut';
+	@override String get userNotAuthenticated => 'Benutzer nicht authentifiziert';
 }
 
 // Path: registration.email
@@ -359,6 +362,7 @@ extension on TranslationsDe {
 			case 'core.errors.weakPassword': return 'Passwort ist zu schwach';
 			case 'core.errors.unknown': return 'Ein unbekannter Fehler ist aufgetreten';
 			case 'core.errors.tryAgain': return 'Bitte versuche es erneut';
+			case 'core.errors.userNotAuthenticated': return 'Benutzer nicht authentifiziert';
 			case 'registration.welcomeText': return 'Willkommen zurück';
 			case 'registration.email.emailText': return 'E-Mail';
 			case 'registration.email.emailHint': return 'Bitte geben Sie Ihre E-Mail-Adresse ein';
@@ -423,6 +427,8 @@ extension on TranslationsDe {
 			case 'dreamEntry.interpretation.saveButton': return 'Deutung speichern';
 			case 'dreamEntry.interpretation.shareButton': return 'Deutung teilen';
 			case 'dreamDetail': return 'Traumbeschreibung';
+			case 'dreamFilterOptions.selectTag': return 'Tag auswählen';
+			case 'dreamFilterOptions.tags': return 'Tags';
 			case 'dreamFilterOptions.all': return 'Alle';
 			case 'dreamFilterOptions.week': return 'Diese Woche';
 			case 'dreamFilterOptions.month': return 'Diesen Monat';

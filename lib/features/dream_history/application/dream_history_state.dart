@@ -2,20 +2,63 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dream/features/dream_history/models/dream_history_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'dream_history_state.freezed.dart';
+@immutable
+class DreamHistoryState {
+  final List<DreamHistoryModel> dreams;
+  final List<DreamHistoryModel> filteredDreams;
+  final String selectedFilter;
+  final String searchQuery;
+  final bool isLoading;
+  final bool isLoadingMore;
+  final bool hasMore;
+  final String? error;
+  final DocumentSnapshot? lastDocument;
+  final int currentPage;
+  final List<String> availableTags;
+  final String? selectedTag;
 
-@freezed
-class DreamHistoryState with _$DreamHistoryState {
-  const factory DreamHistoryState({
-    @Default([]) List<DreamHistoryModel> dreams,
-    @Default([]) List<DreamHistoryModel> filteredDreams,
-    @Default('All') String selectedFilter,
-    @Default('') String searchQuery,
-    @Default(false) bool isLoading,
-    @Default(false) bool isLoadingMore,
-    @Default(true) bool hasMore,
-    DocumentSnapshot? lastDocument,
-    @Default(0) int currentPage,
+  const DreamHistoryState({
+    this.dreams = const [],
+    this.filteredDreams = const [],
+    this.selectedFilter = 'All',
+    this.searchQuery = '',
+    this.isLoading = false,
+    this.isLoadingMore = false,
+    this.hasMore = true,
+    this.error,
+    this.lastDocument,
+    this.currentPage = 0,
+    this.availableTags = const [],
+    this.selectedTag,
+  });
+
+  DreamHistoryState copyWith({
+    List<DreamHistoryModel>? dreams,
+    List<DreamHistoryModel>? filteredDreams,
+    String? selectedFilter,
+    String? searchQuery,
+    bool? isLoading,
+    bool? isLoadingMore,
+    bool? hasMore,
     String? error,
-  }) = _DreamHistoryState;
+    DocumentSnapshot? lastDocument,
+    int? currentPage,
+    List<String>? availableTags,
+    String? selectedTag,
+  }) {
+    return DreamHistoryState(
+      dreams: dreams ?? this.dreams,
+      filteredDreams: filteredDreams ?? this.filteredDreams,
+      selectedFilter: selectedFilter ?? this.selectedFilter,
+      searchQuery: searchQuery ?? this.searchQuery,
+      isLoading: isLoading ?? this.isLoading,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      hasMore: hasMore ?? this.hasMore,
+      error: error,
+      lastDocument: lastDocument,
+      currentPage: currentPage ?? this.currentPage,
+      availableTags: availableTags ?? this.availableTags,
+      selectedTag: selectedTag,
+    );
+  }
 }

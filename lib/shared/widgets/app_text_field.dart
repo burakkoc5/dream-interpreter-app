@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// A customizable text field widget that follows the app's theme guidelines.
-class AppTextField extends StatelessWidget {
+/// A customizable text field widget that follows the app's ethereal theme guidelines.
+class AppTextField extends StatefulWidget {
   /// Creates an AppTextField with optional configuration parameters.
   const AppTextField({
     super.key,
@@ -16,6 +16,9 @@ class AppTextField extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.validator,
+    this.borderRadius,
+    this.filled = true,
+    this.autofillHints,
   });
 
   final TextEditingController? controller;
@@ -29,23 +32,118 @@ class AppTextField extends StatelessWidget {
   final IconData? prefixIcon;
   final IconData? suffixIcon;
   final String? Function(String?)? validator;
+  final double? borderRadius;
+  final bool filled;
+  final Iterable<String>? autofillHints;
+
+  @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  bool _isFocused = false;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        errorText: errorText,
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-        suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
+    final theme = Theme.of(context);
+    final radius = widget.borderRadius ?? 16.0;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius + 4),
+        boxShadow: [
+          if (_isFocused)
+            BoxShadow(
+              color: theme.colorScheme.primary.withOpacity(0.1),
+              blurRadius: 8,
+              spreadRadius: 2,
+            ),
+        ],
       ),
-      onChanged: onChanged,
-      keyboardType: keyboardType,
-      obscureText: obscureText,
-      maxLines: maxLines,
-      validator: validator,
+      child: Focus(
+        onFocusChange: (focused) => setState(() => _isFocused = focused),
+        child: TextFormField(
+          controller: widget.controller,
+          decoration: InputDecoration(
+            labelText: widget.label,
+            hintText: widget.hint,
+            errorText: widget.errorText,
+            prefixIcon: widget.prefixIcon != null
+                ? Icon(
+                    widget.prefixIcon,
+                    color: _isFocused
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.onSurface.withOpacity(0.6),
+                  )
+                : null,
+            suffixIcon: widget.suffixIcon != null
+                ? IconButton(
+                    icon: Icon(
+                      widget.suffixIcon,
+                      color: _isFocused
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.onSurface.withOpacity(0.6),
+                    ),
+                    onPressed: () => setState(() {
+                      if (widget.obscureText) {
+                        // Toggle password visibility
+                        widget.onChanged?.call(widget.controller?.text ?? '');
+                      }
+                    }),
+                  )
+                : null,
+            filled: widget.filled,
+            fillColor: theme.colorScheme.surface.withOpacity(0.8),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(radius),
+              borderSide: BorderSide(
+                color: theme.colorScheme.primary.withOpacity(0.2),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(radius),
+              borderSide: BorderSide(
+                color: theme.colorScheme.primary.withOpacity(0.2),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(radius),
+              borderSide: BorderSide(
+                color: theme.colorScheme.primary,
+                width: 2,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(radius),
+              borderSide: BorderSide(
+                color: theme.colorScheme.error,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(radius),
+              borderSide: BorderSide(
+                color: theme.colorScheme.error,
+                width: 2,
+              ),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 16,
+            ),
+          ),
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: theme.colorScheme.onSurface,
+          ),
+          cursorColor: theme.colorScheme.primary,
+          onChanged: widget.onChanged,
+          keyboardType: widget.keyboardType,
+          obscureText: widget.obscureText,
+          maxLines: widget.maxLines,
+          validator: widget.validator,
+          autofillHints: widget.autofillHints,
+        ),
+      ),
     );
   }
 }

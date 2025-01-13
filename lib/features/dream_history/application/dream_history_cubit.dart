@@ -1,17 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dream/features/auth/application/auth_cubit.dart';
 import 'package:dream/features/dream_history/models/dream_history_model.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show setEquals, listEquals;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../repositories/dream_history_repository.dart';
 import 'dream_history_state.dart';
 import 'package:injectable/injectable.dart';
-
-//TODO: Every user can see local history, but only if user ids match, they can see the history of other users. Fix this issue.
-//TODO: On every refresh or load more, dreams are doubled. Fix this issue.
-//TODO: Filters are not working properly. Fix this issue.
-//TODO: Implement delete dream functionality. It gives firebase error. Fix this issue.
-//TODO: Implement favorite dream button.
-//TODO: Page transition animations.
+import 'package:dream/i18n/strings.g.dart';
 
 @injectable
 class DreamHistoryCubit extends Cubit<DreamHistoryState> {
@@ -29,51 +25,86 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
           error: null,
           currentPage: 0,
           dreams: [],
+          filteredDreams: [],
           hasMore: true,
-          lastDocument: null,
+          lastDocument:
+              null, // Clear lastDocument on refresh to start from beginning
         ));
       } else {
         emit(state.copyWith(isLoading: true, error: null));
       }
 
-      await Future.delayed(
-          const Duration(milliseconds: 50)); // Simulate loading
       final userId = _authCubit.state.user?.id;
-      print('User ID: $userId');
-      if (userId == null) throw Exception('User not authenticated');
+      debugPrint('DreamHistoryCubit - Loading dreams for user: $userId');
+
+      if (userId == null) {
+        debugPrint(
+            'DreamHistoryCubit - User not authenticated, retrying in 100ms');
+        // Wait a bit longer and try one more time
+        await Future.delayed(const Duration(milliseconds: 100));
+        final retryUserId = _authCubit.state.user?.id;
+
+        if (retryUserId == null) {
+          emit(state.copyWith(
+            error: t.core.errors.userNotAuthenticated,
+            isLoading: false,
+            dreams: [],
+            filteredDreams: [],
+          ));
+          return;
+        }
+
+        debugPrint(
+            'DreamHistoryCubit - Retry successful, user ID: $retryUserId');
+      }
 
       final result = await _repository.getDreamHistory(
-        userId,
-        lastDocument: refresh ? null : state.lastDocument,
+        userId!,
+        lastDocument: state.lastDocument,
       );
-      //print('Result: $result this is the result');
+
       final dreamsData = result['dreams'];
       List<DreamHistoryModel> dreams;
       if (dreamsData == null || (dreamsData is! List) || dreamsData.isEmpty) {
-        print("Dreams data is empty or invalid");
+        debugPrint("Dreams data is empty or invalid");
         dreams = [];
       } else {
         dreams = (dreamsData as List<DreamHistoryModel>).toList();
-        print('Dreams: $dreams this line is the dreams');
+        debugPrint('Loaded ${dreams.length} dreams');
       }
 
       final lastDocument = result['lastDocument'] as DocumentSnapshot?;
       final isNewData = result['isNewData'] as bool;
 
       if (isNewData) {
+        final updatedDreams = refresh ? dreams : [...state.dreams, ...dreams];
+        debugPrint('Total dreams after update: ${updatedDreams.length}');
+
         emit(state.copyWith(
-          dreams: [...state.dreams, ...dreams],
-          lastDocument: lastDocument,
+          dreams: updatedDreams,
+          filteredDreams: [], // Clear filtered dreams to force reapplication of filters
+          lastDocument:
+              lastDocument, // Always update lastDocument for proper pagination
           isLoading: false,
           hasMore: dreams.length >= 10,
+          error: null,
         ));
-        _applyFilters();
+        _updateAvailableTags();
+        _applyFilters(); // This will update filteredDreams
       } else {
-        emit(state.copyWith(isLoading: false)); // No changes needed
+        emit(state.copyWith(
+          isLoading: false,
+          hasMore: false,
+          error: null,
+        ));
       }
-    } catch (e) {
-      emit(
-          state.copyWith(error: 'Failed to load dreams: $e', isLoading: false));
+    } catch (e, stackTrace) {
+      debugPrint('Error loading dreams: $e');
+      debugPrint('Stack trace: $stackTrace');
+      emit(state.copyWith(
+        error: 'Failed to load dreams: $e',
+        isLoading: false,
+      ));
     }
   }
 
@@ -93,14 +124,27 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
 
       final moreDreams = result['dreams'] as List<DreamHistoryModel>;
       final lastDocument = result['lastDocument'] as DocumentSnapshot?;
-      print('More dreams: ${moreDreams.length}');
-      emit(state.copyWith(
-        dreams: [...state.dreams, ...moreDreams],
-        isLoadingMore: false,
-        hasMore: moreDreams.length >= 10,
-        lastDocument: lastDocument, // Update the last document
-      ));
-      _applyFilters();
+      debugPrint('Loaded ${moreDreams.length} more dreams');
+
+      // Check if we actually have new dreams
+      final currentDreamsIds = state.dreams.map((d) => d.id).toSet();
+      final newDreamsIds = moreDreams.map((d) => d.id).toSet();
+
+      if (newDreamsIds.any((id) => !currentDreamsIds.contains(id))) {
+        emit(state.copyWith(
+          dreams: [...state.dreams, ...moreDreams],
+          filteredDreams: [], // Clear filtered dreams to force reapplication of filters
+          isLoadingMore: false,
+          hasMore: moreDreams.length >= 10,
+          lastDocument: lastDocument, // Update lastDocument for next pagination
+        ));
+        _applyFilters(); // This will update filteredDreams
+      } else {
+        emit(state.copyWith(
+          isLoadingMore: false,
+          hasMore: false, // No more unique dreams to load
+        ));
+      }
     } catch (e) {
       emit(state.copyWith(
         error: 'Failed to load more dreams: $e',
@@ -122,9 +166,35 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
   Future<void> deleteDream(String dreamId) async {
     try {
       await _repository.deleteDream(dreamId);
-      await loadDreams();
+      // Force a complete refresh of the dreams list
+      emit(state.copyWith(
+        lastDocument: null,
+        dreams: [],
+        filteredDreams: [],
+      ));
+      await loadDreams(refresh: true);
     } catch (e) {
       emit(state.copyWith(error: 'Failed to delete dream: $e'));
+    }
+  }
+
+  Future<void> toggleFavorite(DreamHistoryModel dream) async {
+    try {
+      final updatedDream = dream.copyWith(isFavourite: !dream.isFavourite);
+      await _repository.updateDream(updatedDream);
+
+      // Update the dream in the state
+      final updatedDreams = state.dreams.map((d) {
+        if (d.id == dream.id) {
+          return updatedDream;
+        }
+        return d;
+      }).toList();
+
+      emit(state.copyWith(dreams: updatedDreams));
+      _applyFilters();
+    } catch (e) {
+      emit(state.copyWith(error: 'Failed to update favorite status: $e'));
     }
   }
 
@@ -145,22 +215,44 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
     }
 
     // Apply date/favorite filter
-    switch (state.selectedFilter) {
-      case 'This Week':
-        final weekAgo = DateTime.now().subtract(const Duration(days: 7));
-        filteredDreams = filteredDreams
-            .where((dream) => dream.createdAt.isAfter(weekAgo))
-            .toList();
-        break;
-      case 'This Month':
-        final monthAgo = DateTime.now().subtract(const Duration(days: 30));
-        filteredDreams = filteredDreams
-            .where((dream) => dream.createdAt.isAfter(monthAgo))
-            .toList();
-        break;
+    final translations = t;
+    if (state.selectedFilter == translations.dreamFilterOptions.week) {
+      final weekAgo = DateTime.now().subtract(const Duration(days: 7));
+      filteredDreams = filteredDreams
+          .where((dream) => dream.createdAt.isAfter(weekAgo))
+          .toList();
+    } else if (state.selectedFilter == translations.dreamFilterOptions.month) {
+      final monthAgo = DateTime.now().subtract(const Duration(days: 30));
+      filteredDreams = filteredDreams
+          .where((dream) => dream.createdAt.isAfter(monthAgo))
+          .toList();
+    } else if (state.selectedFilter ==
+        translations.dreamFilterOptions.favorites) {
+      filteredDreams =
+          filteredDreams.where((dream) => dream.isFavourite).toList();
+    }
+
+    // Apply tag filter
+    if (state.selectedTag != null) {
+      filteredDreams = filteredDreams
+          .where((dream) => dream.tags.contains(state.selectedTag))
+          .toList();
     }
 
     emit(state.copyWith(filteredDreams: filteredDreams));
+  }
+
+  void updateSelectedTag(String? tag) {
+    emit(state.copyWith(selectedTag: tag));
+    _applyFilters();
+  }
+
+  void _updateAvailableTags() {
+    final Set<String> tags = {};
+    for (final dream in state.dreams) {
+      tags.addAll(dream.tags);
+    }
+    emit(state.copyWith(availableTags: tags.toList()..sort()));
   }
 
   void reset() {

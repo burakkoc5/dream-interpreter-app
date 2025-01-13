@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../models/reminder_settings_model.dart';
 import '../widgets/reminder_option_card.dart';
+import 'package:dream/config/theme/theme_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReminderSettingsContent extends StatefulWidget {
   final ReminderSettings? initialSettings;
@@ -19,13 +21,35 @@ class ReminderSettingsContent extends StatefulWidget {
       _ReminderSettingsContentState();
 }
 
-class _ReminderSettingsContentState extends State<ReminderSettingsContent> {
+class _ReminderSettingsContentState extends State<ReminderSettingsContent>
+    with SingleTickerProviderStateMixin {
   ReminderType? selectedType;
   TimeOfDay? selectedCustomTime;
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutCubic,
+    ));
+
     if (widget.initialSettings != null) {
       selectedType = ReminderType.values.firstWhere(
         (type) => type.name == widget.initialSettings!.type,
@@ -35,6 +59,14 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent> {
           ? TimeOfDay.fromDateTime(widget.initialSettings!.time)
           : null;
     }
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void _handleOptionSelection(ReminderType type) {
@@ -57,88 +89,151 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent> {
   Future<void> _saveSettings() async {
     if (selectedType == null) return;
 
+    print('ReminderSettingsContent: Starting save settings');
+    print('ReminderSettingsContent: Selected type: $selectedType');
+    print('ReminderSettingsContent: Selected custom time: $selectedCustomTime');
+
     final reminderTime = getTimeForType(selectedType!, selectedCustomTime);
     final newSettings = ReminderSettings(
       type: selectedType!.name,
       time: reminderTime,
       isEnabled: true,
     );
+    print('ReminderSettingsContent: Created settings: ${newSettings.toJson()}');
     await widget.onSave(newSettings);
+    print('ReminderSettingsContent: Save completed');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: ReminderOptionCard(
-                  type: ReminderType.earlyMorning,
-                  icon: Icons.bedtime,
-                  title: 'Early morning',
-                  subtitle: '6:00 AM',
-                  onTap: () =>
-                      _handleOptionSelection(ReminderType.earlyMorning),
-                  isSelected: selectedType == ReminderType.earlyMorning,
-                ),
+    final theme = Theme.of(context);
+    final isDarkMode = context.watch<ThemeCubit>().state;
+
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Choose when you want to be reminded',
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.w600,
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: ReminderOptionCard(
-                  type: ReminderType.afternoon,
-                  icon: Icons.wb_sunny,
-                  title: 'Afternoon',
-                  subtitle: '2:00 PM',
-                  onTap: () => _handleOptionSelection(ReminderType.afternoon),
-                  isSelected: selectedType == ReminderType.afternoon,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: ReminderOptionCard(
-                  type: ReminderType.nighttime,
-                  icon: Icons.nights_stay,
-                  title: 'Nighttime',
-                  subtitle: '10:00 PM',
-                  onTap: () => _handleOptionSelection(ReminderType.nighttime),
-                  isSelected: selectedType == ReminderType.nighttime,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: ReminderOptionCard(
-                  type: ReminderType.custom,
-                  icon: Icons.access_time,
-                  title: 'Custom',
-                  subtitle: 'Set your time',
-                  onTap: _handleCustomTimeSelection,
-                  isSelected: selectedType == ReminderType.custom,
-                ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: _saveSettings,
-              child: const Text('Continue'),
+              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: () => context.pop(),
-            child: const Text('Ignore'),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              'We\'ll send you a notification to help you remember your dreams',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(0.7),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ReminderOptionCard(
+                            type: ReminderType.earlyMorning,
+                            icon: Icons.bedtime,
+                            title: 'Early morning',
+                            subtitle: '6:00 AM',
+                            onTap: () => _handleOptionSelection(
+                                ReminderType.earlyMorning),
+                            isSelected:
+                                selectedType == ReminderType.earlyMorning,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: ReminderOptionCard(
+                            type: ReminderType.afternoon,
+                            icon: Icons.wb_sunny,
+                            title: 'Afternoon',
+                            subtitle: '2:00 PM',
+                            onTap: () =>
+                                _handleOptionSelection(ReminderType.afternoon),
+                            isSelected: selectedType == ReminderType.afternoon,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ReminderOptionCard(
+                            type: ReminderType.nighttime,
+                            icon: Icons.nights_stay,
+                            title: 'Nighttime',
+                            subtitle: '10:00 PM',
+                            onTap: () =>
+                                _handleOptionSelection(ReminderType.nighttime),
+                            isSelected: selectedType == ReminderType.nighttime,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: ReminderOptionCard(
+                            type: ReminderType.custom,
+                            icon: Icons.access_time,
+                            title: 'Custom',
+                            subtitle: selectedCustomTime?.format(context) ??
+                                'Set your time',
+                            onTap: _handleCustomTimeSelection,
+                            isSelected: selectedType == ReminderType.custom,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            FilledButton(
+              onPressed: selectedType != null ? _saveSettings : null,
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                backgroundColor:
+                    theme.colorScheme.primary.withOpacity(isDarkMode ? 0.8 : 1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              child: Text(
+                'Save Reminder',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () => context.pop(),
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              child: Text(
+                'Skip for now',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: theme.colorScheme.primary.withOpacity(0.8),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

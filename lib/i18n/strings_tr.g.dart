@@ -98,6 +98,8 @@ class _TranslationsDreamFilterOptionsTr implements TranslationsDreamFilterOption
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
+	@override String get selectTag => 'Etiket Seç';
+	@override String get tags => 'Etiketler';
 	@override String get all => 'Tüm';
 	@override String get week => 'Bu Hafta';
 	@override String get month => 'Bu Ay';
@@ -176,6 +178,7 @@ class _TranslationsCoreErrorsTr implements TranslationsCoreErrorsEn {
 	@override String get weakPassword => 'Şifre çok zayıf';
 	@override String get unknown => 'Bilinmeyen bir hata oluştu';
 	@override String get tryAgain => 'Lütfen tekrar deneyin';
+	@override String get userNotAuthenticated => 'Kullanıcı oturum açmamış';
 }
 
 // Path: registration.email
@@ -359,6 +362,7 @@ extension on TranslationsTr {
 			case 'core.errors.weakPassword': return 'Şifre çok zayıf';
 			case 'core.errors.unknown': return 'Bilinmeyen bir hata oluştu';
 			case 'core.errors.tryAgain': return 'Lütfen tekrar deneyin';
+			case 'core.errors.userNotAuthenticated': return 'Kullanıcı oturum açmamış';
 			case 'registration.welcomeText': return 'Hoş Geldiniz';
 			case 'registration.email.emailText': return 'E-posta';
 			case 'registration.email.emailHint': return 'Lütfen e-posta adresinizi girin';
@@ -423,6 +427,8 @@ extension on TranslationsTr {
 			case 'dreamEntry.interpretation.saveButton': return 'Yorumu Kaydet';
 			case 'dreamEntry.interpretation.shareButton': return 'Yorumu Paylaş';
 			case 'dreamDetail': return 'Rüya Açıklaması';
+			case 'dreamFilterOptions.selectTag': return 'Etiket Seç';
+			case 'dreamFilterOptions.tags': return 'Etiketler';
 			case 'dreamFilterOptions.all': return 'Tüm';
 			case 'dreamFilterOptions.week': return 'Bu Hafta';
 			case 'dreamFilterOptions.month': return 'Bu Ay';

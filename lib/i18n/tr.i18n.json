@@ -13,7 +13,8 @@
       "invalidEmail": "Geçersiz e-posta formatı",
       "weakPassword": "Şifre çok zayıf",
       "unknown": "Bilinmeyen bir hata oluştu",
-      "tryAgain": "Lütfen tekrar deneyin"
+      "tryAgain": "Lütfen tekrar deneyin",
+      "userNotAuthenticated": "Kullanıcı oturum açmamış"
     }
   },
   "registration": {
@@ -109,6 +110,8 @@
   },
   "dreamDetail": "Rüya Açıklaması",
   "dreamFilterOptions": {
+    "selectTag": "Etiket Seç",
+    "tags": "Etiketler",
     "all": "Tüm",
     "week": "Bu Hafta",
     "month": "Bu Ay",

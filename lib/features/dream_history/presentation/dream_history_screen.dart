@@ -3,6 +3,8 @@ import 'package:dream/features/dream_history/application/dream_history_state.dar
 import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:ui';
+import 'package:dream/core/presentation/animated_background.dart';
 import 'dream_history_mixin.dart';
 
 class DreamHistoryScreen extends StatefulWidget {
@@ -14,6 +16,14 @@ class DreamHistoryScreen extends StatefulWidget {
 
 class _DreamHistoryScreenState extends State<DreamHistoryScreen>
     with DreamHistoryMixin {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -21,27 +31,80 @@ class _DreamHistoryScreenState extends State<DreamHistoryScreen>
     return BlocBuilder<DreamHistoryCubit, DreamHistoryState>(
       builder: (context, state) {
         return Scaffold(
+          extendBodyBehindAppBar: true,
           appBar: AppBar(
             title: Text(
               t.dreamHistory.dreamHistory,
               style: theme.textTheme.headlineSmall?.copyWith(
                 color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.w500,
               ),
             ),
             centerTitle: true,
             backgroundColor: Colors.transparent,
             elevation: 0,
-          ),
-          body: SafeArea(
-            child: Column(
-              children: [
-                buildSearchBar(context),
-                buildFilterChips(context, state),
-                Expanded(
-                  child: buildDreamsList(context, state),
+            flexibleSpace: ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  color: theme.colorScheme.surface.withOpacity(0.5),
                 ),
-              ],
+              ),
             ),
+          ),
+          body: Stack(
+            children: [
+              const AnimatedBackground(),
+              SafeArea(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0,
+                        vertical: 16.0,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(32),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.surface.withOpacity(0.7),
+                              borderRadius: BorderRadius.circular(32),
+                              border: Border.all(
+                                color:
+                                    theme.colorScheme.primary.withOpacity(0.1),
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: buildSearchBar(context),
+                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: buildFilterChips(context, state),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: buildDreamsList(
+                        context,
+                        state,
+                        scrollController: _scrollController,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         );
       },

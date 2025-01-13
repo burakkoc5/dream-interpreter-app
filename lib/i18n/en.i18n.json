@@ -13,7 +13,8 @@
       "invalidEmail": "Invalid email format",
       "weakPassword": "Password is too weak",
       "unknown": "An unknown error occurred",
-      "tryAgain": "Please try again"
+      "tryAgain": "Please try again",
+      "userNotAuthenticated": "User not authenticated"
     }
   },
   "registration": {
@@ -111,6 +112,8 @@
   },
   "dreamDetail": "Dream Description",
   "dreamFilterOptions": {
+    "selectTag": "Select Tag",
+    "tags": "Tags",
     "all": "All",
     "week": "This Week",
     "month": "This Month",

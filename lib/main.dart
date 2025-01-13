@@ -7,12 +7,15 @@ import 'package:dream/features/dream_entry/application/dream_entry_cubit.dart';
 import 'package:dream/features/dream_history/application/dream_history_cubit.dart';
 import 'package:dream/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:dream/features/profile/application/profile_cubit.dart';
+import 'package:dream/features/profile/application/stats_cubit.dart';
 import 'package:dream/firebase_options.dart';
 import 'package:dream/i18n/strings.g.dart';
+import 'package:dream/shared/repositories/notification_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,38 +39,48 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return MultiProvider(
       providers: [
-        BlocProvider(
-          create: (_) => getIt<ThemeCubit>(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<AuthCubit>(),
-        ),
-        BlocProvider<DreamEntryCubit>(
-          create: (context) => getIt<DreamEntryCubit>(),
-        ),
-        BlocProvider<DreamHistoryCubit>(
-          create: (context) => getIt<DreamHistoryCubit>(),
-        ),
-        BlocProvider<OnboardingCubit>(
-          create: (context) => getIt<OnboardingCubit>(),
-        ),
-        BlocProvider<ProfileCubit>(
-          create: (context) => getIt<ProfileCubit>(),
+        Provider<NotificationRepository>(
+          create: (_) => getIt<NotificationRepository>(),
         ),
       ],
-      child: BlocBuilder<ThemeCubit, bool>(
-        builder: (context, isDarkMode) {
-          return MaterialApp.router(
-            title: t.core.appName,
-            theme: AppTheme.lightTheme(),
-            darkTheme: AppTheme.darkTheme(),
-            themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            routerConfig: _router,
-            debugShowCheckedModeBanner: false,
-          );
-        },
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => getIt<ThemeCubit>(),
+          ),
+          BlocProvider(
+            create: (_) => getIt<AuthCubit>(),
+          ),
+          BlocProvider<DreamEntryCubit>(
+            create: (context) => getIt<DreamEntryCubit>(),
+          ),
+          BlocProvider<DreamHistoryCubit>(
+            create: (context) => getIt<DreamHistoryCubit>(),
+          ),
+          BlocProvider<OnboardingCubit>(
+            create: (context) => getIt<OnboardingCubit>(),
+          ),
+          BlocProvider<ProfileCubit>(
+            create: (context) => getIt<ProfileCubit>(),
+          ),
+          BlocProvider<StatsCubit>(
+            create: (context) => getIt<StatsCubit>(),
+          ),
+        ],
+        child: BlocBuilder<ThemeCubit, bool>(
+          builder: (context, isDarkMode) {
+            return MaterialApp.router(
+              title: t.core.appName,
+              theme: AppTheme.lightTheme(),
+              darkTheme: AppTheme.darkTheme(),
+              themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+              routerConfig: _router,
+              debugShowCheckedModeBanner: false,
+            );
+          },
+        ),
       ),
     );
   }

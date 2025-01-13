@@ -13,7 +13,8 @@
       "invalidEmail": "Ungültiges E-Mail-Format",
       "weakPassword": "Passwort ist zu schwach",
       "unknown": "Ein unbekannter Fehler ist aufgetreten",
-      "tryAgain": "Bitte versuche es erneut"
+      "tryAgain": "Bitte versuche es erneut",
+      "userNotAuthenticated": "Benutzer nicht authentifiziert"
     }
   },
   "registration": {
@@ -109,6 +110,8 @@
   },
   "dreamDetail": "Traumbeschreibung",
   "dreamFilterOptions": {
+    "selectTag": "Tag auswählen",
+    "tags": "Tags",
     "all": "Alle",
     "week": "Diese Woche",
     "month": "Diesen Monat",

@@ -7,17 +7,24 @@ import 'package:go_router/go_router.dart';
 
 class RouteGuard {
   static String? guard(BuildContext context, GoRouterState state) {
-    final isAuthenticated = context.read<AuthCubit>().state.isAuthenticated;
+    final authState = context.read<AuthCubit>().state;
     final hasCompletedOnboarding =
         context.read<OnboardingCubit>().isOnboardingComplete;
 
     final location = state.uri.toString();
 
-    print('RouteGuard - hasCompletedOnboarding: $hasCompletedOnboarding');
-    print('RouteGuard - isAuthenticated: $isAuthenticated');
-    print('RouteGuard - location: $location');
+    debugPrint('RouteGuard - hasCompletedOnboarding: $hasCompletedOnboarding');
+    debugPrint('RouteGuard - isAuthenticated: ${authState.isAuthenticated}');
+    debugPrint('RouteGuard - isInitializing: ${authState.isInitializing}');
+    debugPrint('RouteGuard - userId: ${authState.user?.id}');
+    debugPrint('RouteGuard - location: $location');
 
     if (location == AppRoute.splash) {
+      return null;
+    }
+
+    // If auth is initializing, stay on current route
+    if (authState.isInitializing) {
       return null;
     }
 
@@ -30,24 +37,22 @@ class RouteGuard {
     }
 
     // Handle authentication redirects
-    if (!isAuthenticated &&
-        !location.startsWith('/auth') &&
-        location != AppRoute.onboarding) {
+    if (!authState.isAuthenticated &&
+        location != AppRoute.login &&
+        location != AppRoute.register &&
+        location != AppRoute.onboarding &&
+        location != AppRoute.passwordReset &&
+        location != AppRoute.splash) {
       return AppRoute.login;
     }
 
-    if (!isAuthenticated && !location.startsWith(AppRoute.root)) {
-      print('Redirecting to root');
-      return AppRoute.login;
-    }
-
-    if (isAuthenticated && location == AppRoute.root) {
-      print('Redirecting to dream entry');
+    if (authState.isAuthenticated &&
+        (location == AppRoute.login || location == AppRoute.register)) {
       return AppRoute.dreamEntry;
     }
 
-    // Redirect root /home to /home/dreams
-    if (isAuthenticated && location == '/home') {
+    // Redirect root /home to /home/entry
+    if (authState.isAuthenticated && location == '/home') {
       return AppRoute.dreamEntry;
     }
 

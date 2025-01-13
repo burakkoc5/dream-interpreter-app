@@ -29,11 +29,14 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
     return Form(
       key: _formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Record Your Dream',
-            style: theme.textTheme.headlineMedium,
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 8),
+            child: Text(
+              'Record Your Dream',
+              style: theme.textTheme.headlineMedium,
+            ),
           ),
           const SizedBox(height: 16),
           TextFormField(

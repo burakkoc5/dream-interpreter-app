@@ -3,7 +3,8 @@ import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dream/features/auth/application/auth_state.dart';
-
+import 'package:dream/shared/widgets/app_button.dart';
+import 'package:dream/shared/widgets/app_text_field.dart';
 import 'package:go_router/go_router.dart';
 
 /// Screen that handles password reset functionality.
@@ -51,14 +52,21 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(t.registration.password.resetPassword.resetPasswordText),
+        title: Text(
+          t.registration.password.resetPassword.resetPasswordText,
+          style: theme.textTheme.titleLarge?.copyWith(
+            color: theme.colorScheme.primary,
+          ),
+        ),
       ),
       body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) => Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(24.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -67,25 +75,25 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                 children: [
                   Text(
                     t.registration.signIn.forgotPassword,
-                    style: TextStyle(
-                      fontSize: 24,
+                    style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.primary,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
                   Text(
                     t.registration.password.resetPassword.resetPasswordCaption,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.onSurface.withOpacity(0.8),
+                    ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 32),
-                  TextFormField(
+                  const SizedBox(height: 40),
+                  AppTextField(
                     controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: t.registration.email.emailText,
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.email),
-                    ),
+                    label: t.registration.email.emailText,
+                    prefixIcon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
                     autofillHints: const [AutofillHints.email],
                     validator: (value) {
@@ -98,26 +106,20 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 24),
-                  FilledButton(
+                  const SizedBox(height: 32),
+                  AppButton(
+                    text: t.registration.password.resetPassword
+                        .resetPasswordButton,
                     onPressed: state.isLoading ? null : _handlePasswordReset,
-                    child: state.isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : Text(t.registration.password.resetPassword
-                            .resetPasswordButton),
+                    isLoading: state.isLoading,
+                    icon: Icons.restore,
                   ),
                   const SizedBox(height: 16),
-                  TextButton(
+                  AppButton(
+                    text: t.registration.password.resetPassword.backToSignIn,
                     onPressed: () => context.pop(),
-                    child: Text(
-                        t.registration.password.resetPassword.backToSignIn),
+                    variant: AppButtonVariant.ghost,
+                    icon: Icons.arrow_back,
                   ),
                 ],
               ),

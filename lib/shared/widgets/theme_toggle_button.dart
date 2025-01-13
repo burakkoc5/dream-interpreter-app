@@ -8,9 +8,21 @@ class ThemeToggleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = context.watch<ThemeCubit>().state;
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      leading: const Icon(Icons.brightness_6),
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.primary.withOpacity(isDarkMode ? 0.2 : 0.1),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(
+          Icons.brightness_6,
+          color: theme.colorScheme.primary,
+        ),
+      ),
       title: const Text('Dark Mode'),
       trailing: BlocBuilder<ThemeCubit, bool>(
         builder: (context, isDarkMode) {

@@ -102,6 +102,8 @@ class TranslationsDreamFilterOptionsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+	String get selectTag => 'Select Tag';
+	String get tags => 'Tags';
 	String get all => 'All';
 	String get week => 'This Week';
 	String get month => 'This Month';
@@ -180,6 +182,7 @@ class TranslationsCoreErrorsEn {
 	String get weakPassword => 'Password is too weak';
 	String get unknown => 'An unknown error occurred';
 	String get tryAgain => 'Please try again';
+	String get userNotAuthenticated => 'User not authenticated';
 }
 
 // Path: registration.email
@@ -363,6 +366,7 @@ extension on Translations {
 			case 'core.errors.weakPassword': return 'Password is too weak';
 			case 'core.errors.unknown': return 'An unknown error occurred';
 			case 'core.errors.tryAgain': return 'Please try again';
+			case 'core.errors.userNotAuthenticated': return 'User not authenticated';
 			case 'registration.welcomeText': return 'Welcome Back';
 			case 'registration.email.emailText': return 'Email';
 			case 'registration.email.emailHint': return 'Please enter your email';
@@ -427,6 +431,8 @@ extension on Translations {
 			case 'dreamEntry.interpretation.saveButton': return 'Save Interpretation';
 			case 'dreamEntry.interpretation.shareButton': return 'Share Interpretation';
 			case 'dreamDetail': return 'Dream Description';
+			case 'dreamFilterOptions.selectTag': return 'Select Tag';
+			case 'dreamFilterOptions.tags': return 'Tags';
 			case 'dreamFilterOptions.all': return 'All';
 			case 'dreamFilterOptions.week': return 'This Week';
 			case 'dreamFilterOptions.month': return 'This Month';
