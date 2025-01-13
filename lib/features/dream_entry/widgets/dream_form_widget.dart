@@ -95,6 +95,10 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
         dreamEntry: dreamEntry,
         onSave: () => _showDetailsModal(dreamEntry),
         onShare: () => _shareDream(dreamEntry),
+        onDiscard: () {
+          context.read<DreamEntryCubit>().reset();
+          context.pop();
+        },
       ),
     );
   }

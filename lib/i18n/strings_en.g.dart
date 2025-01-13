@@ -131,7 +131,7 @@ class TranslationsDreamHistoryEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get dreamHistory => 'Dream Journal';
+	String get dreamHistory => 'Past Dreams';
 	String get noDreams => 'No dreams recorded';
 	String get noDreamsCaption => 'You haven\'t recorded any dreams yet. Start recording your dreams today.';
 }
@@ -442,7 +442,7 @@ extension on Translations {
 			case 'searchDreams.noResults': return 'No dreams found';
 			case 'searchDreams.delete': return 'Delete';
 			case 'searchDreams.undoButton': return 'Undo';
-			case 'dreamHistory.dreamHistory': return 'Dream Journal';
+			case 'dreamHistory.dreamHistory': return 'Past Dreams';
 			case 'dreamHistory.noDreams': return 'No dreams recorded';
 			case 'dreamHistory.noDreamsCaption': return 'You haven\'t recorded any dreams yet. Start recording your dreams today.';
 			case 'profile.profile': return 'Profile';

@@ -27,39 +27,39 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
           dreams: [],
           filteredDreams: [],
           hasMore: true,
-          lastDocument:
-              null, // Clear lastDocument on refresh to start from beginning
+          lastDocument: null,
         ));
       } else {
         emit(state.copyWith(isLoading: true, error: null));
       }
 
-      final userId = _authCubit.state.user?.id;
+      String? userId = _authCubit.state.user?.id;
       debugPrint('DreamHistoryCubit - Loading dreams for user: $userId');
 
-      if (userId == null) {
+      // If userId is null, wait a bit longer and retry multiple times
+      int retryCount = 0;
+      while (userId == null && retryCount < 3) {
         debugPrint(
-            'DreamHistoryCubit - User not authenticated, retrying in 100ms');
-        // Wait a bit longer and try one more time
-        await Future.delayed(const Duration(milliseconds: 100));
-        final retryUserId = _authCubit.state.user?.id;
-
-        if (retryUserId == null) {
-          emit(state.copyWith(
-            error: t.core.errors.userNotAuthenticated,
-            isLoading: false,
-            dreams: [],
-            filteredDreams: [],
-          ));
-          return;
-        }
-
-        debugPrint(
-            'DreamHistoryCubit - Retry successful, user ID: $retryUserId');
+            'DreamHistoryCubit - User not authenticated, retry ${retryCount + 1}/3');
+        await Future.delayed(const Duration(milliseconds: 300));
+        userId = _authCubit.state.user?.id;
+        retryCount++;
       }
 
+      if (userId == null) {
+        emit(state.copyWith(
+          error: t.core.errors.userNotAuthenticated,
+          isLoading: false,
+          dreams: [],
+          filteredDreams: [],
+        ));
+        return;
+      }
+
+      debugPrint('DreamHistoryCubit - Using user ID: $userId');
+
       final result = await _repository.getDreamHistory(
-        userId!,
+        userId,
         lastDocument: state.lastDocument,
       );
 
@@ -233,17 +233,29 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
     }
 
     // Apply tag filter
-    if (state.selectedTag != null) {
+    if (state.selectedTags.isNotEmpty) {
       filteredDreams = filteredDreams
-          .where((dream) => dream.tags.contains(state.selectedTag))
+          .where((dream) =>
+              dream.tags.any((tag) => state.selectedTags.contains(tag)))
           .toList();
     }
 
     emit(state.copyWith(filteredDreams: filteredDreams));
   }
 
-  void updateSelectedTag(String? tag) {
-    emit(state.copyWith(selectedTag: tag));
+  void updateSelectedTag(String tag) {
+    final updatedTags = List<String>.from(state.selectedTags);
+    if (updatedTags.contains(tag)) {
+      updatedTags.remove(tag);
+    } else {
+      updatedTags.add(tag);
+    }
+    emit(state.copyWith(selectedTags: updatedTags));
+    _applyFilters();
+  }
+
+  void clearSelectedTags() {
+    emit(state.copyWith(selectedTags: []));
     _applyFilters();
   }
 

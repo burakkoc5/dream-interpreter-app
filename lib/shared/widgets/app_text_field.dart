@@ -15,6 +15,7 @@ class AppTextField extends StatefulWidget {
     this.maxLines = 1,
     this.prefixIcon,
     this.suffixIcon,
+    this.onSuffixIconTap,
     this.validator,
     this.borderRadius,
     this.filled = true,
@@ -31,6 +32,7 @@ class AppTextField extends StatefulWidget {
   final int maxLines;
   final IconData? prefixIcon;
   final IconData? suffixIcon;
+  final VoidCallback? onSuffixIconTap;
   final String? Function(String?)? validator;
   final double? borderRadius;
   final bool filled;
@@ -69,6 +71,12 @@ class _AppTextFieldState extends State<AppTextField> {
             labelText: widget.label,
             hintText: widget.hint,
             errorText: widget.errorText,
+            errorStyle: TextStyle(
+              color: theme.colorScheme.error,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.2,
+            ),
             prefixIcon: widget.prefixIcon != null
                 ? Icon(
                     widget.prefixIcon,
@@ -85,12 +93,7 @@ class _AppTextFieldState extends State<AppTextField> {
                           ? theme.colorScheme.primary
                           : theme.colorScheme.onSurface.withOpacity(0.6),
                     ),
-                    onPressed: () => setState(() {
-                      if (widget.obscureText) {
-                        // Toggle password visibility
-                        widget.onChanged?.call(widget.controller?.text ?? '');
-                      }
-                    }),
+                    onPressed: widget.onSuffixIconTap,
                   )
                 : null,
             filled: widget.filled,
@@ -118,6 +121,7 @@ class _AppTextFieldState extends State<AppTextField> {
               borderRadius: BorderRadius.circular(radius),
               borderSide: BorderSide(
                 color: theme.colorScheme.error,
+                width: 1.5,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
@@ -127,10 +131,27 @@ class _AppTextFieldState extends State<AppTextField> {
                 width: 2,
               ),
             ),
+            errorMaxLines: 2,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 16,
             ),
+            floatingLabelStyle: MaterialStateTextStyle.resolveWith((states) {
+              if (states.contains(MaterialState.error)) {
+                return TextStyle(
+                  color: theme.colorScheme.error,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                );
+              }
+              return TextStyle(
+                color: _isFocused
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurface.withOpacity(0.7),
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              );
+            }),
           ),
           style: theme.textTheme.bodyLarge?.copyWith(
             color: theme.colorScheme.onSurface,

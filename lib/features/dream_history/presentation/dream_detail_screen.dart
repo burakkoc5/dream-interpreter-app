@@ -131,6 +131,8 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
                   ),
                 ],
                 expandedHeight: 200,
+                toolbarHeight: 72,
+                collapsedHeight: 72,
                 floating: false,
                 pinned: true,
                 backgroundColor: Colors.transparent,
@@ -138,22 +140,35 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                     child: FlexibleSpaceBar(
-                      title: Text(
-                        widget.dream.title,
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          color: isDarkMode
-                              ? theme.colorScheme.onSurface
-                              : theme.colorScheme.onPrimary,
-                          fontWeight: FontWeight.bold,
-                          shadows: [
-                            Shadow(
-                              color: (isDarkMode
-                                      ? theme.colorScheme.primary
-                                      : theme.colorScheme.onPrimary)
-                                  .withOpacity(0.5),
-                              blurRadius: 8,
-                            ),
-                          ],
+                      titlePadding: EdgeInsets.only(
+                        left: 56,
+                        right: 16,
+                        bottom: 16,
+                      ),
+                      centerTitle: false,
+                      expandedTitleScale: 1.3,
+                      title: Container(
+                        constraints: const BoxConstraints(maxWidth: 300),
+                        child: Text(
+                          widget.dream.title,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: isDarkMode
+                                ? theme.colorScheme.onSurface
+                                : theme.colorScheme.onPrimary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            shadows: [
+                              Shadow(
+                                color: (isDarkMode
+                                        ? theme.colorScheme.primary
+                                        : theme.colorScheme.onPrimary)
+                                    .withOpacity(0.5),
+                                blurRadius: 8,
+                              ),
+                            ],
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       background: Container(
@@ -210,11 +225,11 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
                           icon: Icons.psychology,
                           iconColor: theme.colorScheme.tertiary,
                         ),
-                      if (widget.dream.tags.isNotEmpty)
-                        _buildTagsSection(context, widget.dream.tags),
                       const SizedBox(height: 20),
                       _buildMoodRatingSection(context),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 20),
+                      if (widget.dream.tags.isNotEmpty)
+                        _buildTagsSection(context, widget.dream.tags),
                     ],
                   ),
                 ),
@@ -313,7 +328,7 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
     final isDarkMode = context.watch<ThemeCubit>().state;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0),
+      padding: const EdgeInsets.only(bottom: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

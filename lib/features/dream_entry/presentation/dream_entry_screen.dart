@@ -119,6 +119,10 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
                               onSave: () =>
                                   _showDetailsModal(dreamEntry, context),
                               onShare: () => _shareDream(dreamEntry),
+                              onDiscard: () {
+                                context.read<DreamEntryCubit>().reset();
+                                context.go(AppRoute.dreamEntry);
+                              },
                             ),
                             error: (message) => Center(
                               child: Column(

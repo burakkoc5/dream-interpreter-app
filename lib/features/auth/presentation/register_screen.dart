@@ -23,6 +23,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordVisible = !_isPasswordVisible;
+    });
+  }
+
+  void _toggleConfirmPasswordVisibility() {
+    setState(() {
+      _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+    });
+  }
+
+  void _clearForm() {
+    _formKey.currentState?.reset();
+    setState(() {});
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -42,7 +59,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(e.toString())),
+            SnackBar(
+              content: Text(e.toString()),
+              backgroundColor: Theme.of(context).colorScheme.error,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
           );
         }
       }
@@ -83,7 +107,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: IconButton(
-                          onPressed: () => context.pop(),
+                          onPressed: () {
+                            _clearForm();
+                            context.pop();
+                          },
                           icon: Icon(
                             Icons.arrow_back_ios_new,
                             color: theme.colorScheme.primary,
@@ -157,6 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             suffixIcon: _isPasswordVisible
                                 ? Icons.visibility_off
                                 : Icons.visibility,
+                            onSuffixIconTap: _togglePasswordVisibility,
                             obscureText: !_isPasswordVisible,
                             autofillHints: const [AutofillHints.newPassword],
                             validator: (value) {
@@ -180,6 +208,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             suffixIcon: _isConfirmPasswordVisible
                                 ? Icons.visibility_off
                                 : Icons.visibility,
+                            onSuffixIconTap: _toggleConfirmPasswordVisibility,
                             obscureText: !_isConfirmPasswordVisible,
                             validator: (value) {
                               if (value != _passwordController.text) {
@@ -213,7 +242,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () => context.pop(),
+                          onPressed: () {
+                            _clearForm();
+                            context.pop();
+                          },
                           child: Text(
                             t.registration.signIn.signInText,
                             style: theme.textTheme.bodyMedium?.copyWith(

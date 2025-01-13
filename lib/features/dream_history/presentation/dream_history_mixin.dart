@@ -51,73 +51,100 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
   Widget buildFilterChips(BuildContext context, DreamHistoryState state) {
     final theme = Theme.of(context);
 
-    return Row(
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
       children: [
         ...filterOptions.map((filter) {
           final isSelected = state.selectedFilter == filter;
-          return Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: FilterChip(
-              label: Text(filter),
-              selected: isSelected,
-              onSelected: (_) =>
-                  context.read<DreamHistoryCubit>().updateFilter(filter),
-              selectedColor: theme.colorScheme.primaryContainer,
-              backgroundColor: theme.colorScheme.surface.withOpacity(0.5),
-              labelStyle: TextStyle(
+          return FilterChip(
+            label: Text(
+              filter,
+              style: theme.textTheme.bodyMedium?.copyWith(
                 color: isSelected
                     ? theme.colorScheme.onPrimaryContainer
                     : theme.colorScheme.onSurface,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: BorderSide(
-                  color: isSelected
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.primary.withOpacity(0.2),
-                ),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
+            selected: isSelected,
+            onSelected: (_) => context.read<DreamHistoryCubit>().updateFilter(
+                  isSelected ? t.dreamFilterOptions.all : filter,
+                ),
+            selectedColor: theme.colorScheme.primaryContainer,
+            backgroundColor: theme.colorScheme.surface.withOpacity(0.3),
+            labelStyle: TextStyle(
+              color: isSelected
+                  ? theme.colorScheme.onPrimaryContainer
+                  : theme.colorScheme.onSurface,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.primary.withOpacity(0.1),
+                width: 0.5,
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            visualDensity: VisualDensity.compact,
           );
         }).toList(),
         if (state.availableTags.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: FilterChip(
-              label: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.tag,
-                    size: 16,
-                    color: state.selectedTag != null
-                        ? theme.colorScheme.onPrimaryContainer
-                        : theme.colorScheme.onSurface,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(state.selectedTag ?? t.dreamFilterOptions.tags),
-                ],
-              ),
-              selected: state.selectedTag != null,
-              onSelected: (_) => _showTagFilterDialog(context, state),
-              selectedColor: theme.colorScheme.primaryContainer,
-              backgroundColor: theme.colorScheme.surface.withOpacity(0.5),
-              labelStyle: TextStyle(
-                color: state.selectedTag != null
-                    ? theme.colorScheme.onPrimaryContainer
-                    : theme.colorScheme.onSurface,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: BorderSide(
-                  color: state.selectedTag != null
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.primary.withOpacity(0.2),
+          FilterChip(
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.local_offer_rounded,
+                  size: 14,
+                  color: state.selectedTags.isNotEmpty
+                      ? theme.colorScheme.onSecondaryContainer
+                      : theme.colorScheme.onSurface,
                 ),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                const SizedBox(width: 4),
+                Text(
+                  state.selectedTags.isEmpty
+                      ? t.dreamFilterOptions.tags
+                      : '${state.selectedTags.length} ${t.dreamFilterOptions.tags}',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: state.selectedTags.isNotEmpty
+                        ? theme.colorScheme.onSecondaryContainer
+                        : theme.colorScheme.onSurface,
+                    fontWeight: state.selectedTags.isNotEmpty
+                        ? FontWeight.w600
+                        : FontWeight.normal,
+                  ),
+                ),
+                if (state.selectedTags.isNotEmpty) ...[
+                  const SizedBox(width: 4),
+                  Icon(
+                    Icons.close,
+                    size: 14,
+                    color: theme.colorScheme.onSecondaryContainer,
+                  ),
+                ],
+              ],
             ),
+            selected: state.selectedTags.isNotEmpty,
+            onSelected: (_) => _showTagFilterDialog(context, state),
+            selectedColor: theme.colorScheme.secondaryContainer,
+            backgroundColor: theme.colorScheme.surface.withOpacity(0.2),
+            showCheckmark: false,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(
+                color: state.selectedTags.isNotEmpty
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.primary.withOpacity(0.1),
+                width: 0.5,
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            visualDensity: VisualDensity.compact,
           ),
       ],
     );
@@ -131,83 +158,128 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
       context: context,
       builder: (context) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: AlertDialog(
-          backgroundColor: theme.colorScheme.surface.withOpacity(0.9),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
-          title: Row(
-            children: [
-              Icon(
-                Icons.tag,
-                color: theme.colorScheme.primary,
-                size: 24,
-              ),
-              const SizedBox(width: 12),
-              Text(
-                t.dreamFilterOptions.selectTag,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: theme.colorScheme.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          content: SingleChildScrollView(
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 8,
+        child: BlocBuilder<DreamHistoryCubit, DreamHistoryState>(
+          builder: (context, state) => AlertDialog(
+            backgroundColor: theme.colorScheme.surface.withOpacity(0.9),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            title: Row(
               children: [
-                FilterChip(
-                  label: Text(t.dreamFilterOptions.all),
-                  selected: state.selectedTag == null,
-                  onSelected: (_) {
-                    context.read<DreamHistoryCubit>().updateSelectedTag(null);
-                    Navigator.of(context).pop();
-                  },
-                  selectedColor: theme.colorScheme.primaryContainer,
-                  backgroundColor: theme.colorScheme.surface.withOpacity(0.5),
-                  labelStyle: TextStyle(
-                    color: state.selectedTag == null
-                        ? theme.colorScheme.onPrimaryContainer
-                        : theme.colorScheme.onSurface,
+                Icon(
+                  Icons.local_offer_rounded,
+                  color: theme.colorScheme.primary,
+                  size: 20,
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  t.dreamFilterOptions.selectTag,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontWeight: FontWeight.bold,
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(
-                      color: state.selectedTag == null
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: state.selectedTags.isNotEmpty
+                      ? () {
+                          context.read<DreamHistoryCubit>().clearSelectedTags();
+                        }
+                      : null,
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    t.dreamFilterOptions.all,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: state.selectedTags.isNotEmpty
                           ? theme.colorScheme.primary
-                          : theme.colorScheme.primary.withOpacity(0.2),
+                          : theme.colorScheme.onSurface.withOpacity(0.38),
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-                ...state.availableTags.map((tag) {
-                  final isSelected = state.selectedTag == tag;
-                  return FilterChip(
-                    label: Text(tag),
-                    selected: isSelected,
-                    onSelected: (_) {
-                      context.read<DreamHistoryCubit>().updateSelectedTag(tag);
-                      Navigator.of(context).pop();
-                    },
-                    selectedColor: theme.colorScheme.primaryContainer,
-                    backgroundColor: theme.colorScheme.surface.withOpacity(0.5),
-                    labelStyle: TextStyle(
-                      color: isSelected
-                          ? theme.colorScheme.onPrimaryContainer
-                          : theme.colorScheme.onSurface,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(
-                        color: isSelected
-                            ? theme.colorScheme.primary
-                            : theme.colorScheme.primary.withOpacity(0.2),
-                      ),
-                    ),
-                  );
-                }).toList(),
               ],
+            ),
+            contentPadding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            content: SingleChildScrollView(
+              child: Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  ...state.availableTags.map((tag) {
+                    final isSelected = state.selectedTags.contains(tag);
+                    return Container(
+                      padding: const EdgeInsets.only(top: 8),
+                      decoration: isSelected
+                          ? BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: theme.colorScheme.secondary
+                                      .withOpacity(0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            )
+                          : null,
+                      child: FilterChip(
+                        label: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (isSelected)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 6),
+                                child: Icon(
+                                  Icons.check_circle,
+                                  size: 14,
+                                  color: theme.colorScheme.onSecondaryContainer,
+                                ),
+                              ),
+                            Text(
+                              tag,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: isSelected
+                                    ? theme.colorScheme.onSecondaryContainer
+                                    : theme.colorScheme.onSurface,
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+                        selected: isSelected,
+                        onSelected: (_) {
+                          context
+                              .read<DreamHistoryCubit>()
+                              .updateSelectedTag(tag);
+                        },
+                        selectedColor: theme.colorScheme.secondaryContainer,
+                        backgroundColor:
+                            theme.colorScheme.surface.withOpacity(0.2),
+                        showCheckmark: false,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(
+                            color: isSelected
+                                ? theme.colorScheme.secondary
+                                : theme.colorScheme.outline.withOpacity(0.3),
+                            width: 0.5,
+                          ),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    );
+                  }).toList(),
+                ],
+              ),
             ),
           ),
         ),

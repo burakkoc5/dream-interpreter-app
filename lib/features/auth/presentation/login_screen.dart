@@ -21,6 +21,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
 
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordVisible = !_isPasswordVisible;
+    });
+  }
+
+  void _clearForm() {
+    _formKey.currentState?.reset();
+    setState(() {});
+  }
+
   Future<void> _handleLogin() async {
     if (_formKey.currentState?.validate() ?? false) {
       try {
@@ -32,7 +43,14 @@ class _LoginScreenState extends State<LoginScreen> {
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(e.toString())),
+            SnackBar(
+              content: Text(e.toString()),
+              backgroundColor: Theme.of(context).colorScheme.error,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
           );
         }
       }
@@ -135,6 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             suffixIcon: _isPasswordVisible
                                 ? Icons.visibility_off
                                 : Icons.visibility,
+                            onSuffixIconTap: _togglePasswordVisibility,
                             obscureText: !_isPasswordVisible,
                             validator: (value) {
                               if (value?.isEmpty ?? true) {
@@ -182,12 +201,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 24),
                     AppButton(
                       text: t.registration.signUp.signUpText,
-                      onPressed: () => context.push(AppRoute.register),
+                      onPressed: () {
+                        _clearForm();
+                        context.push(AppRoute.register);
+                      },
                       variant: AppButtonVariant.ghost,
                       icon: Icons.person_add_outlined,
                     ),
                     TextButton(
-                      onPressed: () => context.push(AppRoute.passwordReset),
+                      onPressed: () {
+                        _clearForm();
+                        context.push(AppRoute.passwordReset);
+                      },
                       child: Text(
                         t.registration.signIn.forgotPassword,
                         style: theme.textTheme.labelLarge?.copyWith(

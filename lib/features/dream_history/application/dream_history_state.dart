@@ -15,7 +15,7 @@ class DreamHistoryState {
   final DocumentSnapshot? lastDocument;
   final int currentPage;
   final List<String> availableTags;
-  final String? selectedTag;
+  final List<String> selectedTags;
 
   const DreamHistoryState({
     this.dreams = const [],
@@ -29,7 +29,7 @@ class DreamHistoryState {
     this.lastDocument,
     this.currentPage = 0,
     this.availableTags = const [],
-    this.selectedTag,
+    this.selectedTags = const [],
   });
 
   DreamHistoryState copyWith({
@@ -44,7 +44,7 @@ class DreamHistoryState {
     DocumentSnapshot? lastDocument,
     int? currentPage,
     List<String>? availableTags,
-    String? selectedTag,
+    List<String>? selectedTags,
   }) {
     return DreamHistoryState(
       dreams: dreams ?? this.dreams,
@@ -58,7 +58,7 @@ class DreamHistoryState {
       lastDocument: lastDocument,
       currentPage: currentPage ?? this.currentPage,
       availableTags: availableTags ?? this.availableTags,
-      selectedTag: selectedTag,
+      selectedTags: selectedTags ?? this.selectedTags,
     );
   }
 }

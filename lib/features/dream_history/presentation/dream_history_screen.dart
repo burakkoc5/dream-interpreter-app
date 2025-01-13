@@ -82,10 +82,12 @@ class _DreamHistoryScreenState extends State<DreamHistoryScreen>
                                   padding: const EdgeInsets.all(16.0),
                                   child: buildSearchBar(context),
                                 ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 16.0,
+                                    right: 16.0,
+                                    bottom: 16.0,
+                                  ),
                                   child: buildFilterChips(context, state),
                                 ),
                               ],
