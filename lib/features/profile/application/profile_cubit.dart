@@ -172,4 +172,21 @@ class ProfileCubit extends Cubit<ProfileState> {
       ));
     }
   }
+
+  Future<void> updateProfilePreferences(Map<String, dynamic> data) async {
+    if (state.profile == null) return;
+
+    try {
+      await _repository.updateProfilePreferences(data);
+      final updatedProfile = state.profile!.copyWith(
+        preferences: (data['preferences'] as Map<String, dynamic>?) ??
+            state.profile!.preferences,
+      );
+      emit(state.copyWith(profile: updatedProfile));
+    } catch (e) {
+      emit(state.copyWith(
+        error: 'Failed to update preferences',
+      ));
+    }
+  }
 }

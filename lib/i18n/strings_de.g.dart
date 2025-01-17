@@ -53,6 +53,7 @@ class _TranslationsCoreDe implements TranslationsCoreEn {
 	@override String get appName => 'Traumtagebuch';
 	@override late final _TranslationsCoreModeDe mode = _TranslationsCoreModeDe._(_root);
 	@override late final _TranslationsCoreErrorsDe errors = _TranslationsCoreErrorsDe._(_root);
+	@override String get success => 'Erfolg';
 }
 
 // Path: registration
@@ -118,6 +119,7 @@ class _TranslationsSearchDreamsDe implements TranslationsSearchDreamsEn {
 	@override String get noResults => 'Keine Träume gefunden';
 	@override String get delete => 'Löschen';
 	@override String get undoButton => 'Rückgängig machen';
+	@override String get dreamDeleted => 'Traum gelöscht';
 }
 
 // Path: dreamHistory
@@ -145,11 +147,20 @@ class _TranslationsProfileDe implements TranslationsProfileEn {
 	@override String get dreamStats => 'Traumstatistiken';
 	@override String get totalDreams => 'Gesamtträume';
 	@override String get weeklyDreams => 'Wöchentliche Träume';
+	@override String get currentStreak => 'Mevcut Seri';
+	@override String get longestStreak => 'En Uzun Seri';
 	@override String get completionRate => 'Abschlussrate';
 	@override String get settings => 'Einstellungen';
 	@override String get notifications => 'Benachrichtigungen';
+	@override String get language => 'Sprache';
+	@override String get english => 'Englisch';
+	@override String get turkish => 'Türkisch';
+	@override String get german => 'Deutsch';
 	@override String get changePassword => 'Passwort ändern';
 	@override String get logout => 'Abmelden';
+	@override String get closeBackgroundAnimation => 'Hintergrundanimation schließen';
+	@override String get displayNameUpdated => 'Benutzername erfolgreich aktualisiert';
+	@override String get reminderUpdated => 'Traum-Erinnerung erfolgreich aktualisiert';
 }
 
 // Path: core.mode
@@ -159,8 +170,9 @@ class _TranslationsCoreModeDe implements TranslationsCoreModeEn {
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
-	@override String get darkMode => 'Dunkler Modus';
-	@override String get lightMode => 'Heller Modus';
+	@override String get systemMode => 'System';
+	@override String get darkMode => 'Dunkelmodus';
+	@override String get lightMode => 'Hellmodus';
 }
 
 // Path: core.errors
@@ -176,8 +188,8 @@ class _TranslationsCoreErrorsDe implements TranslationsCoreErrorsEn {
 	@override String get emailAlreadyInUse => 'E-Mail ist bereits registriert';
 	@override String get invalidEmail => 'Ungültiges E-Mail-Format';
 	@override String get weakPassword => 'Passwort ist zu schwach';
-	@override String get unknown => 'Ein unbekannter Fehler ist aufgetreten';
-	@override String get tryAgain => 'Bitte versuche es erneut';
+	@override String get unknown => 'E-Mail oder Passwort ist falsch';
+	@override String get tryAgain => 'Bitte versuchen Sie es erneut';
 	@override String get userNotAuthenticated => 'Benutzer nicht authentifiziert';
 }
 
@@ -352,17 +364,19 @@ extension on TranslationsDe {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
 			case 'core.appName': return 'Traumtagebuch';
-			case 'core.mode.darkMode': return 'Dunkler Modus';
-			case 'core.mode.lightMode': return 'Heller Modus';
+			case 'core.mode.systemMode': return 'System';
+			case 'core.mode.darkMode': return 'Dunkelmodus';
+			case 'core.mode.lightMode': return 'Hellmodus';
 			case 'core.errors.error': return 'Fehler';
 			case 'core.errors.userNotFound': return 'Benutzer nicht gefunden';
 			case 'core.errors.wrongPassword': return 'Ungültiges Passwort';
 			case 'core.errors.emailAlreadyInUse': return 'E-Mail ist bereits registriert';
 			case 'core.errors.invalidEmail': return 'Ungültiges E-Mail-Format';
 			case 'core.errors.weakPassword': return 'Passwort ist zu schwach';
-			case 'core.errors.unknown': return 'Ein unbekannter Fehler ist aufgetreten';
-			case 'core.errors.tryAgain': return 'Bitte versuche es erneut';
+			case 'core.errors.unknown': return 'E-Mail oder Passwort ist falsch';
+			case 'core.errors.tryAgain': return 'Bitte versuchen Sie es erneut';
 			case 'core.errors.userNotAuthenticated': return 'Benutzer nicht authentifiziert';
+			case 'core.success': return 'Erfolg';
 			case 'registration.welcomeText': return 'Willkommen zurück';
 			case 'registration.email.emailText': return 'E-Mail';
 			case 'registration.email.emailHint': return 'Bitte geben Sie Ihre E-Mail-Adresse ein';
@@ -438,6 +452,7 @@ extension on TranslationsDe {
 			case 'searchDreams.noResults': return 'Keine Träume gefunden';
 			case 'searchDreams.delete': return 'Löschen';
 			case 'searchDreams.undoButton': return 'Rückgängig machen';
+			case 'searchDreams.dreamDeleted': return 'Traum gelöscht';
 			case 'dreamHistory.dreamHistory': return 'Traumtagebuch';
 			case 'dreamHistory.noDreams': return 'Keine Träume aufgezeichnet';
 			case 'dreamHistory.noDreamsCaption': return 'Sie haben noch keine Träume aufgezeichnet. Beginnen Sie noch heute, Ihre Träume zu protokollieren.';
@@ -447,11 +462,20 @@ extension on TranslationsDe {
 			case 'profile.dreamStats': return 'Traumstatistiken';
 			case 'profile.totalDreams': return 'Gesamtträume';
 			case 'profile.weeklyDreams': return 'Wöchentliche Träume';
+			case 'profile.currentStreak': return 'Mevcut Seri';
+			case 'profile.longestStreak': return 'En Uzun Seri';
 			case 'profile.completionRate': return 'Abschlussrate';
 			case 'profile.settings': return 'Einstellungen';
 			case 'profile.notifications': return 'Benachrichtigungen';
+			case 'profile.language': return 'Sprache';
+			case 'profile.english': return 'Englisch';
+			case 'profile.turkish': return 'Türkisch';
+			case 'profile.german': return 'Deutsch';
 			case 'profile.changePassword': return 'Passwort ändern';
 			case 'profile.logout': return 'Abmelden';
+			case 'profile.closeBackgroundAnimation': return 'Hintergrundanimation schließen';
+			case 'profile.displayNameUpdated': return 'Benutzername erfolgreich aktualisiert';
+			case 'profile.reminderUpdated': return 'Traum-Erinnerung erfolgreich aktualisiert';
 			default: return null;
 		}
 	}

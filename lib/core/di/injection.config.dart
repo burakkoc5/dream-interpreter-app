@@ -16,6 +16,7 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
+import '../../config/language/language_cubit.dart' as _i58;
 import '../../config/theme/theme_cubit.dart' as _i223;
 import '../../features/auth/application/auth_cubit.dart' as _i877;
 import '../../features/auth/repositories/auth_repository.dart' as _i1041;
@@ -78,18 +79,21 @@ Future<_i174.GetIt> init(
   gh.singleton<_i604.ITimeZoneService>(() => registerModule.timeZoneService);
   gh.singleton<_i567.LocalStorageService>(
       () => _i567.LocalStorageService(gh<_i460.SharedPreferences>()));
+  gh.factory<_i58.LanguageCubit>(
+      () => _i58.LanguageCubit(gh<_i460.SharedPreferences>()));
   gh.factory<_i223.ThemeCubit>(
       () => _i223.ThemeCubit(gh<_i460.SharedPreferences>()));
   gh.factory<_i547.OnboardingCubit>(
       () => _i547.OnboardingCubit(gh<_i460.SharedPreferences>()));
+  gh.factory<_i386.DreamHistoryRepository>(() => _i386.DreamHistoryRepository(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i567.LocalStorageService>(),
+      ));
   gh.singleton<_i517.NotificationRepository>(() => _i517.NotificationRepository(
         gh<_i163.FlutterLocalNotificationsPlugin>(),
         gh<_i411.IPlatformNotificationSettings>(),
         gh<_i604.ITimeZoneService>(),
-      ));
-  gh.factory<_i386.DreamHistoryRepository>(() => _i386.DreamHistoryRepository(
-        gh<_i974.FirebaseFirestore>(),
-        gh<_i567.LocalStorageService>(),
+        gh<_i460.SharedPreferences>(),
       ));
   gh.factory<_i733.StatsRepository>(
       () => _i733.StatsRepository(gh<_i974.FirebaseFirestore>()));

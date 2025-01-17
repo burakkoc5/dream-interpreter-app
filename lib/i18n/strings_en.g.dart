@@ -122,6 +122,7 @@ class TranslationsSearchDreamsEn {
 	String get noResults => 'No dreams found';
 	String get delete => 'Delete';
 	String get undoButton => 'Undo';
+	String get dreamDeleted => 'Dream deleted';
 }
 
 // Path: dreamHistory
@@ -147,13 +148,20 @@ class TranslationsProfileEn {
 	String get username => 'Username';
 	String get profileNotFound => 'Profile not found';
 	String get dreamStats => 'Dream Statistics';
+	String get currentStreak => 'Current Streak';
+	String get longestStreak => 'Longest Streak';
 	String get totalDreams => 'Total Dreams';
 	String get weeklyDreams => 'Weekly Dreams';
 	String get completionRate => 'Completion Rate';
 	String get settings => 'Settings';
 	String get notifications => 'Notifications';
+	String get language => 'Language';
+	String get english => 'English';
+	String get turkish => 'Turkish';
+	String get german => 'German';
 	String get changePassword => 'Change Password';
 	String get logout => 'Logout';
+	String get closeBackgroundAnimation => 'Close Background Animation';
 }
 
 // Path: core.mode
@@ -180,7 +188,7 @@ class TranslationsCoreErrorsEn {
 	String get emailAlreadyInUse => 'Email is already registered';
 	String get invalidEmail => 'Invalid email format';
 	String get weakPassword => 'Password is too weak';
-	String get unknown => 'An unknown error occurred';
+	String get unknown => 'Email or password is incorrect';
 	String get tryAgain => 'Please try again';
 	String get userNotAuthenticated => 'User not authenticated';
 }
@@ -364,7 +372,7 @@ extension on Translations {
 			case 'core.errors.emailAlreadyInUse': return 'Email is already registered';
 			case 'core.errors.invalidEmail': return 'Invalid email format';
 			case 'core.errors.weakPassword': return 'Password is too weak';
-			case 'core.errors.unknown': return 'An unknown error occurred';
+			case 'core.errors.unknown': return 'Email or password is incorrect';
 			case 'core.errors.tryAgain': return 'Please try again';
 			case 'core.errors.userNotAuthenticated': return 'User not authenticated';
 			case 'registration.welcomeText': return 'Welcome Back';
@@ -442,6 +450,7 @@ extension on Translations {
 			case 'searchDreams.noResults': return 'No dreams found';
 			case 'searchDreams.delete': return 'Delete';
 			case 'searchDreams.undoButton': return 'Undo';
+			case 'searchDreams.dreamDeleted': return 'Dream deleted';
 			case 'dreamHistory.dreamHistory': return 'Past Dreams';
 			case 'dreamHistory.noDreams': return 'No dreams recorded';
 			case 'dreamHistory.noDreamsCaption': return 'You haven\'t recorded any dreams yet. Start recording your dreams today.';
@@ -449,13 +458,20 @@ extension on Translations {
 			case 'profile.username': return 'Username';
 			case 'profile.profileNotFound': return 'Profile not found';
 			case 'profile.dreamStats': return 'Dream Statistics';
+			case 'profile.currentStreak': return 'Current Streak';
+			case 'profile.longestStreak': return 'Longest Streak';
 			case 'profile.totalDreams': return 'Total Dreams';
 			case 'profile.weeklyDreams': return 'Weekly Dreams';
 			case 'profile.completionRate': return 'Completion Rate';
 			case 'profile.settings': return 'Settings';
 			case 'profile.notifications': return 'Notifications';
+			case 'profile.language': return 'Language';
+			case 'profile.english': return 'English';
+			case 'profile.turkish': return 'Turkish';
+			case 'profile.german': return 'German';
 			case 'profile.changePassword': return 'Change Password';
 			case 'profile.logout': return 'Logout';
+			case 'profile.closeBackgroundAnimation': return 'Close Background Animation';
 			default: return null;
 		}
 	}

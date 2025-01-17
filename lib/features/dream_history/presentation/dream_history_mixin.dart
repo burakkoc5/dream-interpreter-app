@@ -1,6 +1,8 @@
 import 'package:dream/core/routing/app_route_names.dart';
 import 'package:dream/features/dream_history/application/dream_history_cubit.dart';
 import 'package:dream/features/dream_history/application/dream_history_state.dart';
+import 'package:dream/features/dream_history/models/dream_history_model.dart';
+import 'package:dream/features/dream_history/presentation/widgets/delete_dream_alert_dialog.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:dream/shared/widgets/dream_card_widget.dart';
 import 'package:dream/shared/widgets/search_bar_widget.dart';
@@ -8,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:ui';
+
+import 'package:toastification/toastification.dart';
 
 mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
   final TextEditingController searchController = TextEditingController();
@@ -27,6 +31,19 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       cubit.loadDreams(refresh: true);
     });
+  }
+
+  void _showSuccessToast(String message) {
+    if (!mounted) return;
+
+    toastification.show(
+      autoCloseDuration: const Duration(seconds: 3),
+      context: context,
+      type: ToastificationType.success,
+      style: ToastificationStyle.flat,
+      title: Text('Başarılı'),
+      description: Text(message),
+    );
   }
 
   @override
@@ -52,8 +69,8 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
     final theme = Theme.of(context);
 
     return Wrap(
-      spacing: 6,
-      runSpacing: 6,
+      spacing: 4,
+      runSpacing: 4,
       children: [
         ...filterOptions.map((filter) {
           final isSelected = state.selectedFilter == filter;
@@ -65,21 +82,20 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
                     ? theme.colorScheme.onPrimaryContainer
                     : theme.colorScheme.onSurface,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                fontSize: 13,
               ),
             ),
             selected: isSelected,
             onSelected: (_) => context.read<DreamHistoryCubit>().updateFilter(
                   isSelected ? t.dreamFilterOptions.all : filter,
                 ),
-            selectedColor: theme.colorScheme.primaryContainer,
-            backgroundColor: theme.colorScheme.surface.withOpacity(0.3),
-            labelStyle: TextStyle(
-              color: isSelected
-                  ? theme.colorScheme.onPrimaryContainer
-                  : theme.colorScheme.onSurface,
-            ),
+            selectedColor: theme.colorScheme.primaryContainer.withOpacity(0.8),
+            backgroundColor: theme.colorScheme.surface.withOpacity(0.2),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            visualDensity: VisualDensity.compact,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(8),
               side: BorderSide(
                 color: isSelected
                     ? theme.colorScheme.primary
@@ -87,11 +103,8 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
                 width: 0.5,
               ),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            visualDensity: VisualDensity.compact,
           );
-        }).toList(),
+        }),
         if (state.availableTags.isNotEmpty)
           FilterChip(
             label: Row(
@@ -99,7 +112,7 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
               children: [
                 Icon(
                   Icons.local_offer_rounded,
-                  size: 14,
+                  size: 13,
                   color: state.selectedTags.isNotEmpty
                       ? theme.colorScheme.onSecondaryContainer
                       : theme.colorScheme.onSurface,
@@ -116,13 +129,14 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
                     fontWeight: state.selectedTags.isNotEmpty
                         ? FontWeight.w600
                         : FontWeight.normal,
+                    fontSize: 13,
                   ),
                 ),
                 if (state.selectedTags.isNotEmpty) ...[
                   const SizedBox(width: 4),
                   Icon(
                     Icons.close,
-                    size: 14,
+                    size: 13,
                     color: theme.colorScheme.onSecondaryContainer,
                   ),
                 ],
@@ -133,8 +147,11 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
             selectedColor: theme.colorScheme.secondaryContainer,
             backgroundColor: theme.colorScheme.surface.withOpacity(0.2),
             showCheckmark: false,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            visualDensity: VisualDensity.compact,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(8),
               side: BorderSide(
                 color: state.selectedTags.isNotEmpty
                     ? theme.colorScheme.primary
@@ -142,9 +159,6 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
                 width: 0.5,
               ),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            visualDensity: VisualDensity.compact,
           ),
       ],
     );
@@ -250,6 +264,30 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
                                     : FontWeight.normal,
                               ),
                             ),
+                            const SizedBox(width: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? theme.colorScheme.onSecondaryContainer
+                                        .withOpacity(0.2)
+                                    : theme.colorScheme.onSurface
+                                        .withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                '${state.tagCounts[tag] ?? 0}',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: isSelected
+                                      ? theme.colorScheme.onSecondaryContainer
+                                      : theme.colorScheme.onSurface
+                                          .withOpacity(0.7),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         selected: isSelected,
@@ -277,7 +315,7 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
                         visualDensity: VisualDensity.compact,
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),
@@ -406,89 +444,14 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
                   context: context,
                   builder: (context) => BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: AlertDialog(
-                      backgroundColor:
-                          theme.colorScheme.surface.withOpacity(0.9),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      title: Row(
-                        children: [
-                          Icon(
-                            Icons.warning_rounded,
-                            color: theme.colorScheme.error,
-                            size: 28,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            'Delete Dream',
-                            style: theme.textTheme.titleLarge?.copyWith(
-                              color: theme.colorScheme.onSurface,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      content: Text(
-                        'Are you sure you want to delete "${dream.title.isEmpty ? 'Untitled' : dream.title}"?',
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.8),
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(false),
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                          child: Text(
-                            'Cancel',
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              color: theme.colorScheme.primary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        FilledButton(
-                          onPressed: () => Navigator.of(context).pop(true),
-                          style: FilledButton.styleFrom(
-                            backgroundColor:
-                                theme.colorScheme.error.withOpacity(0.9),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                          child: Text(
-                            'Delete',
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              color: theme.colorScheme.onError,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                      ],
-                      actionsPadding: const EdgeInsets.all(16),
-                    ),
+                    child: DeleteDreamAlertDialog(theme: theme, dream: dream),
                   ),
                 );
 
                 if (shouldDelete == true && mounted) {
+                  debugPrint('DreamHistoryMixin - Deleting dream ${dream.id}');
                   context.read<DreamHistoryCubit>().deleteDream(dream.id);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Dream deleted'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor:
-                          theme.colorScheme.surface.withOpacity(0.9),
-                    ),
-                  );
+                  _showSuccessToast(t.searchDreams.dreamDeleted);
                 }
               },
             ),

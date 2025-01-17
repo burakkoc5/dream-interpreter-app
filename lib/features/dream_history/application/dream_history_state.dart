@@ -16,6 +16,7 @@ class DreamHistoryState {
   final int currentPage;
   final List<String> availableTags;
   final List<String> selectedTags;
+  final Map<String, int> tagCounts;
 
   const DreamHistoryState({
     this.dreams = const [],
@@ -30,6 +31,7 @@ class DreamHistoryState {
     this.currentPage = 0,
     this.availableTags = const [],
     this.selectedTags = const [],
+    this.tagCounts = const {},
   });
 
   DreamHistoryState copyWith({
@@ -45,6 +47,7 @@ class DreamHistoryState {
     int? currentPage,
     List<String>? availableTags,
     List<String>? selectedTags,
+    Map<String, int>? tagCounts,
   }) {
     return DreamHistoryState(
       dreams: dreams ?? this.dreams,
@@ -59,6 +62,7 @@ class DreamHistoryState {
       currentPage: currentPage ?? this.currentPage,
       availableTags: availableTags ?? this.availableTags,
       selectedTags: selectedTags ?? this.selectedTags,
+      tagCounts: tagCounts ?? this.tagCounts,
     );
   }
 }

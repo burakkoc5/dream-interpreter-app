@@ -70,7 +70,7 @@ class _DreamHistoryScreenState extends State<DreamHistoryScreen>
                           child: Container(
                             decoration: BoxDecoration(
                               color: theme.colorScheme.surface.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(32),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(
                                 color:
                                     theme.colorScheme.primary.withOpacity(0.1),
@@ -84,9 +84,9 @@ class _DreamHistoryScreenState extends State<DreamHistoryScreen>
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                    left: 16.0,
-                                    right: 16.0,
-                                    bottom: 16.0,
+                                    bottom: 8.0,
+                                    left: 6.0,
+                                    right: 6.0,
                                   ),
                                   child: buildFilterChips(context, state),
                                 ),

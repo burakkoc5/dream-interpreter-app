@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dream/features/auth/application/auth_cubit.dart';
 import 'package:dream/features/dream_history/models/dream_history_model.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/foundation.dart' show setEquals, listEquals;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../repositories/dream_history_repository.dart';
 import 'dream_history_state.dart';
@@ -261,10 +260,19 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
 
   void _updateAvailableTags() {
     final Set<String> tags = {};
+    final Map<String, int> counts = {};
+
     for (final dream in state.dreams) {
-      tags.addAll(dream.tags);
+      for (final tag in dream.tags) {
+        tags.add(tag);
+        counts[tag] = (counts[tag] ?? 0) + 1;
+      }
     }
-    emit(state.copyWith(availableTags: tags.toList()..sort()));
+
+    emit(state.copyWith(
+      availableTags: tags.toList()..sort(),
+      tagCounts: counts,
+    ));
   }
 
   void reset() {

@@ -136,8 +136,8 @@ class _AppTextFieldState extends State<AppTextField> {
               horizontal: 20,
               vertical: 16,
             ),
-            floatingLabelStyle: MaterialStateTextStyle.resolveWith((states) {
-              if (states.contains(MaterialState.error)) {
+            floatingLabelStyle: WidgetStateTextStyle.resolveWith((states) {
+              if (states.contains(WidgetState.error)) {
                 return TextStyle(
                   color: theme.colorScheme.error,
                   fontSize: 16,

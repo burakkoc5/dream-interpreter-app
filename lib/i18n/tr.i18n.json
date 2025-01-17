@@ -2,6 +2,7 @@
   "core": {
     "appName": "Rüya Günlüğü",
     "mode": {
+      "systemMode": "Sistem",
       "darkMode": "Karanlık Mod",
       "lightMode": "Aydınlık Mod"
     },
@@ -12,10 +13,11 @@
       "emailAlreadyInUse": "E-posta zaten kayıtlı",
       "invalidEmail": "Geçersiz e-posta formatı",
       "weakPassword": "Şifre çok zayıf",
-      "unknown": "Bilinmeyen bir hata oluştu",
+      "unknown": "E-posta veya şifre yanlış",
       "tryAgain": "Lütfen tekrar deneyin",
-      "userNotAuthenticated": "Kullanıcı oturum açmamış"
-    }
+      "userNotAuthenticated": "Kullanıcı kimliği doğrulanmadı"
+    },
+    "success": "Başarılı"
   },
   "registration": {
     "welcomeText": "Hoş Geldiniz",
@@ -122,7 +124,8 @@
     "retryButton": "Tekrar Dene",
     "noResults": "Hiç rüya bulunamadı",
     "delete": "Sil",
-    "undoButton": "Geri Al"
+    "undoButton": "Geri Al",
+    "dreamDeleted": "Rüya silindi"
   },
   "dreamHistory": {
     "dreamHistory": "Rüya Günlüğü",
@@ -136,10 +139,19 @@
     "dreamStats": "Rüya İstatistikleri",
     "totalDreams": "Toplam Rüyalar",
     "weeklyDreams": "Haftalık Rüyalar",
+    "currentStreak": "Mevcut Seri",
+    "longestStreak": "En Uzun Seri",
     "completionRate": "Tamamlama Oranı",
     "settings": "Ayarlar",
     "notifications": "Bildirimler",
-    "changePassword": "Şifreyi Değiştir",
-    "logout": "Çıkış Yap"
+    "language": "Dil",
+    "english": "İngilizce",
+    "turkish": "Türkçe",
+    "german": "Almanca",
+    "changePassword": "Şifre Değiştir",
+    "logout": "Çıkış Yap",
+    "closeBackgroundAnimation": "Arka Plan Animasyonunu Kapat",
+    "displayNameUpdated": "Kullanıcı adı başarıyla güncellendi",
+    "reminderUpdated": "Rüya hatırlatıcısı başarıyla güncellendi"
   }
 }

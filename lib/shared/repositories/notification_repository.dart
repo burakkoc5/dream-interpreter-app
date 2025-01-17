@@ -6,6 +6,7 @@ import 'package:dream/shared/services/time_zone_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:injectable/injectable.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Main notification service implementing the interface
 @singleton
@@ -13,57 +14,31 @@ class NotificationRepository implements INotificationService {
   final FlutterLocalNotificationsPlugin _notifications;
   final IPlatformNotificationSettings _platformSettings;
   final ITimeZoneService _timeZoneService;
+  final SharedPreferences _prefs;
   bool _isInitialized = false;
   final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
+  static const String _permissionsRequestedKey =
+      'notification_permissions_requested';
 
   NotificationRepository(
     this._notifications,
     this._platformSettings,
     this._timeZoneService,
+    this._prefs,
   );
 
   Future<bool> _checkAndroidPermissions() async {
     if (!Platform.isAndroid) return true;
 
     final androidInfo = await _deviceInfo.androidInfo;
-    if (androidInfo.version.sdkInt >= 31) {
-      // Android 12 or higher
-      final androidPlugin =
-          _notifications.resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>();
+    if (androidInfo.version.sdkInt < 33) return true;
 
-      // Check exact alarm permission
-      final alarmPermissionStatus =
-          await androidPlugin?.requestExactAlarmsPermission();
-      if (alarmPermissionStatus != true) {
-        print('Exact alarm permission not granted');
-        return false;
-      }
+    final permissionStatus = await _notifications
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
 
-      // Check notification permission
-      final notificationPermissionStatus =
-          await androidPlugin?.requestNotificationsPermission();
-      if (notificationPermissionStatus != true) {
-        print('Notification permission not granted');
-        return false;
-      }
-    }
-    return true;
-  }
-
-  Future<bool> _requestIOSPermissions() async {
-    if (!Platform.isIOS) return true;
-
-    final iosPlugin = _notifications.resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>();
-
-    final bool? permissionResult = await iosPlugin?.requestPermissions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    return permissionResult ?? false;
+    return permissionStatus ?? false;
   }
 
   @override
@@ -72,51 +47,50 @@ class NotificationRepository implements INotificationService {
 
     await _timeZoneService.initialize();
     final settings = await _platformSettings.getSettings();
-    await _platformSettings.requestPermissions(_notifications);
-
-    final hasIOSPermissions = await _requestIOSPermissions();
-    if (!hasIOSPermissions) {
-      throw Exception('iOS permissions not granted');
-    }
-
-    final hasAndroidPermissions = await _checkAndroidPermissions();
-    if (!hasAndroidPermissions) {
-      throw Exception('Android permissions not granted');
-    }
-
     await _notifications.initialize(settings);
+
+    // Request permissions on first app launch
+    final permissionsRequested =
+        _prefs.getBool(_permissionsRequestedKey) ?? false;
+    if (!permissionsRequested) {
+      if (Platform.isIOS) {
+        await _platformSettings.requestPermissions(_notifications);
+      } else {
+        await _checkAndroidPermissions();
+      }
+      await _prefs.setBool(_permissionsRequestedKey, true);
+    }
 
     _isInitialized = true;
   }
 
   @override
-  Future<void> scheduleDreamReminder({required DateTime time}) async {
-    if (!_isInitialized) {
-      await initialize();
-    }
-
-    final androidDetails = AndroidNotificationDetails(
-      'dream_reminders',
-      'Dream Reminders',
-      channelDescription: 'Notifications for dream entry reminders',
-      importance: Importance.high,
-      priority: Priority.high,
-    );
-
-    final notificationDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: const DarwinNotificationDetails(),
-    );
+  Future<void> scheduleDreamReminder({
+    required DateTime time,
+  }) async {
+    if (!_isInitialized) await initialize();
 
     final scheduledDate = await _timeZoneService.getScheduledDate(time);
-    final int notificationId = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
     await _notifications.zonedSchedule(
-      notificationId,
-      'Time to Record Your Dream',
-      'Don\'t forget to write down your dream while it\'s fresh in your memory!',
+      0,
+      'Dream Journal',
+      'Time to record your dream!',
       scheduledDate,
-      notificationDetails,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'dream_reminder',
+          'Dream Reminders',
+          channelDescription: 'Notifications for dream recording reminders',
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+      ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
@@ -126,6 +100,7 @@ class NotificationRepository implements INotificationService {
 
   @override
   Future<void> cancelAllReminders() async {
+    if (!_isInitialized) await initialize();
     await _notifications.cancelAll();
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:dream/config/theme/theme_cubit.dart';
+import 'package:dream/features/profile/application/profile_cubit.dart';
+import 'package:dream/features/profile/application/profile_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AnimatedBackground extends StatefulWidget {
@@ -32,62 +34,109 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = context.watch<ThemeCubit>().state;
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
+        (context.watch<ThemeCubit>().state == ThemeMode.system &&
+            brightness == Brightness.dark);
 
-    return Stack(
-      children: [
-        // Animated gradient background
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment(
-                    math.cos(_controller.value * 2 * math.pi),
-                    math.sin(_controller.value * 2 * math.pi),
-                  ),
-                  end: Alignment(
-                    -math.sin(_controller.value * 2 * math.pi),
-                    math.cos(_controller.value * 2 * math.pi),
-                  ),
-                  colors: isDarkMode
-                      ? [
-                          theme.colorScheme.surface.withOpacity(0.95),
-                          theme.colorScheme.surfaceVariant.withOpacity(0.85),
-                          theme.colorScheme.surfaceVariant.withOpacity(0.8),
-                          theme.colorScheme.surface.withOpacity(0.9),
-                        ]
-                      : [
-                          theme.colorScheme.primary.withOpacity(0.15),
-                          theme.colorScheme.surface.withOpacity(0.2),
-                          theme.colorScheme.surfaceVariant.withOpacity(0.18),
-                          theme.colorScheme.secondary.withOpacity(0.15),
-                        ],
-                  stops: const [0.0, 0.3, 0.7, 1.0],
-                ),
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        final shouldAnimate =
+            state.profile?.preferences['closeBackgroundAnimation'] as bool? ??
+                true;
+
+        if (!shouldAnimate) {
+          _controller.stop();
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: const Alignment(-1, -1),
+                end: const Alignment(1, 1),
+                colors: isDarkMode
+                    ? [
+                        theme.colorScheme.surface.withOpacity(0.95),
+                        theme.colorScheme.surfaceContainerHighest
+                            .withOpacity(0.85),
+                        theme.colorScheme.surfaceContainerHighest
+                            .withOpacity(0.8),
+                        theme.colorScheme.surface.withOpacity(0.9),
+                      ]
+                    : [
+                        theme.colorScheme.primary.withOpacity(0.15),
+                        theme.colorScheme.surface.withOpacity(0.2),
+                        theme.colorScheme.surfaceContainerHighest
+                            .withOpacity(0.18),
+                        theme.colorScheme.secondary.withOpacity(0.15),
+                      ],
+                stops: const [0.0, 0.3, 0.7, 1.0],
               ),
-            );
-          },
-        ),
-        // Animated stars background
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return CustomPaint(
-              painter: StarfieldPainter(
-                color: isDarkMode
-                    ? Colors.white
-                    : theme.colorScheme.primary.withOpacity(0.8),
-                animation: _controller.value,
-                starCount: isDarkMode ? 200 : 150,
-                opacity: isDarkMode ? 0.5 : 0.8,
-              ),
-              size: Size.infinite,
-            );
-          },
-        ),
-      ],
+            ),
+          );
+        }
+
+        if (_controller.status != AnimationStatus.forward) {
+          _controller.repeat();
+        }
+
+        return Stack(
+          children: [
+            // Animated gradient background
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment(
+                        math.cos(_controller.value * 2 * math.pi),
+                        math.sin(_controller.value * 2 * math.pi),
+                      ),
+                      end: Alignment(
+                        -math.sin(_controller.value * 2 * math.pi),
+                        math.cos(_controller.value * 2 * math.pi),
+                      ),
+                      colors: isDarkMode
+                          ? [
+                              theme.colorScheme.surface.withOpacity(0.95),
+                              theme.colorScheme.surfaceContainerHighest
+                                  .withOpacity(0.85),
+                              theme.colorScheme.surfaceContainerHighest
+                                  .withOpacity(0.8),
+                              theme.colorScheme.surface.withOpacity(0.9),
+                            ]
+                          : [
+                              theme.colorScheme.primary.withOpacity(0.15),
+                              theme.colorScheme.surface.withOpacity(0.2),
+                              theme.colorScheme.surfaceContainerHighest
+                                  .withOpacity(0.18),
+                              theme.colorScheme.secondary.withOpacity(0.15),
+                            ],
+                      stops: const [0.0, 0.3, 0.7, 1.0],
+                    ),
+                  ),
+                );
+              },
+            ),
+            // Animated stars background
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return CustomPaint(
+                  painter: StarfieldPainter(
+                    color: isDarkMode
+                        ? Colors.white
+                        : theme.colorScheme.primary.withOpacity(0.8),
+                    animation: _controller.value,
+                    starCount: isDarkMode ? 200 : 150,
+                    opacity: isDarkMode ? 0.5 : 0.8,
+                  ),
+                  size: Size.infinite,
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

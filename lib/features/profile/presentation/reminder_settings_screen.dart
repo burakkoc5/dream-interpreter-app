@@ -15,7 +15,10 @@ class ReminderSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = context.watch<ThemeCubit>().state;
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
+        (context.watch<ThemeCubit>().state == ThemeMode.system &&
+            brightness == Brightness.dark);
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
@@ -47,21 +50,17 @@ class ReminderSettingsScreen extends StatelessWidget {
           appBar: AppBar(
             title: Text(
               'Set dream reminder time',
-              style: theme.textTheme.headlineSmall?.copyWith(
+              style: theme.textTheme.titleLarge?.copyWith(
                 color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+                letterSpacing: -0.5,
               ),
             ),
             centerTitle: true,
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: theme.colorScheme.onSurface,
-              ),
-              onPressed: () => context.pop(),
-            ),
+            automaticallyImplyLeading: false,
             flexibleSpace: ClipRect(
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),

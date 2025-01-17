@@ -12,7 +12,7 @@
       "emailAlreadyInUse": "Email is already registered",
       "invalidEmail": "Invalid email format",
       "weakPassword": "Password is too weak",
-      "unknown": "An unknown error occurred",
+      "unknown": "Email or password is incorrect",
       "tryAgain": "Please try again",
       "userNotAuthenticated": "User not authenticated"
     }
@@ -124,7 +124,8 @@
     "retryButton": "Retry",
     "noResults": "No dreams found",
     "delete": "Delete",
-    "undoButton": "Undo"
+    "undoButton": "Undo",
+    "dreamDeleted": "Dream deleted"
   },
   "dreamHistory": {
     "dreamHistory": "Past Dreams",
@@ -136,12 +137,19 @@
     "username": "Username",
     "profileNotFound": "Profile not found",
     "dreamStats": "Dream Statistics",
+    "currentStreak": "Current Streak",
+    "longestStreak": "Longest Streak",
     "totalDreams": "Total Dreams",
     "weeklyDreams": "Weekly Dreams",
     "completionRate": "Completion Rate",
     "settings": "Settings",
     "notifications": "Notifications",
+    "language": "Language",
+    "english": "English",
+    "turkish": "Turkish",
+    "german": "German",
     "changePassword": "Change Password",
-    "logout": "Logout"
+    "logout": "Logout",
+    "closeBackgroundAnimation": "Close Background Animation"
   }
 }

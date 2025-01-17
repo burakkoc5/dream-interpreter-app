@@ -53,6 +53,7 @@ class _TranslationsCoreTr implements TranslationsCoreEn {
 	@override String get appName => 'Rüya Günlüğü';
 	@override late final _TranslationsCoreModeTr mode = _TranslationsCoreModeTr._(_root);
 	@override late final _TranslationsCoreErrorsTr errors = _TranslationsCoreErrorsTr._(_root);
+	@override String get success => 'Başarılı';
 }
 
 // Path: registration
@@ -118,6 +119,7 @@ class _TranslationsSearchDreamsTr implements TranslationsSearchDreamsEn {
 	@override String get noResults => 'Hiç rüya bulunamadı';
 	@override String get delete => 'Sil';
 	@override String get undoButton => 'Geri Al';
+	@override String get dreamDeleted => 'Rüya silindi';
 }
 
 // Path: dreamHistory
@@ -145,11 +147,20 @@ class _TranslationsProfileTr implements TranslationsProfileEn {
 	@override String get dreamStats => 'Rüya İstatistikleri';
 	@override String get totalDreams => 'Toplam Rüyalar';
 	@override String get weeklyDreams => 'Haftalık Rüyalar';
+	@override String get currentStreak => 'Mevcut Seri';
+	@override String get longestStreak => 'En Uzun Seri';
 	@override String get completionRate => 'Tamamlama Oranı';
 	@override String get settings => 'Ayarlar';
 	@override String get notifications => 'Bildirimler';
-	@override String get changePassword => 'Şifreyi Değiştir';
+	@override String get language => 'Dil';
+	@override String get english => 'İngilizce';
+	@override String get turkish => 'Türkçe';
+	@override String get german => 'Almanca';
+	@override String get changePassword => 'Şifre Değiştir';
 	@override String get logout => 'Çıkış Yap';
+	@override String get closeBackgroundAnimation => 'Arka Plan Animasyonunu Kapat';
+	@override String get displayNameUpdated => 'Kullanıcı adı başarıyla güncellendi';
+	@override String get reminderUpdated => 'Rüya hatırlatıcısı başarıyla güncellendi';
 }
 
 // Path: core.mode
@@ -159,6 +170,7 @@ class _TranslationsCoreModeTr implements TranslationsCoreModeEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
+	@override String get systemMode => 'Sistem';
 	@override String get darkMode => 'Karanlık Mod';
 	@override String get lightMode => 'Aydınlık Mod';
 }
@@ -176,9 +188,9 @@ class _TranslationsCoreErrorsTr implements TranslationsCoreErrorsEn {
 	@override String get emailAlreadyInUse => 'E-posta zaten kayıtlı';
 	@override String get invalidEmail => 'Geçersiz e-posta formatı';
 	@override String get weakPassword => 'Şifre çok zayıf';
-	@override String get unknown => 'Bilinmeyen bir hata oluştu';
+	@override String get unknown => 'E-posta veya şifre yanlış';
 	@override String get tryAgain => 'Lütfen tekrar deneyin';
-	@override String get userNotAuthenticated => 'Kullanıcı oturum açmamış';
+	@override String get userNotAuthenticated => 'Kullanıcı kimliği doğrulanmadı';
 }
 
 // Path: registration.email
@@ -352,6 +364,7 @@ extension on TranslationsTr {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
 			case 'core.appName': return 'Rüya Günlüğü';
+			case 'core.mode.systemMode': return 'Sistem';
 			case 'core.mode.darkMode': return 'Karanlık Mod';
 			case 'core.mode.lightMode': return 'Aydınlık Mod';
 			case 'core.errors.error': return 'Hata';
@@ -360,9 +373,10 @@ extension on TranslationsTr {
 			case 'core.errors.emailAlreadyInUse': return 'E-posta zaten kayıtlı';
 			case 'core.errors.invalidEmail': return 'Geçersiz e-posta formatı';
 			case 'core.errors.weakPassword': return 'Şifre çok zayıf';
-			case 'core.errors.unknown': return 'Bilinmeyen bir hata oluştu';
+			case 'core.errors.unknown': return 'E-posta veya şifre yanlış';
 			case 'core.errors.tryAgain': return 'Lütfen tekrar deneyin';
-			case 'core.errors.userNotAuthenticated': return 'Kullanıcı oturum açmamış';
+			case 'core.errors.userNotAuthenticated': return 'Kullanıcı kimliği doğrulanmadı';
+			case 'core.success': return 'Başarılı';
 			case 'registration.welcomeText': return 'Hoş Geldiniz';
 			case 'registration.email.emailText': return 'E-posta';
 			case 'registration.email.emailHint': return 'Lütfen e-posta adresinizi girin';
@@ -438,6 +452,7 @@ extension on TranslationsTr {
 			case 'searchDreams.noResults': return 'Hiç rüya bulunamadı';
 			case 'searchDreams.delete': return 'Sil';
 			case 'searchDreams.undoButton': return 'Geri Al';
+			case 'searchDreams.dreamDeleted': return 'Rüya silindi';
 			case 'dreamHistory.dreamHistory': return 'Rüya Günlüğü';
 			case 'dreamHistory.noDreams': return 'Kaydedilen rüya yok';
 			case 'dreamHistory.noDreamsCaption': return 'Henüz hiçbir rüya kaydetmediniz. Bugün rüyalarınızı kaydetmeye başlayın.';
@@ -447,11 +462,20 @@ extension on TranslationsTr {
 			case 'profile.dreamStats': return 'Rüya İstatistikleri';
 			case 'profile.totalDreams': return 'Toplam Rüyalar';
 			case 'profile.weeklyDreams': return 'Haftalık Rüyalar';
+			case 'profile.currentStreak': return 'Mevcut Seri';
+			case 'profile.longestStreak': return 'En Uzun Seri';
 			case 'profile.completionRate': return 'Tamamlama Oranı';
 			case 'profile.settings': return 'Ayarlar';
 			case 'profile.notifications': return 'Bildirimler';
-			case 'profile.changePassword': return 'Şifreyi Değiştir';
+			case 'profile.language': return 'Dil';
+			case 'profile.english': return 'İngilizce';
+			case 'profile.turkish': return 'Türkçe';
+			case 'profile.german': return 'Almanca';
+			case 'profile.changePassword': return 'Şifre Değiştir';
 			case 'profile.logout': return 'Çıkış Yap';
+			case 'profile.closeBackgroundAnimation': return 'Arka Plan Animasyonunu Kapat';
+			case 'profile.displayNameUpdated': return 'Kullanıcı adı başarıyla güncellendi';
+			case 'profile.reminderUpdated': return 'Rüya hatırlatıcısı başarıyla güncellendi';
 			default: return null;
 		}
 	}

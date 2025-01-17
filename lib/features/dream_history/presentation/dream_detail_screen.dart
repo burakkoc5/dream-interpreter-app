@@ -7,7 +7,9 @@ import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dream/config/theme/theme_cubit.dart';
 import 'package:dream/features/dream_history/application/dream_history_cubit.dart';
+import 'package:dream/features/dream_history/application/dream_history_state.dart';
 import 'package:dream/core/presentation/animated_background.dart';
+import 'package:dream/shared/widgets/mood_rating_widget.dart';
 
 class DreamDetailScreen extends StatefulWidget {
   final DreamHistoryModel dream;
@@ -43,7 +45,10 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = context.watch<ThemeCubit>().state;
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
+        (context.watch<ThemeCubit>().state == ThemeMode.system &&
+            brightness == Brightness.dark);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -72,10 +77,10 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
                             theme.colorScheme.secondary.withOpacity(0.15),
                           ]
                         : [
-                            theme.colorScheme.background,
-                            theme.colorScheme.background,
-                            theme.colorScheme.background.withOpacity(0.95),
-                            theme.colorScheme.background.withOpacity(0.9),
+                            theme.colorScheme.surface,
+                            theme.colorScheme.surface,
+                            theme.colorScheme.surface.withOpacity(0.95),
+                            theme.colorScheme.surface.withOpacity(0.9),
                           ],
                   ),
                 ),
@@ -111,28 +116,45 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
                   ),
                   onPressed: () => context.pop(),
                 ),
+                title: Text(
+                  widget.dream.title,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    color: isDarkMode
+                        ? theme.colorScheme.onSurface
+                        : theme.colorScheme.onPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 actions: [
-                  IconButton(
-                    icon: Icon(
-                      widget.dream.isFavourite
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color: widget.dream.isFavourite
-                          ? Colors.red
-                          : (isDarkMode
-                              ? theme.colorScheme.onSurface
-                              : theme.colorScheme.onPrimary),
-                    ),
-                    onPressed: () {
-                      context
-                          .read<DreamHistoryCubit>()
-                          .toggleFavorite(widget.dream);
+                  BlocBuilder<DreamHistoryCubit, DreamHistoryState>(
+                    builder: (context, state) {
+                      final dream = state.dreams.firstWhere(
+                        (d) => d.id == widget.dream.id,
+                        orElse: () => widget.dream,
+                      );
+                      return IconButton(
+                        icon: Icon(
+                          dream.isFavourite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: dream.isFavourite
+                              ? Colors.red
+                              : (isDarkMode
+                                  ? theme.colorScheme.onSurface
+                                  : theme.colorScheme.onPrimary),
+                        ),
+                        onPressed: () {
+                          context
+                              .read<DreamHistoryCubit>()
+                              .toggleFavorite(dream);
+                        },
+                      );
                     },
                   ),
                 ],
                 expandedHeight: 200,
-                toolbarHeight: 72,
-                collapsedHeight: 72,
+                toolbarHeight: 54,
+                collapsedHeight: 54,
                 floating: false,
                 pinned: true,
                 backgroundColor: Colors.transparent,
@@ -147,30 +169,6 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
                       ),
                       centerTitle: false,
                       expandedTitleScale: 1.3,
-                      title: Container(
-                        constraints: const BoxConstraints(maxWidth: 300),
-                        child: Text(
-                          widget.dream.title,
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            color: isDarkMode
-                                ? theme.colorScheme.onSurface
-                                : theme.colorScheme.onPrimary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            shadows: [
-                              Shadow(
-                                color: (isDarkMode
-                                        ? theme.colorScheme.primary
-                                        : theme.colorScheme.onPrimary)
-                                    .withOpacity(0.5),
-                                blurRadius: 8,
-                              ),
-                            ],
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
                       background: Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -249,7 +247,10 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
     Color? iconColor,
   }) {
     final theme = Theme.of(context);
-    final isDarkMode = context.watch<ThemeCubit>().state;
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
+        (context.watch<ThemeCubit>().state == ThemeMode.system &&
+            brightness == Brightness.dark);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
@@ -325,7 +326,10 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
 
   Widget _buildTagsSection(BuildContext context, List<String> tags) {
     final theme = Theme.of(context);
-    final isDarkMode = context.watch<ThemeCubit>().state;
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
+        (context.watch<ThemeCubit>().state == ThemeMode.system &&
+            brightness == Brightness.dark);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
@@ -408,7 +412,10 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
 
   Widget _buildMoodRatingSection(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = context.watch<ThemeCubit>().state;
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
+        (context.watch<ThemeCubit>().state == ThemeMode.system &&
+            brightness == Brightness.dark);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -454,16 +461,10 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Row(
-                      children: List.generate(5, (index) {
-                        return Icon(
-                          index < widget.dream.moodRating
-                              ? Icons.star
-                              : Icons.star_border,
-                          color: theme.colorScheme.primary,
-                          size: 20,
-                        );
-                      }),
+                    MoodRatingWidget(
+                      rating: widget.dream.moodRating,
+                      isInteractive: false,
+                      size: 28,
                     ),
                   ],
                 ),

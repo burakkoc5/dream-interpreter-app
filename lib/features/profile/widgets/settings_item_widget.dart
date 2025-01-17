@@ -5,11 +5,11 @@ import 'package:dream/features/dream_history/application/dream_history_cubit.dar
 import 'package:dream/features/profile/application/profile_state.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:dream/shared/widgets/theme_toggle_button.dart';
+import 'package:dream/shared/widgets/language_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../application/profile_cubit.dart';
 import 'package:go_router/go_router.dart';
-import 'dart:ui';
 import 'package:dream/config/theme/theme_cubit.dart';
 
 /// Widget displaying settings options in a list format
@@ -19,111 +19,191 @@ class SettingsItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = context.watch<ThemeCubit>().state;
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
+        (context.watch<ThemeCubit>().state == ThemeMode.system &&
+            brightness == Brightness.dark);
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final profile = state.profile;
         if (profile == null) return const SizedBox.shrink();
 
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-            child: Container(
-              decoration: BoxDecoration(
-                color: (isDarkMode
-                        ? theme.colorScheme.surface
-                        : theme.colorScheme.surface)
-                    .withOpacity(isDarkMode ? 0.4 : 0.7),
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(
-                  color: theme.colorScheme.primary.withOpacity(0.2),
-                  width: 1.5,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
-                    blurRadius: 16,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.primary
-                              .withOpacity(isDarkMode ? 0.2 : 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(
-                          Icons.settings,
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        t.profile.settings,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: theme.colorScheme.onSurface,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  _buildSettingItem(
-                    context,
-                    icon: Icons.notification_add,
-                    title: 'Dream Reminders',
-                    onTap: () => context.push(AppRoute.reminderSettings),
-                  ),
-                  _buildDivider(context),
-                  _buildSettingItem(
-                    context,
-                    icon: Icons.notifications,
-                    title: t.profile.notifications,
-                    trailing: Switch(
-                      value: profile.notificationsEnabled,
-                      onChanged: (enabled) {
-                        context
-                            .read<ProfileCubit>()
-                            .updateNotifications(enabled);
-                      },
-                    ),
-                  ),
-                  _buildDivider(context),
-                  const ThemeToggleButton(),
-                  _buildDivider(context),
-                  _buildSettingItem(
-                    context,
-                    icon: Icons.lock,
-                    title: t.profile.changePassword,
-                    onTap: () => context.push(AppRoute.changePassword),
-                  ),
-                  _buildDivider(context),
-                  _buildSettingItem(
-                    context,
-                    icon: Icons.logout,
-                    title: t.profile.logout,
-                    textColor: theme.colorScheme.error,
-                    iconColor: theme.colorScheme.error,
-                    onTap: () {
-                      context.read<DreamEntryCubit>().reset();
-                      context.read<DreamHistoryCubit>().reset();
-                      context.read<AuthCubit>().signOut();
-                      context.go(AppRoute.login);
-                    },
-                  ),
-                ],
-              ),
+        return Container(
+          decoration: BoxDecoration(
+            color:
+                theme.colorScheme.surface.withOpacity(isDarkMode ? 0.4 : 0.7),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: theme.colorScheme.primary.withOpacity(0.1),
+              width: 1,
             ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primary
+                            .withOpacity(isDarkMode ? 0.2 : 0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        Icons.settings,
+                        color: theme.colorScheme.primary,
+                        size: 18,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      t.profile.settings,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: theme.colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                minVerticalPadding: 0,
+                visualDensity: VisualDensity.compact,
+                leading: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    Icons.notifications,
+                    color: theme.colorScheme.primary,
+                    size: 18,
+                  ),
+                ),
+                title: Text(
+                  t.profile.notifications,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontSize: 14,
+                  ),
+                ),
+                trailing: Transform.scale(
+                  scale: 0.8,
+                  child: Switch.adaptive(
+                    value: profile.notificationsEnabled,
+                    onChanged: (enabled) {
+                      context.read<ProfileCubit>().updateNotifications(enabled);
+                    },
+                    activeColor: theme.colorScheme.primary,
+                    activeTrackColor:
+                        theme.colorScheme.primary.withOpacity(0.3),
+                    inactiveThumbColor:
+                        theme.colorScheme.onSurface.withOpacity(0.8),
+                    inactiveTrackColor:
+                        theme.colorScheme.onSurface.withOpacity(0.2),
+                  ),
+                ),
+              ),
+              _buildDivider(context),
+              _buildSettingItem(
+                context,
+                icon: Icons.notification_add,
+                title: t.dreamEntry.dreamForm.record,
+                onTap: profile.notificationsEnabled
+                    ? () => context.push(AppRoute.reminderSettings)
+                    : null,
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: profile.notificationsEnabled
+                      ? theme.colorScheme.onSurface.withOpacity(0.5)
+                      : theme.colorScheme.onSurface.withOpacity(0.2),
+                ),
+              ),
+              _buildDivider(context),
+              const ThemeToggleButton(),
+              _buildDivider(context),
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                minVerticalPadding: 0,
+                visualDensity: VisualDensity.compact,
+                leading: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    Icons.animation,
+                    color: theme.colorScheme.primary,
+                    size: 18,
+                  ),
+                ),
+                title: Text(
+                  t.profile.closeBackgroundAnimation,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontSize: 14,
+                  ),
+                ),
+                trailing: Transform.scale(
+                  scale: 0.8,
+                  child: Switch.adaptive(
+                    value: profile.preferences['closeBackgroundAnimation']
+                            as bool? ??
+                        true,
+                    onChanged: (enabled) {
+                      context.read<ProfileCubit>().updateProfilePreferences({
+                        'preferences': {
+                          ...profile.preferences,
+                          'closeBackgroundAnimation': enabled,
+                        }
+                      });
+                    },
+                    activeColor: theme.colorScheme.primary,
+                    activeTrackColor:
+                        theme.colorScheme.primary.withOpacity(0.3),
+                    inactiveThumbColor:
+                        theme.colorScheme.onSurface.withOpacity(0.8),
+                    inactiveTrackColor:
+                        theme.colorScheme.onSurface.withOpacity(0.2),
+                  ),
+                ),
+              ),
+              _buildDivider(context),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: const LanguageSelector(),
+              ),
+              _buildDivider(context),
+              _buildSettingItem(
+                context,
+                icon: Icons.lock,
+                title: t.profile.changePassword,
+                onTap: () => context.push(AppRoute.changePassword),
+              ),
+              _buildDivider(context),
+              _buildSettingItem(
+                context,
+                icon: Icons.logout,
+                title: t.profile.logout,
+                onTap: () async {
+                  await context.read<AuthCubit>().signOut();
+                  if (context.mounted) {
+                    context.read<DreamEntryCubit>().reset();
+                    context.read<DreamHistoryCubit>().reset();
+                    context.go(AppRoute.login);
+                  }
+                },
+              ),
+            ],
           ),
         );
       },
@@ -134,70 +214,49 @@ class SettingsItemWidget extends StatelessWidget {
     BuildContext context, {
     required IconData icon,
     required String title,
-    Color? textColor,
-    Color? iconColor,
-    Widget? trailing,
     VoidCallback? onTap,
+    Widget? trailing,
   }) {
     final theme = Theme.of(context);
-    final isDarkMode = context.watch<ThemeCubit>().state;
+    final isDisabled = onTap == null;
 
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: (iconColor ?? theme.colorScheme.primary)
-                    .withOpacity(isDarkMode ? 0.2 : 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                icon,
-                color: iconColor ?? theme.colorScheme.primary,
-                size: 20,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                title,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: textColor ??
-                      theme.colorScheme.onSurface.withOpacity(
-                        isDarkMode ? 0.9 : 0.8,
-                      ),
-                ),
-              ),
-            ),
-            if (trailing != null) trailing,
-          ],
+    return ListTile(
+      enabled: !isDisabled,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+      minVerticalPadding: 0,
+      visualDensity: VisualDensity.compact,
+      leading: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.primary.withOpacity(isDisabled ? 0.05 : 0.1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(
+          icon,
+          size: 18,
+          color: theme.colorScheme.primary.withOpacity(isDisabled ? 0.5 : 1.0),
         ),
       ),
+      title: Text(
+        title,
+        style: theme.textTheme.titleMedium?.copyWith(
+          color:
+              theme.colorScheme.onSurface.withOpacity(isDisabled ? 0.5 : 1.0),
+          fontSize: 14,
+        ),
+      ),
+      trailing: trailing,
+      onTap: onTap,
     );
   }
 
   Widget _buildDivider(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = context.watch<ThemeCubit>().state;
-
-    return Container(
+    return Divider(
+      color: theme.colorScheme.primary.withOpacity(0.1),
       height: 1,
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            theme.colorScheme.primary.withOpacity(0),
-            theme.colorScheme.primary.withOpacity(isDarkMode ? 0.1 : 0.05),
-            theme.colorScheme.primary.withOpacity(isDarkMode ? 0.1 : 0.05),
-            theme.colorScheme.primary.withOpacity(0),
-          ],
-          stops: const [0.0, 0.2, 0.8, 1.0],
-        ),
-      ),
+      indent: 12,
+      endIndent: 12,
     );
   }
 }

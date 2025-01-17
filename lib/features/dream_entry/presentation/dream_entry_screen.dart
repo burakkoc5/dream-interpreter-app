@@ -28,7 +28,10 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = context.watch<ThemeCubit>().state;
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
+        (context.watch<ThemeCubit>().state == ThemeMode.system &&
+            brightness == Brightness.dark);
 
     return BlocProvider(
       create: (context) => getIt<DreamEntryCubit>(),

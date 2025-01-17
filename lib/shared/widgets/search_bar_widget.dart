@@ -1,107 +1,71 @@
 import 'package:flutter/material.dart';
 
 /// A reusable search bar widget with ethereal styling
-class SearchBarWidget extends StatefulWidget {
+class SearchBarWidget extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  final Function(String)? onChanged;
-  final VoidCallback? onClear;
-  final double? borderRadius;
+  final Function(String) onChanged;
+  final VoidCallback onClear;
 
   const SearchBarWidget({
     super.key,
     required this.controller,
-    this.hintText = 'Search...',
-    this.onChanged,
-    this.onClear,
-    this.borderRadius,
+    required this.hintText,
+    required this.onChanged,
+    required this.onClear,
   });
-
-  @override
-  State<SearchBarWidget> createState() => _SearchBarWidgetState();
-}
-
-class _SearchBarWidgetState extends State<SearchBarWidget> {
-  bool _isFocused = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final radius = widget.borderRadius ?? 20.0;
+    final FocusNode focusNode = FocusNode();
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius + 4),
-        boxShadow: [
-          if (_isFocused)
-            BoxShadow(
-              color: theme.colorScheme.primary.withOpacity(0.1),
-              blurRadius: 8,
-              spreadRadius: 2,
-            ),
-        ],
-      ),
-      child: Focus(
-        onFocusChange: (focused) => setState(() => _isFocused = focused),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Container(
+        height: 36,
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: TextField(
-          controller: widget.controller,
-          onChanged: widget.onChanged,
-          style: theme.textTheme.bodyLarge?.copyWith(
-            color: theme.colorScheme.onSurface,
+          controller: controller,
+          focusNode: focusNode,
+          onChanged: onChanged,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontSize: 13,
           ),
-          cursorColor: theme.colorScheme.primary,
           decoration: InputDecoration(
-            hintText: widget.hintText,
-            hintStyle: TextStyle(
+            hintText: hintText,
+            hintStyle: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurface.withOpacity(0.5),
+              fontSize: 13,
             ),
-            prefixIcon: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              child: Icon(
-                Icons.search,
-                color: _isFocused
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurface.withOpacity(0.6),
-              ),
+            prefixIcon: Icon(
+              Icons.search,
+              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              size: 18,
             ),
-            suffixIcon: widget.controller.text.isNotEmpty
+            suffixIcon: controller.text.isNotEmpty
                 ? IconButton(
                     icon: Icon(
                       Icons.clear,
-                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      size: 16,
                     ),
                     onPressed: () {
-                      widget.controller.clear();
-                      widget.onClear?.call();
+                      onClear();
                     },
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
                   )
                 : null,
-            filled: true,
-            fillColor: theme.colorScheme.surface.withOpacity(0.8),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(radius),
-              borderSide: BorderSide(
-                color: theme.colorScheme.primary.withOpacity(0.2),
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(radius),
-              borderSide: BorderSide(
-                color: theme.colorScheme.primary.withOpacity(0.2),
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(radius),
-              borderSide: BorderSide(
-                color: theme.colorScheme.primary,
-                width: 2,
-              ),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 16,
-            ),
+            border: InputBorder.none,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           ),
         ),
       ),

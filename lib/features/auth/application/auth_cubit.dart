@@ -2,6 +2,7 @@ import 'package:dream/core/routing/app_route_names.dart';
 import 'package:dream/features/auth/models/auth_error.dart';
 import 'package:dream/features/auth/models/user_model.dart';
 import 'package:dream/features/auth/repositories/auth_repository.dart';
+import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -43,8 +44,27 @@ class AuthCubit extends Cubit<AuthState> {
       context.go(AppRoute.dreamEntry);
     } catch (e) {
       debugPrint('AuthCubit - Sign in error: $e');
+      String errorMessage = t.core.errors.unknown;
+
+      if (e is FirebaseAuthException) {
+        switch (e.code) {
+          case 'user-not-found':
+            errorMessage = t.core.errors.userNotFound;
+            break;
+          case 'wrong-password':
+            errorMessage = t.core.errors.wrongPassword;
+            break;
+          case 'invalid-email':
+            errorMessage = t.core.errors.invalidEmail;
+            break;
+          case 'user-disabled':
+            errorMessage = t.core.errors.userNotAuthenticated;
+            break;
+        }
+      }
+
       emit(state.copyWith(
-        error: e is AuthError ? e.toString() : 'Unknown error occurred',
+        error: errorMessage,
         isLoading: false,
       ));
     }

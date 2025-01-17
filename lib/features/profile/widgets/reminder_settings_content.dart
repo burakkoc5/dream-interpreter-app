@@ -1,6 +1,7 @@
 import 'package:dream/core/utils/reminder_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 import '../models/reminder_settings_model.dart';
 import '../widgets/reminder_option_card.dart';
 import 'package:dream/config/theme/theme_cubit.dart';
@@ -73,6 +74,19 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
     setState(() => selectedType = type);
   }
 
+  void _showSuccessToast(String message) {
+    if (!mounted) return;
+
+    toastification.show(
+      autoCloseDuration: const Duration(seconds: 3),
+      context: context,
+      type: ToastificationType.success,
+      style: ToastificationStyle.flat,
+      title: Text('Başarılı'),
+      description: Text(message),
+    );
+  }
+
   Future<void> _handleCustomTimeSelection() async {
     final TimeOfDay? selectedTime = await showTimePicker(
       context: context,
@@ -107,7 +121,10 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = context.watch<ThemeCubit>().state;
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
+        (context.watch<ThemeCubit>().state == ThemeMode.system &&
+            brightness == Brightness.dark);
 
     return FadeTransition(
       opacity: _fadeAnimation,
@@ -121,14 +138,19 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
               style: theme.textTheme.titleLarge?.copyWith(
                 color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w600,
+                fontSize: 24,
+                height: 1.2,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Text(
               'We\'ll send you a notification to help you remember your dreams',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.7),
+                fontSize: 15,
+                height: 1.4,
+                letterSpacing: 0.1,
               ),
               textAlign: TextAlign.center,
             ),
@@ -199,13 +221,18 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
             ),
             const SizedBox(height: 24),
             FilledButton(
-              onPressed: selectedType != null ? _saveSettings : null,
+              onPressed: () {
+                if (selectedType != null) {
+                  _saveSettings();
+                  _showSuccessToast('Reminder settings saved successfully');
+                }
+              },
               style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 backgroundColor:
                     theme.colorScheme.primary.withOpacity(isDarkMode ? 0.8 : 1),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
               child: Text(
@@ -213,22 +240,24 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: theme.colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
+                  fontSize: 14,
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             TextButton(
               onPressed: () => context.pop(),
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
               child: Text(
                 'Skip for now',
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: theme.colorScheme.primary.withOpacity(0.8),
+                  fontSize: 14,
                 ),
               ),
             ),

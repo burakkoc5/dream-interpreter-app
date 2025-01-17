@@ -1,5 +1,6 @@
 import 'package:dream/config/theme/theme.dart';
 import 'package:dream/config/theme/theme_cubit.dart';
+import 'package:dream/config/language/language_cubit.dart';
 import 'package:dream/core/di/injection.dart';
 import 'package:dream/core/routing/app_router.dart';
 import 'package:dream/features/auth/application/auth_cubit.dart';
@@ -16,9 +17,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
 
   // Initialize Firebase
   await Firebase.initializeApp(
@@ -27,8 +30,14 @@ void main() async {
 
   // Initialize dependency injection
   await configureDependencies();
+
+  // Initialize localization
+  LocaleSettings.useDeviceLocale();
+
   runApp(
-    MyApp(),
+    TranslationProvider(
+      child: MyApp(),
+    ),
   );
 }
 
@@ -48,35 +57,39 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (_) => getIt<ThemeCubit>(),
+            create: (context) => getIt<AuthCubit>(),
           ),
           BlocProvider(
-            create: (_) => getIt<AuthCubit>(),
-          ),
-          BlocProvider<DreamEntryCubit>(
-            create: (context) => getIt<DreamEntryCubit>(),
-          ),
-          BlocProvider<DreamHistoryCubit>(
-            create: (context) => getIt<DreamHistoryCubit>(),
-          ),
-          BlocProvider<OnboardingCubit>(
             create: (context) => getIt<OnboardingCubit>(),
           ),
-          BlocProvider<ProfileCubit>(
+          BlocProvider(
+            create: (context) => getIt<ThemeCubit>(),
+          ),
+          BlocProvider(
+            create: (context) => getIt<LanguageCubit>(),
+          ),
+          BlocProvider(
             create: (context) => getIt<ProfileCubit>(),
           ),
-          BlocProvider<StatsCubit>(
+          BlocProvider(
             create: (context) => getIt<StatsCubit>(),
           ),
+          BlocProvider(
+            create: (context) => getIt<DreamEntryCubit>(),
+          ),
+          BlocProvider(
+            create: (context) => getIt<DreamHistoryCubit>(),
+          ),
         ],
-        child: BlocBuilder<ThemeCubit, bool>(
-          builder: (context, isDarkMode) {
+        child: Builder(
+          builder: (context) {
             return MaterialApp.router(
               title: t.core.appName,
               theme: AppTheme.lightTheme(),
               darkTheme: AppTheme.darkTheme(),
-              themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+              themeMode: context.watch<ThemeCubit>().state,
               routerConfig: _router,
+              locale: TranslationProvider.of(context).flutterLocale,
               debugShowCheckedModeBanner: false,
             );
           },

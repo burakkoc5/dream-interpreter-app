@@ -2,8 +2,9 @@
   "core": {
     "appName": "Traumtagebuch",
     "mode": {
-      "darkMode": "Dunkler Modus",
-      "lightMode": "Heller Modus"
+      "systemMode": "System",
+      "darkMode": "Dunkelmodus",
+      "lightMode": "Hellmodus"
     },
     "errors": {
       "error": "Fehler",
@@ -12,10 +13,11 @@
       "emailAlreadyInUse": "E-Mail ist bereits registriert",
       "invalidEmail": "Ungültiges E-Mail-Format",
       "weakPassword": "Passwort ist zu schwach",
-      "unknown": "Ein unbekannter Fehler ist aufgetreten",
-      "tryAgain": "Bitte versuche es erneut",
+      "unknown": "E-Mail oder Passwort ist falsch",
+      "tryAgain": "Bitte versuchen Sie es erneut",
       "userNotAuthenticated": "Benutzer nicht authentifiziert"
-    }
+    },
+    "success": "Erfolg"
   },
   "registration": {
     "welcomeText": "Willkommen zurück",
@@ -122,7 +124,8 @@
     "retryButton": "Erneut versuchen",
     "noResults": "Keine Träume gefunden",
     "delete": "Löschen",
-    "undoButton": "Rückgängig machen"
+    "undoButton": "Rückgängig machen",
+    "dreamDeleted": "Traum gelöscht"
   },
   "dreamHistory": {
     "dreamHistory": "Traumtagebuch",
@@ -136,10 +139,19 @@
     "dreamStats": "Traumstatistiken",
     "totalDreams": "Gesamtträume",
     "weeklyDreams": "Wöchentliche Träume",
+    "currentStreak": "Mevcut Seri",
+    "longestStreak": "En Uzun Seri",
     "completionRate": "Abschlussrate",
     "settings": "Einstellungen",
     "notifications": "Benachrichtigungen",
+    "language": "Sprache",
+    "english": "Englisch",
+    "turkish": "Türkisch",
+    "german": "Deutsch",
     "changePassword": "Passwort ändern",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "closeBackgroundAnimation": "Hintergrundanimation schließen",
+    "displayNameUpdated": "Benutzername erfolgreich aktualisiert",
+    "reminderUpdated": "Traum-Erinnerung erfolgreich aktualisiert"
   }
 }
