@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dream/features/dream_entry/services/local_storage_service.dart';
 
-//TODO: Not working properly. Fix this issue.
 @injectable
 class DreamHistoryRepository {
   final FirebaseFirestore _firestore;
@@ -25,30 +24,20 @@ class DreamHistoryRepository {
           .where('userId', isEqualTo: userId)
           .orderBy('createdAt', descending: true)
           .limit(pageSize);
-      print('Last document: ${lastDocument?.id}');
-      print('userId on repository: $userId');
-
-      print('Fetching dream history query ready...');
 
       if (lastDocument != null) {
         query = query.startAfterDocument(lastDocument);
       }
 
-      print('Fetching dream history...');
-
       final snapshot = await query.get();
-      print('Fetched ${snapshot.docs.length} dreams');
 
       if (snapshot.docs.isEmpty) {
-        print('No dreams found');
         return {
           'dreams': [],
           'lastDocument': lastDocument,
           'isNewData': false, // No new data
         };
       }
-
-      print('Fetched ${snapshot.docs.length} dreams');
 
       final dreams = snapshot.docs.map((doc) {
         final data = doc.data();

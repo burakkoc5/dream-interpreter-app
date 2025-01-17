@@ -5,6 +5,9 @@ import 'package:dream/features/dream_history/application/dream_history_cubit.dar
 import 'package:dream/features/dream_history/application/dream_history_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dream/shared/widgets/mood_rating_widget.dart';
+import 'tag_input_section.dart';
+import 'available_tags_section.dart';
+import 'selected_tags_section.dart';
 
 class DreamDetailsModalContent extends StatefulWidget {
   final DreamEntry dreamEntry;
@@ -36,8 +39,6 @@ class _DreamDetailsModalContentState extends State<DreamDetailsModalContent> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Padding(
       padding: EdgeInsets.only(
         left: 16.0,
@@ -63,133 +64,31 @@ class _DreamDetailsModalContentState extends State<DreamDetailsModalContent> {
               ),
             ),
             const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _tagController,
-                    decoration: InputDecoration(
-                      labelText: t.dreamEntry.dreamDetails.addTags,
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  onPressed: _addTag,
-                  icon: const Icon(Icons.add),
-                ),
-              ],
+            TagInputSection(
+              tagController: _tagController,
+              onAddTag: _addTag,
             ),
             const SizedBox(height: 16),
             BlocBuilder<DreamHistoryCubit, DreamHistoryState>(
-              builder: (context, state) {
-                if (state.availableTags.isEmpty) return const SizedBox.shrink();
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Previously used tags',
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: state.availableTags.map((tag) {
-                        final isSelected = _tags.contains(tag);
-                        return FilterChip(
-                          label: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                tag,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: isSelected
-                                      ? theme.colorScheme.onSecondaryContainer
-                                      : theme.colorScheme.onSurface,
-                                  fontWeight: isSelected
-                                      ? FontWeight.w600
-                                      : FontWeight.normal,
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? theme.colorScheme.onSecondaryContainer
-                                          .withOpacity(0.2)
-                                      : theme.colorScheme.onSurface
-                                          .withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  '${state.tagCounts[tag] ?? 0}',
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: isSelected
-                                        ? theme.colorScheme.onSecondaryContainer
-                                        : theme.colorScheme.onSurface
-                                            .withOpacity(0.7),
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 11,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          selected: isSelected,
-                          onSelected: (_) {
-                            setState(() {
-                              if (isSelected) {
-                                _tags.remove(tag);
-                              } else {
-                                _tags.add(tag);
-                              }
-                            });
-                          },
-                          selectedColor: theme.colorScheme.secondaryContainer,
-                          backgroundColor:
-                              theme.colorScheme.surface.withOpacity(0.2),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: isSelected
-                                  ? theme.colorScheme.secondary
-                                  : theme.colorScheme.outline.withOpacity(0.3),
-                              width: 0.5,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                );
-              },
+              builder: (context, state) => AvailableTagsSection(
+                state: state,
+                selectedTags: _tags,
+                onTagSelected: (tag) {
+                  setState(() {
+                    if (_tags.contains(tag)) {
+                      _tags.remove(tag);
+                    } else {
+                      _tags.add(tag);
+                    }
+                  });
+                },
+              ),
             ),
-            if (_tags.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              Text(
-                'Selected tags',
-                style: theme.textTheme.titleSmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.7),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                children: _tags
-                    .map((tag) => Chip(
-                          label: Text(tag),
-                          onDeleted: () => _removeTag(tag),
-                        ))
-                    .toList(),
-              ),
-            ],
+            const SizedBox(height: 16),
+            SelectedTagsSection(
+              tags: _tags,
+              onTagRemoved: _removeTag,
+            ),
             const SizedBox(height: 24),
             Text(
               t.dreamEntry.dreamDetails.moodRating,

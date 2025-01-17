@@ -13,6 +13,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import '../widgets/dream_form_widget.dart';
+import '../widgets/dream_loading_widget.dart';
+import '../widgets/dream_error_widget.dart';
 import 'dart:ui';
 import 'package:dream/config/theme/theme_cubit.dart';
 
@@ -56,123 +58,68 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 24.0, vertical: 16.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(32),
-                    topRight: Radius.circular(32),
-                    bottomLeft: Radius.circular(24),
-                    bottomRight: Radius.circular(24),
-                  ),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: (isDarkMode
-                                ? theme.colorScheme.surface
-                                : theme.colorScheme.surface)
-                            .withOpacity(isDarkMode ? 0.4 : 0.7),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(32),
-                          topRight: Radius.circular(32),
-                          bottomLeft: Radius.circular(24),
-                          bottomRight: Radius.circular(24),
-                        ),
-                        border: Border.all(
-                          color: theme.colorScheme.primary.withOpacity(0.2),
-                          width: 1.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.colorScheme.primary.withOpacity(0.1),
-                            blurRadius: 16,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: BlocBuilder<DreamEntryCubit, DreamEntryState>(
-                        builder: (context, state) {
-                          return state.when(
-                            initial: () => Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(24, 16, 24, 24),
-                              child: const DreamFormWidget(),
-                            ),
-                            loading: () => Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      theme.colorScheme.primary,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    'Interpreting your dream...',
-                                    style: theme.textTheme.bodyLarge?.copyWith(
-                                      color: theme.colorScheme.onSurface
-                                          .withOpacity(0.7),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            success: (dreamEntry) => InterpretationModalContent(
-                              dreamEntry: dreamEntry,
-                              onSave: () =>
-                                  _showDetailsModal(dreamEntry, context),
-                              onShare: () => _shareDream(dreamEntry),
-                              onDiscard: () {
-                                context.read<DreamEntryCubit>().reset();
-                                context.go(AppRoute.dreamEntry);
-                              },
-                            ),
-                            error: (message) => Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.error_outline,
-                                    size: 48,
-                                    color: theme.colorScheme.error,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    '${t.core.errors.error}$message',
-                                    textAlign: TextAlign.center,
-                                    style: theme.textTheme.bodyLarge?.copyWith(
-                                      color: theme.colorScheme.error,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      color: theme.colorScheme.error
-                                          .withOpacity(0.1),
-                                    ),
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.refresh,
-                                        color: theme.colorScheme.error,
-                                      ),
-                                      onPressed: () {
-                                        context.read<DreamEntryCubit>().reset();
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
+                child: _buildGlassContainer(
+                  context,
+                  isDarkMode,
+                  theme,
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGlassContainer(
+    BuildContext context,
+    bool isDarkMode,
+    ThemeData theme,
+  ) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(32),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: (isDarkMode
+                    ? theme.colorScheme.surface
+                    : theme.colorScheme.surface)
+                .withOpacity(isDarkMode ? 0.4 : 0.7),
+            borderRadius: BorderRadius.circular(32),
+            border: Border.all(
+              color: theme.colorScheme.primary.withOpacity(0.2),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: theme.colorScheme.primary.withOpacity(0.1),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: BlocBuilder<DreamEntryCubit, DreamEntryState>(
+            builder: (context, state) {
+              return state.when(
+                initial: () => const Padding(
+                  padding: EdgeInsets.fromLTRB(24, 16, 24, 24),
+                  child: DreamFormWidget(),
+                ),
+                loading: () => const DreamLoadingWidget(),
+                success: (dreamEntry) => InterpretationModalContent(
+                  dreamEntry: dreamEntry,
+                  onSave: () => _showDetailsModal(dreamEntry, context),
+                  onShare: () => _shareDream(dreamEntry),
+                  onDiscard: () {
+                    context.read<DreamEntryCubit>().reset();
+                    context.go(AppRoute.dreamEntry);
+                  },
+                ),
+                error: (message) => DreamErrorWidget(message: message),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -190,7 +137,7 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
           final updatedDream = dreamEntry.copyWith(
             title: title,
             tags: tags,
-            moodRating: moodRating,
+            moodRating: moodRating.toInt(),
           );
           context.pop();
           try {

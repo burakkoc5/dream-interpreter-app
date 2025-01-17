@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:ui';
 import 'package:dream/core/routing/app_route_names.dart';
 import 'package:go_router/go_router.dart';
+import 'widgets/nav_item_widget.dart';
 
 class MainScreen extends StatefulWidget {
   final Widget child;
@@ -18,8 +19,7 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen>
-    with SingleTickerProviderStateMixin {
+class _MainScreenState extends State<MainScreen> {
   int get _selectedIndex {
     final location = GoRouterState.of(context).uri.path;
     if (location.startsWith(AppRoute.dreamHistory)) return 0;
@@ -80,24 +80,21 @@ class _MainScreenState extends State<MainScreen>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildNavItem(
-                          context,
+                        NavItemWidget(
                           icon: Icons.auto_awesome_outlined,
                           selectedIcon: Icons.auto_awesome,
                           label: t.dreamHistory.dreamHistory,
                           isSelected: _selectedIndex == 0,
                           onTap: () => _onItemTapped(0),
                         ),
-                        _buildNavItem(
-                          context,
+                        NavItemWidget(
                           icon: Icons.add_circle_outline,
                           selectedIcon: Icons.add_circle,
                           label: t.dreamEntry.newDream,
                           isSelected: _selectedIndex == 1,
                           onTap: () => _onItemTapped(1),
                         ),
-                        _buildNavItem(
-                          context,
+                        NavItemWidget(
                           icon: Icons.person_outline,
                           selectedIcon: Icons.person,
                           label: t.profile.profile,
@@ -112,60 +109,6 @@ class _MainScreenState extends State<MainScreen>
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(
-    BuildContext context, {
-    required IconData icon,
-    required IconData selectedIcon,
-    required String label,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    final theme = Theme.of(context);
-    final brightness = MediaQuery.platformBrightnessOf(context);
-    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
-        (context.watch<ThemeCubit>().state == ThemeMode.system &&
-            brightness == Brightness.dark);
-
-    return SizedBox(
-      width: MediaQuery.of(context).size.width / 3 - 32,
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: isSelected
-                ? theme.colorScheme.primary.withOpacity(isDarkMode ? 0.15 : 0.1)
-                : Colors.transparent,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                isSelected ? selectedIcon : icon,
-                color: isSelected
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurface.withOpacity(0.7),
-                size: 20,
-              ),
-              const SizedBox(height: 2),
-              Text(
-                label,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  fontSize: 10,
-                  color: isSelected
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.onSurface.withOpacity(0.7),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

@@ -58,10 +58,13 @@ class _DreamHistoryScreenState extends State<DreamHistoryScreen>
               SafeArea(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
+                    Container(
+                      margin: const EdgeInsets.symmetric(
                         horizontal: 24.0,
                         vertical: 16.0,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(32),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(32),
@@ -77,12 +80,13 @@ class _DreamHistoryScreenState extends State<DreamHistoryScreen>
                               ),
                             ),
                             child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Padding(
+                                Container(
                                   padding: const EdgeInsets.all(16.0),
                                   child: buildSearchBar(context),
                                 ),
-                                Padding(
+                                Container(
                                   padding: const EdgeInsets.only(
                                     bottom: 8.0,
                                     left: 6.0,

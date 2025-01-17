@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/profile_model.dart';
 import 'profile_photo_picker_widget.dart';
+import 'editable_name_section.dart';
 
 /// Widget displaying the user's profile header with photo and basic info
 class ProfileHeaderWidget extends StatelessWidget {
@@ -44,7 +45,7 @@ class ProfileHeaderWidget extends StatelessWidget {
   }
 }
 
-class EditableProfileHeader extends StatefulWidget {
+class EditableProfileHeader extends StatelessWidget {
   final Profile profile;
   final Function(String) onDisplayNameChanged;
 
@@ -55,33 +56,6 @@ class EditableProfileHeader extends StatefulWidget {
   });
 
   @override
-  State<EditableProfileHeader> createState() => _EditableProfileHeaderState();
-}
-
-class _EditableProfileHeaderState extends State<EditableProfileHeader> {
-  late TextEditingController _nameController;
-  bool _isEditing = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController(text: widget.profile.displayName);
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
-  }
-
-  void _saveDisplayName() {
-    if (_nameController.text.trim().isNotEmpty) {
-      widget.onDisplayNameChanged(_nameController.text.trim());
-      setState(() => _isEditing = false);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
@@ -90,45 +64,18 @@ class _EditableProfileHeaderState extends State<EditableProfileHeader> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ProfilePhotoPickerWidget(
-              currentPhotoUrl: widget.profile.photoUrl,
+              currentPhotoUrl: profile.photoUrl,
               onPhotoSelected: (photoUrl) {
                 context.read<ProfileCubit>().updateProfilePhoto(photoUrl);
               },
             ),
             const SizedBox(height: 16),
-            if (_isEditing)
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        labelText: t.profile.username,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.check),
-                    onPressed: _saveDisplayName,
-                  ),
-                ],
-              )
-            else
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.profile.displayName!,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () => setState(() => _isEditing = true),
-                  ),
-                ],
-              ),
+            EditableNameSection(
+              initialName: profile.displayName!,
+              onNameChanged: onDisplayNameChanged,
+            ),
             const SizedBox(height: 8),
-            Text(widget.profile.email),
+            Text(profile.email),
           ],
         ),
       ),
