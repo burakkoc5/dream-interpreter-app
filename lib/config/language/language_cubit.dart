@@ -22,8 +22,11 @@ class LanguageCubit extends Cubit<AppLocale> {
   }
 
   Future<void> setLanguage(AppLocale locale) async {
-    await _prefs.setString(_languageKey, locale.languageCode);
+    // First update the locale settings
     LocaleSettings.setLocale(locale);
+    // Then persist the change
+    await _prefs.setString(_languageKey, locale.languageCode);
+    // Finally emit the new state to trigger UI updates
     emit(locale);
   }
 }

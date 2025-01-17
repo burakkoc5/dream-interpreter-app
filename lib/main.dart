@@ -15,9 +15,11 @@ import 'package:dream/shared/repositories/notification_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,8 +33,17 @@ void main() async {
   // Initialize dependency injection
   await configureDependencies();
 
-  // Initialize localization
-  LocaleSettings.useDeviceLocale();
+  // Initialize localization with stored preference
+  final prefs = await SharedPreferences.getInstance();
+  final savedLanguage = prefs.getString('appLanguage');
+  if (savedLanguage != null) {
+    LocaleSettings.setLocale(AppLocale.values.firstWhere(
+      (locale) => locale.languageCode == savedLanguage,
+      orElse: () => AppLocale.en,
+    ));
+  } else {
+    LocaleSettings.setLocale(AppLocale.en);
+  }
 
   runApp(
     TranslationProvider(
@@ -90,6 +101,13 @@ class MyApp extends StatelessWidget {
               themeMode: context.watch<ThemeCubit>().state,
               routerConfig: _router,
               locale: TranslationProvider.of(context).flutterLocale,
+              supportedLocales:
+                  AppLocale.values.map((locale) => locale.flutterLocale),
+              localizationsDelegates: [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
               debugShowCheckedModeBanner: false,
             );
           },

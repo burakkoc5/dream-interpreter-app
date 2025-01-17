@@ -17,6 +17,7 @@ class ProfileHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Stack(
           children: [
@@ -86,6 +87,7 @@ class _EditableProfileHeaderState extends State<EditableProfileHeader> {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ProfilePhotoPickerWidget(
               currentPhotoUrl: widget.profile.photoUrl,
