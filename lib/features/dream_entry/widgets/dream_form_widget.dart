@@ -2,6 +2,7 @@ import 'package:dream/core/routing/app_route_names.dart';
 import 'package:dream/features/dream_entry/application/dream_entry_cubit.dart';
 import 'package:dream/features/dream_entry/models/dream_entry_model.dart';
 import 'package:dream/shared/widgets/app_modal_sheet.dart';
+import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +41,7 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
           Padding(
             padding: const EdgeInsets.only(left: 4, bottom: 8),
             child: Text(
-              'Record Your Dream',
+              t.dreamEntry.dreamForm.record,
               style: theme.textTheme.headlineMedium,
             ),
           ),
@@ -49,14 +50,14 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
             controller: _contentController,
             maxLength: maxContentLength,
             maxLines: 5,
-            decoration: const InputDecoration(
-              labelText: 'Dream Content',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: t.dreamEntry.dreamForm.content,
+              border: const OutlineInputBorder(),
               alignLabelWithHint: true,
             ),
             validator: (value) {
               if (value?.isEmpty ?? true) {
-                return 'Please enter your dream';
+                return t.dreamEntry.dreamForm.contentHint;
               }
               return null;
             },
@@ -64,7 +65,7 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: _submitForm,
-            child: const Text('Get Interpretation'),
+            child: Text(t.dreamEntry.dreamForm.getInterpretation),
           ),
           const AdBannerWidget(),
         ],
@@ -144,7 +145,7 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to save dream: $e')),
+          SnackBar(content: Text(t.dreamEntry.failedToSaveDream)),
         );
       }
     }
@@ -152,13 +153,13 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
 
   Future<void> _shareDream(DreamEntry dreamEntry) async {
     final shareText = '''
-Dream:
+${t.dreamEntry.yourDream}:
 ${dreamEntry.content}
 
-Interpretation:
+${t.dreamEntry.interpretation.interpretationText}:
 ${dreamEntry.interpretation}
 ''';
 
-    await Share.share(shareText, subject: 'Dream Interpretation');
+    await Share.share(shareText, subject: t.dreamEntry.interpretation.title);
   }
 }

@@ -73,6 +73,8 @@
   "dreamEntry": {
     "newDream": "Yeni Rüya",
     "saveDream": "Rüyayı Kaydet",
+    "discardDream": "At",
+    "shareDream": "Paylaş",
     "dreamTitle": "Rüya Başlığı",
     "dreamTitleHint": "Lütfen rüyanız için bir başlık girin",
     "yourDream": "Sizin Rüyanız",
@@ -89,7 +91,7 @@
       "Sadness": "üzüntü",
       "Excitement": "heyecan"
     },
-    "moodRating": "Ruh Hali Değerlendirmesi",
+    "moodRating": "Ruh Hali",
     "failedToSaveDream": "Rüya kaydedilemedi",
     "dreamDetails": {
       "addDetails": "Ayrıntı Ekle",
@@ -152,6 +154,22 @@
     "logout": "Çıkış Yap",
     "closeBackgroundAnimation": "Arka Plan Animasyonunu Kapat",
     "displayNameUpdated": "Kullanıcı adı başarıyla güncellendi",
-    "reminderUpdated": "Rüya hatırlatıcısı başarıyla güncellendi"
+    "reminderUpdated": "Rüya hatırlatıcısı başarıyla güncellendi",
+    "reminder": {
+      "setTime": "Rüya hatırlatıcı zamanını ayarla",
+      "chooseTime": "Hatırlatılmak istediğiniz zamanı seçin",
+      "description": "Rüyalarınızı hatırlamanıza yardımcı olmak için size bildirim göndereceğiz",
+      "earlyMorning": "Erken sabah",
+      "earlyMorningTime": "06:00",
+      "afternoon": "Öğleden sonra",
+      "afternoonTime": "14:00",
+      "nighttime": "Gece",
+      "nighttimeTime": "22:00",
+      "custom": "Özel",
+      "setCustomTime": "Zamanınızı ayarlayın",
+      "saveButton": "Hatırlatıcıyı Kaydet",
+      "skipButton": "Şimdilik Geç",
+      "savedSuccess": "Hatırlatıcı ayarları başarıyla kaydedildi"
+    }
   }
 }

@@ -33,6 +33,10 @@ void main() async {
   // Initialize dependency injection
   await configureDependencies();
 
+  // Initialize notifications
+  final notificationRepository = getIt<NotificationRepository>();
+  await notificationRepository.initialize();
+
   // Initialize localization with stored preference
   final prefs = await SharedPreferences.getInstance();
   final savedLanguage = prefs.getString('appLanguage');

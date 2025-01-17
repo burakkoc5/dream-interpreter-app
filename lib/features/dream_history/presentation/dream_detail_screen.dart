@@ -210,7 +210,7 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
                     children: [
                       _buildSection(
                         context,
-                        title: t.dreamDetail,
+                        title: t.dreamEntry.yourDream,
                         content: widget.dream.content,
                         icon: Icons.nights_stay_outlined,
                       ),
@@ -454,7 +454,7 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Mood Rating',
+                      t.dreamEntry.moodRating,
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: theme.colorScheme.onSurface,
                         fontWeight: FontWeight.bold,

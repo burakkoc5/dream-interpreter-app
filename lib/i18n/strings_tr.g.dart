@@ -81,11 +81,13 @@ class _TranslationsDreamEntryTr implements TranslationsDreamEntryEn {
 	// Translations
 	@override String get newDream => 'Yeni Rüya';
 	@override String get saveDream => 'Rüyayı Kaydet';
+	@override String get discardDream => 'At';
+	@override String get shareDream => 'Paylaş';
 	@override String get dreamTitle => 'Rüya Başlığı';
 	@override String get dreamTitleHint => 'Lütfen rüyanız için bir başlık girin';
 	@override String get yourDream => 'Sizin Rüyanız';
 	@override late final _TranslationsDreamEntryTagsTr tags = _TranslationsDreamEntryTagsTr._(_root);
-	@override String get moodRating => 'Ruh Hali Değerlendirmesi';
+	@override String get moodRating => 'Ruh Hali';
 	@override String get failedToSaveDream => 'Rüya kaydedilemedi';
 	@override late final _TranslationsDreamEntryDreamDetailsTr dreamDetails = _TranslationsDreamEntryDreamDetailsTr._(_root);
 	@override late final _TranslationsDreamEntryDreamFormTr dreamForm = _TranslationsDreamEntryDreamFormTr._(_root);
@@ -161,6 +163,7 @@ class _TranslationsProfileTr implements TranslationsProfileEn {
 	@override String get closeBackgroundAnimation => 'Arka Plan Animasyonunu Kapat';
 	@override String get displayNameUpdated => 'Kullanıcı adı başarıyla güncellendi';
 	@override String get reminderUpdated => 'Rüya hatırlatıcısı başarıyla güncellendi';
+	@override late final _TranslationsProfileReminderTr reminder = _TranslationsProfileReminderTr._(_root);
 }
 
 // Path: core.mode
@@ -326,6 +329,29 @@ class _TranslationsDreamEntryInterpretationTr implements TranslationsDreamEntryI
 	@override String get shareButton => 'Yorumu Paylaş';
 }
 
+// Path: profile.reminder
+class _TranslationsProfileReminderTr implements TranslationsProfileReminderEn {
+	_TranslationsProfileReminderTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get setTime => 'Rüya hatırlatıcı zamanını ayarla';
+	@override String get chooseTime => 'Hatırlatılmak istediğiniz zamanı seçin';
+	@override String get description => 'Rüyalarınızı hatırlamanıza yardımcı olmak için size bildirim göndereceğiz';
+	@override String get earlyMorning => 'Erken sabah';
+	@override String get earlyMorningTime => '06:00';
+	@override String get afternoon => 'Öğleden sonra';
+	@override String get afternoonTime => '14:00';
+	@override String get nighttime => 'Gece';
+	@override String get nighttimeTime => '22:00';
+	@override String get custom => 'Özel';
+	@override String get setCustomTime => 'Zamanınızı ayarlayın';
+	@override String get saveButton => 'Hatırlatıcıyı Kaydet';
+	@override String get skipButton => 'Şimdilik Geç';
+	@override String get savedSuccess => 'Hatırlatıcı ayarları başarıyla kaydedildi';
+}
+
 // Path: registration.password.changePassword
 class _TranslationsRegistrationPasswordChangePasswordTr implements TranslationsRegistrationPasswordChangePasswordEn {
 	_TranslationsRegistrationPasswordChangePasswordTr._(this._root);
@@ -412,6 +438,8 @@ extension on TranslationsTr {
 			case 'registration.signOut.signOutText': return 'Çıkış Yap';
 			case 'dreamEntry.newDream': return 'Yeni Rüya';
 			case 'dreamEntry.saveDream': return 'Rüyayı Kaydet';
+			case 'dreamEntry.discardDream': return 'At';
+			case 'dreamEntry.shareDream': return 'Paylaş';
 			case 'dreamEntry.dreamTitle': return 'Rüya Başlığı';
 			case 'dreamEntry.dreamTitleHint': return 'Lütfen rüyanız için bir başlık girin';
 			case 'dreamEntry.yourDream': return 'Sizin Rüyanız';
@@ -426,7 +454,7 @@ extension on TranslationsTr {
 			case 'dreamEntry.tags.Peace': return 'barış';
 			case 'dreamEntry.tags.Sadness': return 'üzüntü';
 			case 'dreamEntry.tags.Excitement': return 'heyecan';
-			case 'dreamEntry.moodRating': return 'Ruh Hali Değerlendirmesi';
+			case 'dreamEntry.moodRating': return 'Ruh Hali';
 			case 'dreamEntry.failedToSaveDream': return 'Rüya kaydedilemedi';
 			case 'dreamEntry.dreamDetails.addDetails': return 'Ayrıntı Ekle';
 			case 'dreamEntry.dreamDetails.addTags': return 'Etiketler Ekle';
@@ -476,6 +504,20 @@ extension on TranslationsTr {
 			case 'profile.closeBackgroundAnimation': return 'Arka Plan Animasyonunu Kapat';
 			case 'profile.displayNameUpdated': return 'Kullanıcı adı başarıyla güncellendi';
 			case 'profile.reminderUpdated': return 'Rüya hatırlatıcısı başarıyla güncellendi';
+			case 'profile.reminder.setTime': return 'Rüya hatırlatıcı zamanını ayarla';
+			case 'profile.reminder.chooseTime': return 'Hatırlatılmak istediğiniz zamanı seçin';
+			case 'profile.reminder.description': return 'Rüyalarınızı hatırlamanıza yardımcı olmak için size bildirim göndereceğiz';
+			case 'profile.reminder.earlyMorning': return 'Erken sabah';
+			case 'profile.reminder.earlyMorningTime': return '06:00';
+			case 'profile.reminder.afternoon': return 'Öğleden sonra';
+			case 'profile.reminder.afternoonTime': return '14:00';
+			case 'profile.reminder.nighttime': return 'Gece';
+			case 'profile.reminder.nighttimeTime': return '22:00';
+			case 'profile.reminder.custom': return 'Özel';
+			case 'profile.reminder.setCustomTime': return 'Zamanınızı ayarlayın';
+			case 'profile.reminder.saveButton': return 'Hatırlatıcıyı Kaydet';
+			case 'profile.reminder.skipButton': return 'Şimdilik Geç';
+			case 'profile.reminder.savedSuccess': return 'Hatırlatıcı ayarları başarıyla kaydedildi';
 			default: return null;
 		}
 	}

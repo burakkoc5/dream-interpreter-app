@@ -1,5 +1,4 @@
 import 'package:dream/features/profile/application/profile_cubit.dart';
-import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/profile_model.dart';

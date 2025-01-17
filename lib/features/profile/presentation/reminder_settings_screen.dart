@@ -2,6 +2,7 @@ import 'package:dream/features/profile/application/profile_cubit.dart';
 import 'package:dream/features/profile/application/profile_state.dart';
 import 'package:dream/features/profile/widgets/reminder_settings_content.dart';
 import 'package:dream/shared/repositories/notification_repository.dart';
+import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -35,8 +36,8 @@ class ReminderSettingsScreen extends StatelessWidget {
 
         final profile = state.profile;
         if (profile == null) {
-          return const Scaffold(
-            body: Center(child: Text('Profile not found')),
+          return Scaffold(
+            body: Center(child: Text(t.profile.profileNotFound)),
           );
         }
 
@@ -49,7 +50,7 @@ class ReminderSettingsScreen extends StatelessWidget {
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             title: Text(
-              'Set dream reminder time',
+              t.profile.reminder.setTime,
               style: theme.textTheme.titleLarge?.copyWith(
                 color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w600,
@@ -81,11 +82,9 @@ class ReminderSettingsScreen extends StatelessWidget {
                 child: ReminderSettingsContent(
                   initialSettings: settings,
                   onSave: (selectedSettings) async {
-                    print('ReminderSettingsScreen: Starting save');
                     await context
                         .read<ProfileCubit>()
                         .updateReminders(selectedSettings);
-                    print('ReminderSettingsScreen: Updated reminders');
                     context.mounted
                         ? await context
                             .read<NotificationRepository>()
@@ -93,9 +92,7 @@ class ReminderSettingsScreen extends StatelessWidget {
                               time: selectedSettings.time,
                             )
                         : null;
-                    print('ReminderSettingsScreen: Scheduled notification');
                     if (context.mounted) context.pop(selectedSettings);
-                    print('ReminderSettingsScreen: Save completed');
                   },
                 ),
               ),

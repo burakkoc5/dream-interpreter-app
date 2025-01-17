@@ -1,4 +1,5 @@
 import 'package:dream/core/utils/reminder_utils.dart';
+import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
@@ -82,7 +83,7 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
       context: context,
       type: ToastificationType.success,
       style: ToastificationStyle.flat,
-      title: Text('Başarılı'),
+      title: Text(t.core.success),
       description: Text(message),
     );
   }
@@ -103,19 +104,13 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
   Future<void> _saveSettings() async {
     if (selectedType == null) return;
 
-    print('ReminderSettingsContent: Starting save settings');
-    print('ReminderSettingsContent: Selected type: $selectedType');
-    print('ReminderSettingsContent: Selected custom time: $selectedCustomTime');
-
     final reminderTime = getTimeForType(selectedType!, selectedCustomTime);
     final newSettings = ReminderSettings(
       type: selectedType!.name,
       time: reminderTime,
       isEnabled: true,
     );
-    print('ReminderSettingsContent: Created settings: ${newSettings.toJson()}');
     await widget.onSave(newSettings);
-    print('ReminderSettingsContent: Save completed');
   }
 
   @override
@@ -134,7 +129,7 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Choose when you want to be reminded',
+              t.profile.reminder.chooseTime,
               style: theme.textTheme.titleLarge?.copyWith(
                 color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w600,
@@ -145,7 +140,7 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
             ),
             const SizedBox(height: 12),
             Text(
-              'We\'ll send you a notification to help you remember your dreams',
+              t.profile.reminder.description,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.7),
                 fontSize: 15,
@@ -165,8 +160,8 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
                           child: ReminderOptionCard(
                             type: ReminderType.earlyMorning,
                             icon: Icons.bedtime,
-                            title: 'Early morning',
-                            subtitle: '6:00 AM',
+                            title: t.profile.reminder.earlyMorning,
+                            subtitle: t.profile.reminder.earlyMorningTime,
                             onTap: () => _handleOptionSelection(
                                 ReminderType.earlyMorning),
                             isSelected:
@@ -178,8 +173,8 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
                           child: ReminderOptionCard(
                             type: ReminderType.afternoon,
                             icon: Icons.wb_sunny,
-                            title: 'Afternoon',
-                            subtitle: '2:00 PM',
+                            title: t.profile.reminder.afternoon,
+                            subtitle: t.profile.reminder.afternoonTime,
                             onTap: () =>
                                 _handleOptionSelection(ReminderType.afternoon),
                             isSelected: selectedType == ReminderType.afternoon,
@@ -194,8 +189,8 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
                           child: ReminderOptionCard(
                             type: ReminderType.nighttime,
                             icon: Icons.nights_stay,
-                            title: 'Nighttime',
-                            subtitle: '10:00 PM',
+                            title: t.profile.reminder.nighttime,
+                            subtitle: t.profile.reminder.nighttimeTime,
                             onTap: () =>
                                 _handleOptionSelection(ReminderType.nighttime),
                             isSelected: selectedType == ReminderType.nighttime,
@@ -206,9 +201,9 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
                           child: ReminderOptionCard(
                             type: ReminderType.custom,
                             icon: Icons.access_time,
-                            title: 'Custom',
+                            title: t.profile.reminder.custom,
                             subtitle: selectedCustomTime?.format(context) ??
-                                'Set your time',
+                                t.profile.reminder.setCustomTime,
                             onTap: _handleCustomTimeSelection,
                             isSelected: selectedType == ReminderType.custom,
                           ),
@@ -224,7 +219,7 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
               onPressed: () {
                 if (selectedType != null) {
                   _saveSettings();
-                  _showSuccessToast('Reminder settings saved successfully');
+                  _showSuccessToast(t.profile.reminder.savedSuccess);
                 }
               },
               style: FilledButton.styleFrom(
@@ -236,7 +231,7 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
                 ),
               ),
               child: Text(
-                'Save Reminder',
+                t.profile.reminder.saveButton,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: theme.colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
@@ -254,7 +249,7 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
                 ),
               ),
               child: Text(
-                'Skip for now',
+                t.profile.reminder.skipButton,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: theme.colorScheme.primary.withOpacity(0.8),
                   fontSize: 14,

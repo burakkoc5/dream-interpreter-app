@@ -57,6 +57,7 @@ class TranslationsCoreEn {
 	String get appName => 'Dream Journal';
 	late final TranslationsCoreModeEn mode = TranslationsCoreModeEn._(_root);
 	late final TranslationsCoreErrorsEn errors = TranslationsCoreErrorsEn._(_root);
+	String get success => 'Success';
 }
 
 // Path: registration
@@ -84,6 +85,8 @@ class TranslationsDreamEntryEn {
 	// Translations
 	String get newDream => 'New Dream';
 	String get saveDream => 'Save Dream';
+	String get discardDream => 'Discard';
+	String get shareDream => 'Share';
 	String get dreamTitle => 'Dream Title';
 	String get dreamTitleHint => 'Please enter a title for your dream';
 	String get yourDream => 'Your Dream';
@@ -162,6 +165,7 @@ class TranslationsProfileEn {
 	String get changePassword => 'Change Password';
 	String get logout => 'Logout';
 	String get closeBackgroundAnimation => 'Close Background Animation';
+	late final TranslationsProfileReminderEn reminder = TranslationsProfileReminderEn._(_root);
 }
 
 // Path: core.mode
@@ -326,6 +330,29 @@ class TranslationsDreamEntryInterpretationEn {
 	String get shareButton => 'Share Interpretation';
 }
 
+// Path: profile.reminder
+class TranslationsProfileReminderEn {
+	TranslationsProfileReminderEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get setTime => 'Set dream reminder time';
+	String get chooseTime => 'Choose when you want to be reminded';
+	String get description => 'We\'ll send you a notification to help you remember your dreams';
+	String get earlyMorning => 'Early morning';
+	String get earlyMorningTime => '6:00 AM';
+	String get afternoon => 'Afternoon';
+	String get afternoonTime => '2:00 PM';
+	String get nighttime => 'Nighttime';
+	String get nighttimeTime => '10:00 PM';
+	String get custom => 'Custom';
+	String get setCustomTime => 'Set your time';
+	String get saveButton => 'Save Reminder';
+	String get skipButton => 'Skip for now';
+	String get savedSuccess => 'Reminder settings saved successfully';
+}
+
 // Path: registration.password.changePassword
 class TranslationsRegistrationPasswordChangePasswordEn {
 	TranslationsRegistrationPasswordChangePasswordEn._(this._root);
@@ -375,6 +402,7 @@ extension on Translations {
 			case 'core.errors.unknown': return 'Email or password is incorrect';
 			case 'core.errors.tryAgain': return 'Please try again';
 			case 'core.errors.userNotAuthenticated': return 'User not authenticated';
+			case 'core.success': return 'Success';
 			case 'registration.welcomeText': return 'Welcome Back';
 			case 'registration.email.emailText': return 'Email';
 			case 'registration.email.emailHint': return 'Please enter your email';
@@ -410,6 +438,8 @@ extension on Translations {
 			case 'registration.signOut.signOutText': return 'Sign Out';
 			case 'dreamEntry.newDream': return 'New Dream';
 			case 'dreamEntry.saveDream': return 'Save Dream';
+			case 'dreamEntry.discardDream': return 'Discard';
+			case 'dreamEntry.shareDream': return 'Share';
 			case 'dreamEntry.dreamTitle': return 'Dream Title';
 			case 'dreamEntry.dreamTitleHint': return 'Please enter a title for your dream';
 			case 'dreamEntry.yourDream': return 'Your Dream';
@@ -472,6 +502,20 @@ extension on Translations {
 			case 'profile.changePassword': return 'Change Password';
 			case 'profile.logout': return 'Logout';
 			case 'profile.closeBackgroundAnimation': return 'Close Background Animation';
+			case 'profile.reminder.setTime': return 'Set dream reminder time';
+			case 'profile.reminder.chooseTime': return 'Choose when you want to be reminded';
+			case 'profile.reminder.description': return 'We\'ll send you a notification to help you remember your dreams';
+			case 'profile.reminder.earlyMorning': return 'Early morning';
+			case 'profile.reminder.earlyMorningTime': return '6:00 AM';
+			case 'profile.reminder.afternoon': return 'Afternoon';
+			case 'profile.reminder.afternoonTime': return '2:00 PM';
+			case 'profile.reminder.nighttime': return 'Nighttime';
+			case 'profile.reminder.nighttimeTime': return '10:00 PM';
+			case 'profile.reminder.custom': return 'Custom';
+			case 'profile.reminder.setCustomTime': return 'Set your time';
+			case 'profile.reminder.saveButton': return 'Save Reminder';
+			case 'profile.reminder.skipButton': return 'Skip for now';
+			case 'profile.reminder.savedSuccess': return 'Reminder settings saved successfully';
 			default: return null;
 		}
 	}

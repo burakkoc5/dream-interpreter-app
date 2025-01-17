@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dream/i18n/strings.g.dart';
 
 class DreamLoadingWidget extends StatelessWidget {
   const DreamLoadingWidget({super.key});
@@ -18,7 +19,7 @@ class DreamLoadingWidget extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Interpreting your dream...',
+            t.dreamEntry.interpretation.title,
             style: theme.textTheme.bodyLarge?.copyWith(
               color: theme.colorScheme.onSurface.withOpacity(0.7),
             ),

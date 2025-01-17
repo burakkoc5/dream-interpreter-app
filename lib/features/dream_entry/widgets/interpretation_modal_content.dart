@@ -1,3 +1,4 @@
+import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import '../models/dream_entry_model.dart';
@@ -69,7 +70,7 @@ ${widget.dreamEntry.interpretation}
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Your Dream',
+                        t.dreamEntry.yourDream,
                         style: theme.textTheme.headlineSmall?.copyWith(
                           color: theme.colorScheme.primary,
                           fontWeight: FontWeight.bold,
@@ -95,7 +96,7 @@ ${widget.dreamEntry.interpretation}
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        'Interpretation',
+                        t.dreamEntry.interpretation.interpretationText,
                         style: theme.textTheme.titleLarge?.copyWith(
                           color: theme.colorScheme.secondary,
                           fontWeight: FontWeight.bold,
@@ -137,7 +138,7 @@ ${widget.dreamEntry.interpretation}
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     AppButton(
-                      text: 'Save Dream & Interpretation',
+                      text: t.dreamEntry.saveDream,
                       onPressed: widget.onSave,
                       icon: Icons.save_rounded,
                       height: 44,
@@ -149,7 +150,7 @@ ${widget.dreamEntry.interpretation}
                       children: [
                         Expanded(
                           child: AppButton(
-                            text: 'Share',
+                            text: t.dreamEntry.shareDream,
                             onPressed: _shareDream,
                             icon: Icons.share_rounded,
                             height: 44,
@@ -159,7 +160,7 @@ ${widget.dreamEntry.interpretation}
                         const SizedBox(width: 12),
                         Expanded(
                           child: AppButton(
-                            text: 'Discard',
+                            text: t.dreamEntry.discardDream,
                             onPressed: widget.onDiscard,
                             icon: Icons.delete_outline_rounded,
                             height: 44,

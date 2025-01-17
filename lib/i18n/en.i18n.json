@@ -15,7 +15,8 @@
       "unknown": "Email or password is incorrect",
       "tryAgain": "Please try again",
       "userNotAuthenticated": "User not authenticated"
-    }
+    },
+    "success": "Success"
   },
   "registration": {
     "welcomeText": "Welcome Back",
@@ -64,7 +65,6 @@
       "signInText": "Sign In",
       "forgotPassword": "Forgot Password?"
     },
-
     "signOut": {
       "signOutText": "Sign Out"
     }
@@ -72,10 +72,11 @@
   "dreamEntry": {
     "newDream": "New Dream",
     "saveDream": "Save Dream",
+    "discardDream": "Discard",
+    "shareDream": "Share",
     "dreamTitle": "Dream Title",
     "dreamTitleHint": "Please enter a title for your dream",
     "yourDream": "Your Dream",
-
     "tags": {
       "tags": "Tags",
       "Happiness": "happiness",
@@ -150,6 +151,22 @@
     "german": "German",
     "changePassword": "Change Password",
     "logout": "Logout",
-    "closeBackgroundAnimation": "Close Background Animation"
+    "closeBackgroundAnimation": "Close Background Animation",
+    "reminder": {
+      "setTime": "Set dream reminder time",
+      "chooseTime": "Choose when you want to be reminded",
+      "description": "We'll send you a notification to help you remember your dreams",
+      "earlyMorning": "Early morning",
+      "earlyMorningTime": "6:00 AM",
+      "afternoon": "Afternoon",
+      "afternoonTime": "2:00 PM",
+      "nighttime": "Nighttime",
+      "nighttimeTime": "10:00 PM",
+      "custom": "Custom",
+      "setCustomTime": "Set your time",
+      "saveButton": "Save Reminder",
+      "skipButton": "Skip for now",
+      "savedSuccess": "Reminder settings saved successfully"
+    }
   }
 }

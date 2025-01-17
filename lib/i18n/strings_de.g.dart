@@ -81,6 +81,8 @@ class _TranslationsDreamEntryDe implements TranslationsDreamEntryEn {
 	// Translations
 	@override String get newDream => 'Neuer Traum';
 	@override String get saveDream => 'Traum speichern';
+	@override String get discardDream => 'At';
+	@override String get shareDream => 'Teilen';
 	@override String get dreamTitle => 'Traumtitel';
 	@override String get dreamTitleHint => 'Bitte geben Sie einen Titel für Ihren Traum ein';
 	@override String get yourDream => 'Ihr Traum';
@@ -147,8 +149,8 @@ class _TranslationsProfileDe implements TranslationsProfileEn {
 	@override String get dreamStats => 'Traumstatistiken';
 	@override String get totalDreams => 'Gesamtträume';
 	@override String get weeklyDreams => 'Wöchentliche Träume';
-	@override String get currentStreak => 'Mevcut Seri';
-	@override String get longestStreak => 'En Uzun Seri';
+	@override String get currentStreak => 'Aktuelle Serie';
+	@override String get longestStreak => 'Längste Serie';
 	@override String get completionRate => 'Abschlussrate';
 	@override String get settings => 'Einstellungen';
 	@override String get notifications => 'Benachrichtigungen';
@@ -161,6 +163,7 @@ class _TranslationsProfileDe implements TranslationsProfileEn {
 	@override String get closeBackgroundAnimation => 'Hintergrundanimation schließen';
 	@override String get displayNameUpdated => 'Benutzername erfolgreich aktualisiert';
 	@override String get reminderUpdated => 'Traum-Erinnerung erfolgreich aktualisiert';
+	@override late final _TranslationsProfileReminderDe reminder = _TranslationsProfileReminderDe._(_root);
 }
 
 // Path: core.mode
@@ -326,6 +329,29 @@ class _TranslationsDreamEntryInterpretationDe implements TranslationsDreamEntryI
 	@override String get shareButton => 'Deutung teilen';
 }
 
+// Path: profile.reminder
+class _TranslationsProfileReminderDe implements TranslationsProfileReminderEn {
+	_TranslationsProfileReminderDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get setTime => 'Traum-Erinnerungszeit einstellen';
+	@override String get chooseTime => 'Wählen Sie aus, wann Sie erinnert werden möchten';
+	@override String get description => 'Wir senden Ihnen eine Benachrichtigung, um Ihnen zu helfen, sich an Ihre Träume zu erinnern';
+	@override String get earlyMorning => 'Früher Morgen';
+	@override String get earlyMorningTime => '06:00';
+	@override String get afternoon => 'Nachmittag';
+	@override String get afternoonTime => '14:00';
+	@override String get nighttime => 'Nachtzeit';
+	@override String get nighttimeTime => '22:00';
+	@override String get custom => 'Benutzerdefiniert';
+	@override String get setCustomTime => 'Ihre Zeit einstellen';
+	@override String get saveButton => 'Erinnerung speichern';
+	@override String get skipButton => 'Jetzt überspringen';
+	@override String get savedSuccess => 'Erinnerungseinstellungen erfolgreich gespeichert';
+}
+
 // Path: registration.password.changePassword
 class _TranslationsRegistrationPasswordChangePasswordDe implements TranslationsRegistrationPasswordChangePasswordEn {
 	_TranslationsRegistrationPasswordChangePasswordDe._(this._root);
@@ -412,6 +438,8 @@ extension on TranslationsDe {
 			case 'registration.signOut.signOutText': return 'Abmelden';
 			case 'dreamEntry.newDream': return 'Neuer Traum';
 			case 'dreamEntry.saveDream': return 'Traum speichern';
+			case 'dreamEntry.discardDream': return 'At';
+			case 'dreamEntry.shareDream': return 'Teilen';
 			case 'dreamEntry.dreamTitle': return 'Traumtitel';
 			case 'dreamEntry.dreamTitleHint': return 'Bitte geben Sie einen Titel für Ihren Traum ein';
 			case 'dreamEntry.yourDream': return 'Ihr Traum';
@@ -462,8 +490,8 @@ extension on TranslationsDe {
 			case 'profile.dreamStats': return 'Traumstatistiken';
 			case 'profile.totalDreams': return 'Gesamtträume';
 			case 'profile.weeklyDreams': return 'Wöchentliche Träume';
-			case 'profile.currentStreak': return 'Mevcut Seri';
-			case 'profile.longestStreak': return 'En Uzun Seri';
+			case 'profile.currentStreak': return 'Aktuelle Serie';
+			case 'profile.longestStreak': return 'Längste Serie';
 			case 'profile.completionRate': return 'Abschlussrate';
 			case 'profile.settings': return 'Einstellungen';
 			case 'profile.notifications': return 'Benachrichtigungen';
@@ -476,6 +504,20 @@ extension on TranslationsDe {
 			case 'profile.closeBackgroundAnimation': return 'Hintergrundanimation schließen';
 			case 'profile.displayNameUpdated': return 'Benutzername erfolgreich aktualisiert';
 			case 'profile.reminderUpdated': return 'Traum-Erinnerung erfolgreich aktualisiert';
+			case 'profile.reminder.setTime': return 'Traum-Erinnerungszeit einstellen';
+			case 'profile.reminder.chooseTime': return 'Wählen Sie aus, wann Sie erinnert werden möchten';
+			case 'profile.reminder.description': return 'Wir senden Ihnen eine Benachrichtigung, um Ihnen zu helfen, sich an Ihre Träume zu erinnern';
+			case 'profile.reminder.earlyMorning': return 'Früher Morgen';
+			case 'profile.reminder.earlyMorningTime': return '06:00';
+			case 'profile.reminder.afternoon': return 'Nachmittag';
+			case 'profile.reminder.afternoonTime': return '14:00';
+			case 'profile.reminder.nighttime': return 'Nachtzeit';
+			case 'profile.reminder.nighttimeTime': return '22:00';
+			case 'profile.reminder.custom': return 'Benutzerdefiniert';
+			case 'profile.reminder.setCustomTime': return 'Ihre Zeit einstellen';
+			case 'profile.reminder.saveButton': return 'Erinnerung speichern';
+			case 'profile.reminder.skipButton': return 'Jetzt überspringen';
+			case 'profile.reminder.savedSuccess': return 'Erinnerungseinstellungen erfolgreich gespeichert';
 			default: return null;
 		}
 	}

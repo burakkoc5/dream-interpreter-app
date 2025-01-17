@@ -19,6 +19,10 @@ class NotificationRepository implements INotificationService {
   final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
   static const String _permissionsRequestedKey =
       'notification_permissions_requested';
+  static const String _channelId = 'dream_reminder';
+  static const String _channelName = 'Dream Reminders';
+  static const String _channelDescription =
+      'Notifications for dream recording reminders';
 
   NotificationRepository(
     this._notifications,
@@ -27,18 +31,42 @@ class NotificationRepository implements INotificationService {
     this._prefs,
   );
 
-  Future<bool> _checkAndroidPermissions() async {
+  Future<bool> _checkAndRequestAndroidPermissions() async {
     if (!Platform.isAndroid) return true;
 
     final androidInfo = await _deviceInfo.androidInfo;
     if (androidInfo.version.sdkInt < 33) return true;
 
-    final permissionStatus = await _notifications
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission();
+    final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    if (androidPlugin == null) return false;
 
-    return permissionStatus ?? false;
+    // Request both notification and exact alarm permissions
+    final notificationPermission =
+        await androidPlugin.requestNotificationsPermission();
+    final alarmPermission = await androidPlugin.requestExactAlarmsPermission();
+
+    return (notificationPermission ?? false) && (alarmPermission ?? false);
+  }
+
+  Future<void> _createNotificationChannel() async {
+    if (!Platform.isAndroid) return;
+
+    final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    if (androidPlugin == null) return;
+
+    await androidPlugin.createNotificationChannel(
+      const AndroidNotificationChannel(
+        _channelId,
+        _channelName,
+        description: _channelDescription,
+        importance: Importance.high,
+        enableVibration: true,
+        enableLights: true,
+        playSound: true,
+      ),
+    );
   }
 
   @override
@@ -48,6 +76,7 @@ class NotificationRepository implements INotificationService {
     await _timeZoneService.initialize();
     final settings = await _platformSettings.getSettings();
     await _notifications.initialize(settings);
+    await _createNotificationChannel();
 
     // Request permissions on first app launch
     final permissionsRequested =
@@ -56,7 +85,7 @@ class NotificationRepository implements INotificationService {
       if (Platform.isIOS) {
         await _platformSettings.requestPermissions(_notifications);
       } else {
-        await _checkAndroidPermissions();
+        await _checkAndRequestAndroidPermissions();
       }
       await _prefs.setBool(_permissionsRequestedKey, true);
     }
@@ -70,6 +99,9 @@ class NotificationRepository implements INotificationService {
   }) async {
     if (!_isInitialized) await initialize();
 
+    // Cancel existing reminders before scheduling new one
+    await cancelAllReminders();
+
     final scheduledDate = await _timeZoneService.getScheduledDate(time);
 
     await _notifications.zonedSchedule(
@@ -77,15 +109,21 @@ class NotificationRepository implements INotificationService {
       'Dream Journal',
       'Time to record your dream!',
       scheduledDate,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
-          'dream_reminder',
-          'Dream Reminders',
-          channelDescription: 'Notifications for dream recording reminders',
+          _channelId,
+          _channelName,
+          channelDescription: _channelDescription,
           importance: Importance.high,
           priority: Priority.high,
+          enableVibration: true,
+          enableLights: true,
+          playSound: true,
+          icon: '@mipmap/ic_launcher',
+          category: AndroidNotificationCategory.reminder,
+          visibility: NotificationVisibility.public,
         ),
-        iOS: DarwinNotificationDetails(
+        iOS: const DarwinNotificationDetails(
           presentAlert: true,
           presentBadge: true,
           presentSound: true,

@@ -150,7 +150,7 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Failed to save dream: $e'),
+                  content: Text(t.dreamEntry.failedToSaveDream),
                   behavior: SnackBarBehavior.floating,
                   backgroundColor: theme.colorScheme.error,
                 ),
@@ -164,13 +164,13 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
 
   Future<void> _shareDream(DreamEntry dreamEntry) async {
     final shareText = '''
-✨ Dream:
+✨ ${t.dreamEntry.yourDream}:
 ${dreamEntry.content}
 
-🌙 Interpretation:
+🌙 ${t.dreamEntry.interpretation.interpretationText}:
 ${dreamEntry.interpretation}
 ''';
 
-    await Share.share(shareText, subject: 'Dream Interpretation');
+    await Share.share(shareText, subject: t.dreamEntry.interpretation.title);
   }
 }

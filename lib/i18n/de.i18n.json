@@ -73,6 +73,8 @@
   "dreamEntry": {
     "newDream": "Neuer Traum",
     "saveDream": "Traum speichern",
+    "discardDream": "At",
+    "shareDream": "Teilen",
     "dreamTitle": "Traumtitel",
     "dreamTitleHint": "Bitte geben Sie einen Titel für Ihren Traum ein",
     "yourDream": "Ihr Traum",
@@ -139,8 +141,8 @@
     "dreamStats": "Traumstatistiken",
     "totalDreams": "Gesamtträume",
     "weeklyDreams": "Wöchentliche Träume",
-    "currentStreak": "Mevcut Seri",
-    "longestStreak": "En Uzun Seri",
+    "currentStreak": "Aktuelle Serie",
+    "longestStreak": "Längste Serie",
     "completionRate": "Abschlussrate",
     "settings": "Einstellungen",
     "notifications": "Benachrichtigungen",
@@ -152,6 +154,22 @@
     "logout": "Abmelden",
     "closeBackgroundAnimation": "Hintergrundanimation schließen",
     "displayNameUpdated": "Benutzername erfolgreich aktualisiert",
-    "reminderUpdated": "Traum-Erinnerung erfolgreich aktualisiert"
+    "reminderUpdated": "Traum-Erinnerung erfolgreich aktualisiert",
+    "reminder": {
+      "setTime": "Traum-Erinnerungszeit einstellen",
+      "chooseTime": "Wählen Sie aus, wann Sie erinnert werden möchten",
+      "description": "Wir senden Ihnen eine Benachrichtigung, um Ihnen zu helfen, sich an Ihre Träume zu erinnern",
+      "earlyMorning": "Früher Morgen",
+      "earlyMorningTime": "06:00",
+      "afternoon": "Nachmittag",
+      "afternoonTime": "14:00",
+      "nighttime": "Nachtzeit",
+      "nighttimeTime": "22:00",
+      "custom": "Benutzerdefiniert",
+      "setCustomTime": "Ihre Zeit einstellen",
+      "saveButton": "Erinnerung speichern",
+      "skipButton": "Jetzt überspringen",
+      "savedSuccess": "Erinnerungseinstellungen erfolgreich gespeichert"
+    }
   }
 }
