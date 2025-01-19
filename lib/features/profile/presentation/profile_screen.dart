@@ -290,59 +290,95 @@ class _ProfileContent extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    t.profile.personalization.title,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        t.profile.personalization.title,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.edit,
+                          size: 20,
+                          color: theme.colorScheme.primary,
+                        ),
+                        onPressed: () {
+                          context.push(AppRoute.personalization);
+                        },
+                        visualDensity: VisualDensity.compact,
+                        style: IconButton.styleFrom(
+                          backgroundColor:
+                              theme.colorScheme.primary.withOpacity(0.1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 16),
-                  if (profile.gender != null) ...[
-                    _buildInfoRow(
-                      context,
-                      t.profile.personalization.gender,
-                      profile.gender,
-                      Icons.person,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceContainerHighest
+                          .withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    const SizedBox(height: 12),
-                  ],
-                  if (profile.birthDate != null) ...[
-                    _buildInfoRow(
-                      context,
-                      t.profile.personalization.birthDate,
-                      DateFormat('dd/MM/yyyy').format(profile.birthDate),
-                      Icons.calendar_today,
+                    child: Column(
+                      children: [
+                        if (profile.gender != null)
+                          _buildInfoTile(
+                            context,
+                            t.profile.personalization.gender,
+                            profile.gender,
+                            Icons.person,
+                            showDivider: profile.birthDate != null ||
+                                profile.horoscope != null ||
+                                profile.occupation != null ||
+                                profile.relationshipStatus != null,
+                          ),
+                        if (profile.birthDate != null)
+                          _buildInfoTile(
+                            context,
+                            t.profile.personalization.birthDate,
+                            DateFormat('dd/MM/yyyy').format(profile.birthDate),
+                            Icons.calendar_today,
+                            showDivider: profile.horoscope != null ||
+                                profile.occupation != null ||
+                                profile.relationshipStatus != null,
+                          ),
+                        if (profile.horoscope != null)
+                          _buildInfoTile(
+                            context,
+                            t.profile.personalization.horoscope,
+                            profile.horoscope,
+                            Icons.auto_awesome,
+                            showDivider: profile.occupation != null ||
+                                profile.relationshipStatus != null,
+                          ),
+                        if (profile.occupation != null)
+                          _buildInfoTile(
+                            context,
+                            t.profile.personalization.occupation,
+                            profile.occupation,
+                            Icons.work,
+                            showDivider: profile.relationshipStatus != null,
+                          ),
+                        if (profile.relationshipStatus != null)
+                          _buildInfoTile(
+                            context,
+                            t.profile.personalization.relationshipStatus,
+                            profile.relationshipStatus,
+                            Icons.favorite,
+                            showDivider: false,
+                          ),
+                      ],
                     ),
-                    const SizedBox(height: 12),
-                  ],
-                  if (profile.horoscope != null) ...[
-                    _buildInfoRow(
-                      context,
-                      t.profile.personalization.horoscope,
-                      profile.horoscope,
-                      Icons.auto_awesome,
-                    ),
-                    const SizedBox(height: 12),
-                  ],
-                  if (profile.occupation != null) ...[
-                    _buildInfoRow(
-                      context,
-                      t.profile.personalization.occupation,
-                      profile.occupation,
-                      Icons.work,
-                    ),
-                    const SizedBox(height: 12),
-                  ],
-                  if (profile.relationshipStatus != null) ...[
-                    _buildInfoRow(
-                      context,
-                      t.profile.personalization.relationshipStatus,
-                      profile.relationshipStatus,
-                      Icons.favorite,
-                    ),
-                    const SizedBox(height: 12),
-                  ],
+                  ),
                   if (profile.interests?.isNotEmpty ?? false) ...[
+                    const SizedBox(height: 16),
                     Text(
                       t.profile.personalization.interests,
                       style: theme.textTheme.titleSmall?.copyWith(
@@ -350,21 +386,37 @@ class _ProfileContent extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        for (final interest in profile.interests!)
-                          Chip(
-                            label: Text(
-                              interest,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: colorScheme.onSurface,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest
+                            .withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: theme.colorScheme.outline.withOpacity(0.2),
+                          width: 1,
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(12),
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final interest in profile.interests!)
+                            Chip(
+                              label: Text(
+                                interest,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: colorScheme.onSurface,
+                                ),
+                              ),
+                              backgroundColor: colorScheme.surface,
+                              side: BorderSide(
+                                color:
+                                    theme.colorScheme.outline.withOpacity(0.2),
                               ),
                             ),
-                            backgroundColor: colorScheme.surfaceVariant,
-                          ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ],
@@ -375,38 +427,61 @@ class _ProfileContent extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(
+  Widget _buildInfoTile(
     BuildContext context,
     String label,
     String value,
-    IconData icon,
-  ) {
+    IconData icon, {
+    bool showDivider = true,
+  }) {
     final theme = Theme.of(context);
-    return Row(
+    return Column(
       children: [
-        Icon(
-          icon,
-          size: 20,
-          color: theme.colorScheme.primary,
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
             children: [
-              Text(
-                label,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  icon,
+                  size: 20,
+                  color: theme.colorScheme.primary,
                 ),
               ),
-              Text(
-                value,
-                style: theme.textTheme.bodyMedium,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      ),
+                    ),
+                    Text(
+                      value,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
+        if (showDivider)
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: theme.colorScheme.outline.withOpacity(0.1),
+          ),
       ],
     );
   }

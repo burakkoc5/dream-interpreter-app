@@ -5,18 +5,20 @@ import 'package:dream/features/dream_entry/application/dream_entry_cubit.dart';
 import 'package:dream/features/dream_entry/application/dream_entry_state.dart';
 import 'package:dream/features/dream_entry/models/dream_entry_model.dart';
 import 'package:dream/features/dream_entry/widgets/dream_details_modal_content.dart';
-import 'package:dream/features/dream_entry/widgets/interpretation_modal_content.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:dream/shared/widgets/app_modal_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:toastification/toastification.dart';
 import '../widgets/dream_form_widget.dart';
 import '../widgets/dream_loading_widget.dart';
 import '../widgets/dream_error_widget.dart';
 import 'dart:ui';
 import 'package:dream/config/theme/theme_cubit.dart';
+import 'package:dream/features/auth/application/auth_cubit.dart';
+import 'package:dream/features/profile/application/profile_cubit.dart';
 
 /// Screen for entering and interpreting dreams
 class DreamEntryScreen extends StatefulWidget {
@@ -28,6 +30,15 @@ class DreamEntryScreen extends StatefulWidget {
 
 class _DreamEntryScreenState extends State<DreamEntryScreen> {
   @override
+  void initState() {
+    super.initState();
+    final userId = context.read<AuthCubit>().state.user?.id;
+    if (userId != null) {
+      context.read<ProfileCubit>().loadProfile(userId);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final brightness = MediaQuery.platformBrightnessOf(context);
@@ -38,6 +49,7 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
     return BlocProvider(
       create: (context) => getIt<DreamEntryCubit>(),
       child: Scaffold(
+        extendBody: true,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: Text(
@@ -55,13 +67,37 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
           children: [
             const AnimatedBackground(),
             SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0, vertical: 16.0),
-                child: _buildGlassContainer(
-                  context,
-                  isDarkMode,
-                  theme,
+              bottom: false,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 16.0),
+                  child: Column(
+                    children: [
+                      _buildGlassContainer(
+                        context,
+                        isDarkMode,
+                        theme,
+                      ),
+                      //BlocBuilder<DreamEntryCubit, DreamEntryState>(
+                      // builder: (context, state) {
+                      //    return state.maybeWhen(
+                      //      initial: () => Column(
+                      //        children: const [
+                      //          SizedBox(height: 16),
+                      //          AdBannerWidget(),
+                      //          SizedBox(height: 16),
+                      //        ],
+                      //      ),
+                      //    orElse: () => const SizedBox(height: 16),
+                      //  );
+                      //},
+                      //),
+                      const SizedBox(
+                          height:
+                              80), // Reduced bottom padding since we have spacing above
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -107,14 +143,98 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
                   child: DreamFormWidget(),
                 ),
                 loading: () => const DreamLoadingWidget(),
-                success: (dreamEntry) => InterpretationModalContent(
-                  dreamEntry: dreamEntry,
-                  onSave: () => _showDetailsModal(dreamEntry, context),
-                  onShare: () => _shareDream(dreamEntry),
-                  onDiscard: () {
-                    context.read<DreamEntryCubit>().reset();
-                    context.go(AppRoute.dreamEntry);
-                  },
+                success: (dreamEntry) => SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        t.dreamEntry.yourDream,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: theme.colorScheme.primary.withOpacity(0.2),
+                          ),
+                        ),
+                        child: Text(
+                          dreamEntry.content,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontStyle: FontStyle.italic,
+                            height: 1.6,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        t.dreamEntry.interpretation.interpretationText,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          color: theme.colorScheme.secondary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.secondary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: theme.colorScheme.secondary.withOpacity(0.2),
+                          ),
+                        ),
+                        child: Text(
+                          dreamEntry.interpretation,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            height: 1.6,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () =>
+                                  _showDetailsModal(dreamEntry, context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: theme.colorScheme.primary,
+                                foregroundColor: theme.colorScheme.onPrimary,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
+                              child: Text(t.dreamEntry.saveDream),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          IconButton(
+                            onPressed: () => _shareDream(dreamEntry),
+                            icon: const Icon(Icons.share),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              context.read<DreamEntryCubit>().reset();
+                            },
+                            icon: const Icon(Icons.close),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                    ],
+                  ),
                 ),
                 error: (message) => DreamErrorWidget(message: message),
               );
@@ -139,11 +259,12 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
             tags: tags,
             moodRating: moodRating.toInt(),
           );
-          context.pop();
           try {
             await context.read<DreamEntryCubit>().saveDream(updatedDream);
             if (context.mounted) {
+              _showToast(context, t.dreamEntry.dreamForm.dreamSaved);
               context.read<DreamEntryCubit>().reset();
+              context.pop();
               context.go(AppRoute.dreamEntry);
             }
           } catch (e) {
@@ -159,6 +280,17 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
           }
         },
       ),
+    );
+  }
+
+  void _showToast(BuildContext context, String message) {
+    toastification.show(
+      context: context,
+      type: ToastificationType.success,
+      style: ToastificationStyle.flat,
+      autoCloseDuration: const Duration(seconds: 3),
+      title: Text(t.core.success),
+      description: Text(message),
     );
   }
 

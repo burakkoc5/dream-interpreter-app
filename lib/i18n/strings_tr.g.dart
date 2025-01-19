@@ -314,6 +314,9 @@ class _TranslationsDreamEntryDreamFormTr implements TranslationsDreamEntryDreamF
 	@override String get content => 'Rüya İçeriği';
 	@override String get contentHint => 'Lütfen rüya içeriğinizi girin';
 	@override String get getInterpretation => 'Yorum Al';
+	@override String get noAttemptsLeft => 'Bugün için hakkınız kalmamıştır. Rüya yorumu almak için bir video izleyin.';
+	@override String get watchAdError => 'Lütfen bir video izleyin, rüya yorumu almak için.';
+	@override String get dreamSaved => 'Rüya başarıyla kaydedildi';
 }
 
 // Path: dreamEntry.interpretation
@@ -577,6 +580,9 @@ extension on TranslationsTr {
 			case 'dreamEntry.dreamForm.content': return 'Rüya İçeriği';
 			case 'dreamEntry.dreamForm.contentHint': return 'Lütfen rüya içeriğinizi girin';
 			case 'dreamEntry.dreamForm.getInterpretation': return 'Yorum Al';
+			case 'dreamEntry.dreamForm.noAttemptsLeft': return 'Bugün için hakkınız kalmamıştır. Rüya yorumu almak için bir video izleyin.';
+			case 'dreamEntry.dreamForm.watchAdError': return 'Lütfen bir video izleyin, rüya yorumu almak için.';
+			case 'dreamEntry.dreamForm.dreamSaved': return 'Rüya başarıyla kaydedildi';
 			case 'dreamEntry.interpretation.title': return 'Rüya Yorumu';
 			case 'dreamEntry.interpretation.interpretationText': return 'Yorum';
 			case 'dreamEntry.interpretation.saveButton': return 'Yorumu Kaydet';

@@ -22,6 +22,22 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
   DateTime? _birthDate;
   List<String> _selectedInterests = [];
 
+  @override
+  void initState() {
+    super.initState();
+    final profile = context.read<ProfileCubit>().state.profile;
+    if (profile != null) {
+      setState(() {
+        _gender = profile.gender;
+        _horoscope = profile.horoscope;
+        _occupation = profile.occupation;
+        _relationshipStatus = profile.relationshipStatus;
+        _birthDate = profile.birthDate;
+        _selectedInterests = List<String>.from(profile.interests ?? []);
+      });
+    }
+  }
+
   List<String> get _genderOptions => [
         t.profile.personalization.genderOptions.male,
         t.profile.personalization.genderOptions.female,
@@ -180,7 +196,7 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               // Gender Selection
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonFormField<String>(
@@ -251,7 +267,7 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               // Birth Date
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextFormField(
@@ -319,7 +335,7 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               // Horoscope
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonFormField<String>(
@@ -390,7 +406,7 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               // Occupation
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonFormField<String>(
@@ -461,7 +477,7 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               // Relationship Status
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonFormField<String>(
@@ -538,7 +554,7 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               const SizedBox(height: 8),
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: colorScheme.outline.withOpacity(0.5),

@@ -103,7 +103,10 @@
       "record": "Rüyanızı Kaydedin",
       "content": "Rüya İçeriği",
       "contentHint": "Lütfen rüya içeriğinizi girin",
-      "getInterpretation": "Yorum Al"
+      "getInterpretation": "Yorum Al",
+      "noAttemptsLeft": "Bugün için hakkınız kalmamıştır. Rüya yorumu almak için bir video izleyin.",
+      "watchAdError": "Lütfen bir video izleyin, rüya yorumu almak için.",
+      "dreamSaved": "Rüya başarıyla kaydedildi"
     },
     "interpretation": {
       "title": "Rüya Yorumu",

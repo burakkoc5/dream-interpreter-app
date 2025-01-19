@@ -103,7 +103,10 @@
       "record": "Ihren Traum aufnehmen",
       "content": "Trauminhalt",
       "contentHint": "Bitte geben Sie den Inhalt Ihres Traums ein",
-      "getInterpretation": "Interpretation erhalten"
+      "getInterpretation": "Interpretation erhalten",
+      "noAttemptsLeft": "Keine Versuche mehr für heute. Schauen Sie sich ein Video an, um mehr Träume zu interpretieren.",
+      "watchAdError": "Bitte schauen Sie sich das Video an, um mehr Träume zu interpretieren.",
+      "dreamSaved": "Traum erfolgreich gespeichert"
     },
     "interpretation": {
       "title": "Traumdeutung",

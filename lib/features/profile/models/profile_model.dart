@@ -33,6 +33,8 @@ class Profile with _$Profile {
     DateTime? birthDate,
     @Default([]) List<String> interests,
     @Default(false) bool hasCompletedPersonalization,
+    @Default(2) int remainingDailyAttempts,
+    @TimestampConverter() DateTime? lastAttemptsResetDate,
   }) = _Profile;
 
   factory Profile.fromJson(Map<String, dynamic> json) =>

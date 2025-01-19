@@ -50,8 +50,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _onNextPressed() {
     if (_currentPage < _steps.length - 1) {
       _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOutCubic,
       );
     } else {
       _completeOnboarding();
@@ -65,19 +65,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Color _colorFromString(String colorString) {
-    // If the string starts with '#' (hex format), convert it to Color
     if (colorString.startsWith('#')) {
       return Color(int.parse(colorString.replaceFirst('#', '0xff')));
     } else {
-      // If not a valid hex color, return a default color (e.g., grey)
       return Colors.grey;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      body: Container(
+      body: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
         decoration: BoxDecoration(
           color: _colorFromString(_steps[_currentPage].backgroundColor),
         ),
@@ -98,7 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -112,7 +113,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                     ElevatedButton(
                       onPressed: _onNextPressed,
-                      child: Text(_steps[_currentPage].buttonText),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colorScheme.primary,
+                        foregroundColor: theme.colorScheme.onPrimary,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 36,
+                          vertical: 18,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        elevation: 2,
+                      ),
+                      child: Text(
+                        _steps[_currentPage].buttonText,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: theme.colorScheme.onPrimary,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -132,27 +153,49 @@ class _OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
             step.imagePath,
-            height: 350,
-            fit: BoxFit.cover,
+            height: size.height * 0.35,
+            fit: BoxFit.contain,
           ),
           const SizedBox(height: 48),
-          Text(
-            step.title,
-            style: Theme.of(context).textTheme.headlineSmall,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            step.subtitle,
-            style: Theme.of(context).textTheme.bodyLarge,
-            textAlign: TextAlign.center,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              children: [
+                Text(
+                  step.title,
+                  style: theme.textTheme.displaySmall?.copyWith(
+                    color: theme.colorScheme.primary.withOpacity(0.9),
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: -1.0,
+                    height: 1.2,
+                    fontSize: 32,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  step.subtitle,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: theme.colorScheme.onBackground.withOpacity(0.75),
+                    fontWeight: FontWeight.w500,
+                    height: 1.5,
+                    letterSpacing: 0.3,
+                    fontSize: 18,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -167,15 +210,18 @@ class _PageIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final theme = Theme.of(context);
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.symmetric(horizontal: 4),
-      width: isActive ? 24 : 8,
-      height: 8,
+      width: isActive ? 32 : 10,
+      height: 10,
       decoration: BoxDecoration(
         color: isActive
-            ? Theme.of(context).primaryColor
-            : Theme.of(context).primaryColor.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(4),
+            ? theme.colorScheme.primary
+            : theme.colorScheme.primary.withOpacity(0.25),
+        borderRadius: BorderRadius.circular(5),
       ),
     );
   }

@@ -5,8 +5,6 @@ import 'package:dream/features/dream_history/presentation/widgets/dream_history_
 import 'package:dream/features/dream_history/presentation/widgets/dream_history_skeletonizer.dart';
 import 'package:dream/features/dream_history/presentation/widgets/dream_list_error.dart';
 import 'package:dream/features/dream_history/presentation/widgets/empty_dream_list.dart';
-import 'package:dream/features/dream_history/presentation/widgets/tag_filter_chip.dart';
-import 'package:dream/features/dream_history/presentation/widgets/tag_filter_dialog.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:dream/shared/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';

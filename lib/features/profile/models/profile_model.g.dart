@@ -31,6 +31,10 @@ _$ProfileImpl _$$ProfileImplFromJson(Map<String, dynamic> json) =>
           const [],
       hasCompletedPersonalization:
           json['hasCompletedPersonalization'] as bool? ?? false,
+      remainingDailyAttempts:
+          (json['remainingDailyAttempts'] as num?)?.toInt() ?? 2,
+      lastAttemptsResetDate: _$JsonConverterFromJson<Timestamp, DateTime>(
+          json['lastAttemptsResetDate'], const TimestampConverter().fromJson),
     );
 
 Map<String, dynamic> _$$ProfileImplToJson(_$ProfileImpl instance) =>
@@ -50,4 +54,19 @@ Map<String, dynamic> _$$ProfileImplToJson(_$ProfileImpl instance) =>
       'birthDate': instance.birthDate?.toIso8601String(),
       'interests': instance.interests,
       'hasCompletedPersonalization': instance.hasCompletedPersonalization,
+      'remainingDailyAttempts': instance.remainingDailyAttempts,
+      'lastAttemptsResetDate': _$JsonConverterToJson<Timestamp, DateTime>(
+          instance.lastAttemptsResetDate, const TimestampConverter().toJson),
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

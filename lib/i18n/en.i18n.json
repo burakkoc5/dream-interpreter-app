@@ -103,7 +103,10 @@
       "record": "Record Your Dream",
       "content": "Dream Content",
       "contentHint": "Please enter your dream content",
-      "getInterpretation": "Get Interpretation"
+      "getInterpretation": "Get Interpretation",
+      "noAttemptsLeft": "No attempts left for today. Watch an ad to interpret more dreams.",
+      "watchAdError": "Please watch the ad to interpret more dreams today.",
+      "dreamSaved": "Dream saved successfully"
     },
     "interpretation": {
       "title": "Dream Interpretation",

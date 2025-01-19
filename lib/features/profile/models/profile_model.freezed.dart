@@ -38,6 +38,9 @@ mixin _$Profile {
   DateTime? get birthDate => throw _privateConstructorUsedError;
   List<String> get interests => throw _privateConstructorUsedError;
   bool get hasCompletedPersonalization => throw _privateConstructorUsedError;
+  int get remainingDailyAttempts => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime? get lastAttemptsResetDate => throw _privateConstructorUsedError;
 
   /// Serializes this Profile to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -68,7 +71,9 @@ abstract class $ProfileCopyWith<$Res> {
       String? relationshipStatus,
       DateTime? birthDate,
       List<String> interests,
-      bool hasCompletedPersonalization});
+      bool hasCompletedPersonalization,
+      int remainingDailyAttempts,
+      @TimestampConverter() DateTime? lastAttemptsResetDate});
 }
 
 /// @nodoc
@@ -101,6 +106,8 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
     Object? birthDate = freezed,
     Object? interests = null,
     Object? hasCompletedPersonalization = null,
+    Object? remainingDailyAttempts = null,
+    Object? lastAttemptsResetDate = freezed,
   }) {
     return _then(_value.copyWith(
       userId: null == userId
@@ -163,6 +170,14 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
           ? _value.hasCompletedPersonalization
           : hasCompletedPersonalization // ignore: cast_nullable_to_non_nullable
               as bool,
+      remainingDailyAttempts: null == remainingDailyAttempts
+          ? _value.remainingDailyAttempts
+          : remainingDailyAttempts // ignore: cast_nullable_to_non_nullable
+              as int,
+      lastAttemptsResetDate: freezed == lastAttemptsResetDate
+          ? _value.lastAttemptsResetDate
+          : lastAttemptsResetDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -189,7 +204,9 @@ abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
       String? relationshipStatus,
       DateTime? birthDate,
       List<String> interests,
-      bool hasCompletedPersonalization});
+      bool hasCompletedPersonalization,
+      int remainingDailyAttempts,
+      @TimestampConverter() DateTime? lastAttemptsResetDate});
 }
 
 /// @nodoc
@@ -220,6 +237,8 @@ class __$$ProfileImplCopyWithImpl<$Res>
     Object? birthDate = freezed,
     Object? interests = null,
     Object? hasCompletedPersonalization = null,
+    Object? remainingDailyAttempts = null,
+    Object? lastAttemptsResetDate = freezed,
   }) {
     return _then(_$ProfileImpl(
       userId: null == userId
@@ -282,6 +301,14 @@ class __$$ProfileImplCopyWithImpl<$Res>
           ? _value.hasCompletedPersonalization
           : hasCompletedPersonalization // ignore: cast_nullable_to_non_nullable
               as bool,
+      remainingDailyAttempts: null == remainingDailyAttempts
+          ? _value.remainingDailyAttempts
+          : remainingDailyAttempts // ignore: cast_nullable_to_non_nullable
+              as int,
+      lastAttemptsResetDate: freezed == lastAttemptsResetDate
+          ? _value.lastAttemptsResetDate
+          : lastAttemptsResetDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -304,7 +331,9 @@ class _$ProfileImpl implements _Profile {
       this.relationshipStatus,
       this.birthDate,
       final List<String> interests = const [],
-      this.hasCompletedPersonalization = false})
+      this.hasCompletedPersonalization = false,
+      this.remainingDailyAttempts = 2,
+      @TimestampConverter() this.lastAttemptsResetDate})
       : _preferences = preferences,
         _interests = interests;
 
@@ -360,10 +389,16 @@ class _$ProfileImpl implements _Profile {
   @override
   @JsonKey()
   final bool hasCompletedPersonalization;
+  @override
+  @JsonKey()
+  final int remainingDailyAttempts;
+  @override
+  @TimestampConverter()
+  final DateTime? lastAttemptsResetDate;
 
   @override
   String toString() {
-    return 'Profile(userId: $userId, email: $email, displayName: $displayName, photoUrl: $photoUrl, notificationsEnabled: $notificationsEnabled, preferences: $preferences, createdAt: $createdAt, lastActive: $lastActive, gender: $gender, horoscope: $horoscope, occupation: $occupation, relationshipStatus: $relationshipStatus, birthDate: $birthDate, interests: $interests, hasCompletedPersonalization: $hasCompletedPersonalization)';
+    return 'Profile(userId: $userId, email: $email, displayName: $displayName, photoUrl: $photoUrl, notificationsEnabled: $notificationsEnabled, preferences: $preferences, createdAt: $createdAt, lastActive: $lastActive, gender: $gender, horoscope: $horoscope, occupation: $occupation, relationshipStatus: $relationshipStatus, birthDate: $birthDate, interests: $interests, hasCompletedPersonalization: $hasCompletedPersonalization, remainingDailyAttempts: $remainingDailyAttempts, lastAttemptsResetDate: $lastAttemptsResetDate)';
   }
 
   @override
@@ -399,7 +434,11 @@ class _$ProfileImpl implements _Profile {
             (identical(other.hasCompletedPersonalization,
                     hasCompletedPersonalization) ||
                 other.hasCompletedPersonalization ==
-                    hasCompletedPersonalization));
+                    hasCompletedPersonalization) &&
+            (identical(other.remainingDailyAttempts, remainingDailyAttempts) ||
+                other.remainingDailyAttempts == remainingDailyAttempts) &&
+            (identical(other.lastAttemptsResetDate, lastAttemptsResetDate) ||
+                other.lastAttemptsResetDate == lastAttemptsResetDate));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -420,7 +459,9 @@ class _$ProfileImpl implements _Profile {
       relationshipStatus,
       birthDate,
       const DeepCollectionEquality().hash(_interests),
-      hasCompletedPersonalization);
+      hasCompletedPersonalization,
+      remainingDailyAttempts,
+      lastAttemptsResetDate);
 
   /// Create a copy of Profile
   /// with the given fields replaced by the non-null parameter values.
@@ -440,21 +481,24 @@ class _$ProfileImpl implements _Profile {
 
 abstract class _Profile implements Profile {
   const factory _Profile(
-      {required final String userId,
-      required final String email,
-      final String? displayName,
-      final String? photoUrl,
-      final bool notificationsEnabled,
-      final Map<String, dynamic> preferences,
-      @TimestampConverter() required final DateTime createdAt,
-      @TimestampConverter() required final DateTime lastActive,
-      final String? gender,
-      final String? horoscope,
-      final String? occupation,
-      final String? relationshipStatus,
-      final DateTime? birthDate,
-      final List<String> interests,
-      final bool hasCompletedPersonalization}) = _$ProfileImpl;
+          {required final String userId,
+          required final String email,
+          final String? displayName,
+          final String? photoUrl,
+          final bool notificationsEnabled,
+          final Map<String, dynamic> preferences,
+          @TimestampConverter() required final DateTime createdAt,
+          @TimestampConverter() required final DateTime lastActive,
+          final String? gender,
+          final String? horoscope,
+          final String? occupation,
+          final String? relationshipStatus,
+          final DateTime? birthDate,
+          final List<String> interests,
+          final bool hasCompletedPersonalization,
+          final int remainingDailyAttempts,
+          @TimestampConverter() final DateTime? lastAttemptsResetDate}) =
+      _$ProfileImpl;
 
   factory _Profile.fromJson(Map<String, dynamic> json) = _$ProfileImpl.fromJson;
 
@@ -490,6 +534,11 @@ abstract class _Profile implements Profile {
   List<String> get interests;
   @override
   bool get hasCompletedPersonalization;
+  @override
+  int get remainingDailyAttempts;
+  @override
+  @TimestampConverter()
+  DateTime? get lastAttemptsResetDate;
 
   /// Create a copy of Profile
   /// with the given fields replaced by the non-null parameter values.

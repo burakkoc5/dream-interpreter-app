@@ -12,12 +12,15 @@ class AppTheme {
       Color(0xFFF8F6FF); // Light ethereal background
   static const _darkBackgroundColor =
       Color(0xFF1A1625); // Deep mysterious background
+  static const _accentColor = Color(0xFFFFA6B9); // Soft pink accent
+  static const _successColor = Color(0xFF6BCB77); // Soft green
+  static const _warningColor = Color(0xFFFFB347); // Soft orange
 
   /// Creates the light theme configuration for the application.
   static ThemeData lightTheme() {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: const ColorScheme.light(
+      colorScheme: ColorScheme.light(
         primary: _primaryColor,
         secondary: _secondaryColor,
         tertiary: _tertiaryColor,
@@ -27,7 +30,9 @@ class AppTheme {
         onSecondary: Colors.white,
         onTertiary: Colors.white,
         onError: Colors.white,
-        onSurface: Color(0xFF2D2738),
+        onSurface: const Color(0xFF2D2738),
+        surfaceTint: _accentColor.withOpacity(0.1),
+        outline: _primaryColor.withOpacity(0.3),
       ),
       textTheme: _buildTextTheme(),
       appBarTheme: AppBarTheme(
@@ -45,20 +50,30 @@ class AppTheme {
           ),
           elevation: 4,
           shadowColor: _primaryColor.withOpacity(0.3),
+          backgroundColor: _primaryColor,
+          foregroundColor: Colors.white,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: _primaryColor),
+          borderSide: BorderSide(color: _primaryColor.withOpacity(0.5)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: _primaryColor.withOpacity(0.5)),
+          borderSide: BorderSide(color: _primaryColor.withOpacity(0.3)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: _primaryColor, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: _errorColor.withOpacity(0.5)),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: _errorColor, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -66,6 +81,8 @@ class AppTheme {
         ),
         filled: true,
         fillColor: Colors.white.withOpacity(0.9),
+        labelStyle: TextStyle(color: _primaryColor.withOpacity(0.8)),
+        hintStyle: TextStyle(color: _primaryColor.withOpacity(0.5)),
       ),
       cardTheme: CardTheme(
         elevation: 4,
@@ -75,17 +92,28 @@ class AppTheme {
         ),
         color: Colors.white.withOpacity(0.9),
       ),
-      snackBarTheme: const SnackBarThemeData(
+      snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
+        backgroundColor: _primaryColor.withOpacity(0.9),
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
       ),
-      dividerTheme: const DividerThemeData(
+      dividerTheme: DividerThemeData(
         space: 24,
         thickness: 1,
+        color: _primaryColor.withOpacity(0.1),
       ),
       scaffoldBackgroundColor: _backgroundColor,
+      chipTheme: ChipThemeData(
+        backgroundColor: _primaryColor.withOpacity(0.1),
+        selectedColor: _primaryColor,
+        labelStyle: const TextStyle(fontSize: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
     );
   }
 
@@ -93,7 +121,7 @@ class AppTheme {
   static ThemeData darkTheme() {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: const ColorScheme.dark(
+      colorScheme: ColorScheme.dark(
         primary: _primaryColor,
         secondary: _secondaryColor,
         tertiary: _tertiaryColor,
@@ -103,7 +131,9 @@ class AppTheme {
         onSecondary: Colors.white,
         onTertiary: Colors.white,
         onError: Colors.white,
-        onSurface: Color(0xFFF8F6FF),
+        onSurface: const Color(0xFFF8F6FF),
+        surfaceTint: _accentColor.withOpacity(0.1),
+        outline: _primaryColor.withOpacity(0.4),
       ),
       textTheme: _buildTextTheme(),
       appBarTheme: AppBarTheme(
@@ -121,20 +151,30 @@ class AppTheme {
           ),
           elevation: 4,
           shadowColor: _primaryColor.withOpacity(0.4),
+          backgroundColor: _primaryColor,
+          foregroundColor: Colors.white,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: _primaryColor),
+          borderSide: BorderSide(color: _primaryColor.withOpacity(0.5)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: _primaryColor.withOpacity(0.5)),
+          borderSide: BorderSide(color: _primaryColor.withOpacity(0.3)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: _primaryColor, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: _errorColor.withOpacity(0.5)),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: _errorColor, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -142,6 +182,8 @@ class AppTheme {
         ),
         filled: true,
         fillColor: _darkBackgroundColor.withOpacity(0.7),
+        labelStyle: TextStyle(color: _primaryColor.withOpacity(0.8)),
+        hintStyle: TextStyle(color: _primaryColor.withOpacity(0.5)),
       ),
       cardTheme: CardTheme(
         elevation: 4,
@@ -151,17 +193,28 @@ class AppTheme {
         ),
         color: _darkBackgroundColor.withOpacity(0.7),
       ),
-      snackBarTheme: const SnackBarThemeData(
+      snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
+        backgroundColor: _primaryColor.withOpacity(0.9),
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
       ),
-      dividerTheme: const DividerThemeData(
+      dividerTheme: DividerThemeData(
         space: 24,
         thickness: 1,
+        color: _primaryColor.withOpacity(0.2),
       ),
       scaffoldBackgroundColor: _darkBackgroundColor,
+      chipTheme: ChipThemeData(
+        backgroundColor: _primaryColor.withOpacity(0.15),
+        selectedColor: _primaryColor,
+        labelStyle: const TextStyle(fontSize: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
     );
   }
 

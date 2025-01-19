@@ -6,9 +6,7 @@ import 'package:dream/features/auth/presentation/change_password_screen.dart';
 import 'package:dream/features/auth/presentation/login_screen.dart';
 import 'package:dream/features/auth/presentation/password_reset_screen.dart';
 import 'package:dream/features/auth/presentation/register_screen.dart';
-import 'package:dream/features/dream_entry/models/dream_entry_model.dart';
 import 'package:dream/features/dream_entry/presentation/dream_entry_screen.dart';
-import 'package:dream/features/dream_entry/presentation/interpretation_screen.dart';
 import 'package:dream/features/dream_history/models/dream_history_model.dart';
 import 'package:dream/features/dream_history/presentation/dream_detail_screen.dart';
 import 'package:dream/features/dream_history/presentation/dream_history_screen.dart';
@@ -124,14 +122,7 @@ class AppRouter {
             ),
 
             // Detail routes (outside shell)
-            GoRoute(
-              path: AppRoute.dreamInterpretation,
-              pageBuilder: (context, state) => FadeSlideTransitionPage(
-                child: InterpretationScreen(
-                  dreamEntry: state.extra as DreamEntry,
-                ),
-              ),
-            ),
+
             GoRoute(
               path: AppRoute.dreamDetail,
               pageBuilder: (context, state) => FadeSlideTransitionPage(

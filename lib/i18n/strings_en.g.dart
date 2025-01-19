@@ -318,6 +318,9 @@ class TranslationsDreamEntryDreamFormEn {
 	String get content => 'Dream Content';
 	String get contentHint => 'Please enter your dream content';
 	String get getInterpretation => 'Get Interpretation';
+	String get noAttemptsLeft => 'No attempts left for today. Watch an ad to interpret more dreams.';
+	String get watchAdError => 'Please watch the ad to interpret more dreams today.';
+	String get dreamSaved => 'Dream saved successfully';
 }
 
 // Path: dreamEntry.interpretation
@@ -581,6 +584,9 @@ extension on Translations {
 			case 'dreamEntry.dreamForm.content': return 'Dream Content';
 			case 'dreamEntry.dreamForm.contentHint': return 'Please enter your dream content';
 			case 'dreamEntry.dreamForm.getInterpretation': return 'Get Interpretation';
+			case 'dreamEntry.dreamForm.noAttemptsLeft': return 'No attempts left for today. Watch an ad to interpret more dreams.';
+			case 'dreamEntry.dreamForm.watchAdError': return 'Please watch the ad to interpret more dreams today.';
+			case 'dreamEntry.dreamForm.dreamSaved': return 'Dream saved successfully';
 			case 'dreamEntry.interpretation.title': return 'Dream Interpretation';
 			case 'dreamEntry.interpretation.interpretationText': return 'Interpretation';
 			case 'dreamEntry.interpretation.saveButton': return 'Save Interpretation';

@@ -314,6 +314,9 @@ class _TranslationsDreamEntryDreamFormDe implements TranslationsDreamEntryDreamF
 	@override String get content => 'Trauminhalt';
 	@override String get contentHint => 'Bitte geben Sie den Inhalt Ihres Traums ein';
 	@override String get getInterpretation => 'Interpretation erhalten';
+	@override String get noAttemptsLeft => 'Keine Versuche mehr für heute. Schauen Sie sich ein Video an, um mehr Träume zu interpretieren.';
+	@override String get watchAdError => 'Bitte schauen Sie sich das Video an, um mehr Träume zu interpretieren.';
+	@override String get dreamSaved => 'Traum erfolgreich gespeichert';
 }
 
 // Path: dreamEntry.interpretation
@@ -577,6 +580,9 @@ extension on TranslationsDe {
 			case 'dreamEntry.dreamForm.content': return 'Trauminhalt';
 			case 'dreamEntry.dreamForm.contentHint': return 'Bitte geben Sie den Inhalt Ihres Traums ein';
 			case 'dreamEntry.dreamForm.getInterpretation': return 'Interpretation erhalten';
+			case 'dreamEntry.dreamForm.noAttemptsLeft': return 'Keine Versuche mehr für heute. Schauen Sie sich ein Video an, um mehr Träume zu interpretieren.';
+			case 'dreamEntry.dreamForm.watchAdError': return 'Bitte schauen Sie sich das Video an, um mehr Träume zu interpretieren.';
+			case 'dreamEntry.dreamForm.dreamSaved': return 'Traum erfolgreich gespeichert';
 			case 'dreamEntry.interpretation.title': return 'Traumdeutung';
 			case 'dreamEntry.interpretation.interpretationText': return 'Deutung';
 			case 'dreamEntry.interpretation.saveButton': return 'Deutung speichern';
