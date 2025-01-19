@@ -21,7 +21,7 @@ class EmptyDreamList extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.7,
             child: Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Icon(
                     Icons.nights_stay_outlined,

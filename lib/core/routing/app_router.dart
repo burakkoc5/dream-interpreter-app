@@ -16,6 +16,7 @@ import 'package:dream/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:dream/features/profile/presentation/personalization_screen.dart';
 import 'package:dream/features/profile/presentation/profile_screen.dart';
 import 'package:dream/features/profile/presentation/reminder_settings_screen.dart';
+import 'package:dream/features/profile/presentation/settings_screen.dart';
 import 'package:dream/features/splash/presentation/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -165,6 +166,12 @@ class AppRouter {
               path: AppRoute.personalization,
               pageBuilder: (context, state) => FadeSlideTransitionPage(
                 child: const PersonalizationScreen(),
+              ),
+            ),
+            GoRoute(
+              path: AppRoute.settings,
+              pageBuilder: (context, state) => FadeSlideTransitionPage(
+                child: const SettingsScreen(),
               ),
             ),
           ],

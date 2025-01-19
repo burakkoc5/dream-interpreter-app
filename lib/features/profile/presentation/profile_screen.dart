@@ -15,6 +15,9 @@ import 'package:dream/core/presentation/animated_background.dart';
 import 'package:dream/features/profile/application/streak_cubit.dart';
 import 'package:dream/features/profile/repository/streak_repository.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:dream/core/routing/app_route_names.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -97,6 +100,15 @@ class _ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
+      actions: [
+        IconButton(
+          icon: Icon(
+            Icons.settings,
+            color: theme.colorScheme.onSurface,
+          ),
+          onPressed: () => context.push(AppRoute.settings),
+        ),
+      ],
       flexibleSpace: ClipRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -247,6 +259,9 @@ class _ProfileContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return ListView(
       padding: EdgeInsets.fromLTRB(
           16, 8, 16, MediaQuery.of(context).padding.bottom + 80),
@@ -263,8 +278,135 @@ class _ProfileContent extends StatelessWidget {
         const SizedBox(height: 16),
         const StatsCardWidget(),
         const SizedBox(height: 16),
-        const SettingsItemWidget(),
-        const SizedBox(height: 32),
+        if (profile.gender != null ||
+            profile.horoscope != null ||
+            profile.occupation != null ||
+            profile.relationshipStatus != null ||
+            profile.birthDate != null ||
+            (profile.interests?.isNotEmpty ?? false))
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    t.profile.personalization.title,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  if (profile.gender != null) ...[
+                    _buildInfoRow(
+                      context,
+                      t.profile.personalization.gender,
+                      profile.gender,
+                      Icons.person,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                  if (profile.birthDate != null) ...[
+                    _buildInfoRow(
+                      context,
+                      t.profile.personalization.birthDate,
+                      DateFormat('dd/MM/yyyy').format(profile.birthDate),
+                      Icons.calendar_today,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                  if (profile.horoscope != null) ...[
+                    _buildInfoRow(
+                      context,
+                      t.profile.personalization.horoscope,
+                      profile.horoscope,
+                      Icons.auto_awesome,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                  if (profile.occupation != null) ...[
+                    _buildInfoRow(
+                      context,
+                      t.profile.personalization.occupation,
+                      profile.occupation,
+                      Icons.work,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                  if (profile.relationshipStatus != null) ...[
+                    _buildInfoRow(
+                      context,
+                      t.profile.personalization.relationshipStatus,
+                      profile.relationshipStatus,
+                      Icons.favorite,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                  if (profile.interests?.isNotEmpty ?? false) ...[
+                    Text(
+                      t.profile.personalization.interests,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        for (final interest in profile.interests!)
+                          Chip(
+                            label: Text(
+                              interest,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: colorScheme.onSurface,
+                              ),
+                            ),
+                            backgroundColor: colorScheme.surfaceVariant,
+                          ),
+                      ],
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+  ) {
+    final theme = Theme.of(context);
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 20,
+          color: theme.colorScheme.primary,
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+                ),
+              ),
+              Text(
+                value,
+                style: theme.textTheme.bodyMedium,
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
