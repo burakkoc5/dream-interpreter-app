@@ -1,5 +1,7 @@
 import 'package:dream/features/dream_history/application/dream_history_cubit.dart';
 import 'package:dream/features/dream_history/application/dream_history_state.dart';
+import 'package:dream/features/dream_history/presentation/widgets/tag_filter_chip.dart';
+import 'package:dream/features/dream_history/presentation/widgets/tag_filter_dialog.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +16,14 @@ class DreamFilterChips extends StatelessWidget {
   final DreamHistoryState state;
   final List<String> filterOptions;
 
+  Future<void> _showTagFilterDialog(
+      BuildContext context, DreamHistoryState state) async {
+    await showDialog(
+      context: context,
+      builder: (context) => TagFilterDialog(state: state),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -23,6 +33,14 @@ class DreamFilterChips extends StatelessWidget {
       runSpacing: 4,
       children: filterOptions.map((filter) {
         final isSelected = state.selectedFilter == filter;
+
+        if (filter == t.dreamFilterOptions.tags) {
+          return TagFilterChip(
+            state: state,
+            onSelected: () => _showTagFilterDialog(context, state),
+          );
+        }
+
         return FilterChip(
           label: Text(
             filter,

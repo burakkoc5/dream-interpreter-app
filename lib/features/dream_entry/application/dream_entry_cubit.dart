@@ -30,9 +30,14 @@ class DreamEntryCubit extends Cubit<DreamEntryState> {
       final interpretation =
           await _interpretationService.interpretDream(content);
 
+      final userId = _authCubit.state.user?.id;
+      if (userId == null) {
+        throw Exception('User not authenticated');
+      }
+
       final dreamEntry = DreamEntry(
-        id: Uuid().v4(),
-        userId: _authCubit.state.user!.id,
+        id: const Uuid().v4(),
+        userId: userId,
         title: title,
         content: content,
         interpretation: interpretation,
@@ -43,6 +48,10 @@ class DreamEntryCubit extends Cubit<DreamEntryState> {
 
       // Save as draft
       await _localStorageService.saveDraft(dreamEntry);
+
+      // Update streak after successful dream entry
+      await _streakRepository.updateStreak(userId);
+
       emit(DreamEntryState.success(dreamEntry));
     } catch (e) {
       emit(DreamEntryState.error(e.toString()));

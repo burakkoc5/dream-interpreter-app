@@ -88,7 +88,7 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
           hasMore: dreams.length >= 10,
           error: null,
         ));
-        _updateAvailableTags();
+        updateAvailableTags();
         _applyFilters(); // This will update filteredDreams
       } else {
         emit(state.copyWith(
@@ -258,7 +258,7 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
     _applyFilters();
   }
 
-  void _updateAvailableTags() {
+  void updateAvailableTags() {
     final Set<String> tags = {};
     final Map<String, int> counts = {};
 

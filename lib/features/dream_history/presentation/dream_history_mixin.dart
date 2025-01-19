@@ -19,7 +19,7 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
     t.dreamFilterOptions.all,
     t.dreamFilterOptions.week,
     t.dreamFilterOptions.month,
-    t.dreamFilterOptions.favorites
+    t.dreamFilterOptions.favorites,
   ];
 
   @override
@@ -52,6 +52,11 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
   }
 
   Widget buildFilterChips(BuildContext context, DreamHistoryState state) {
+    if (state.availableTags.isNotEmpty &&
+        !filterOptions.contains(t.dreamFilterOptions.tags)) {
+      filterOptions.add(t.dreamFilterOptions.tags);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -65,28 +70,7 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
             ),
           ],
         ),
-        if (state.availableTags.isNotEmpty) ...[
-          const SizedBox(height: 4),
-          Wrap(
-            spacing: 4,
-            runSpacing: 4,
-            children: [
-              TagFilterChip(
-                state: state,
-                onSelected: () => _showTagFilterDialog(context, state),
-              ),
-            ],
-          ),
-        ],
       ],
-    );
-  }
-
-  Future<void> _showTagFilterDialog(
-      BuildContext context, DreamHistoryState state) async {
-    await showDialog(
-      context: context,
-      builder: (context) => TagFilterDialog(state: state),
     );
   }
 

@@ -150,4 +150,24 @@ class DreamHistoryRepository {
       throw Exception('Failed to update dream: $e');
     }
   }
+
+  Future<List<String>> getAllTags(String userId) async {
+    try {
+      final snapshot = await _firestore
+          .collection('dreams')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      final Set<String> allTags = {};
+      for (final doc in snapshot.docs) {
+        final data = doc.data();
+        final tags = (data['tags'] as List<dynamic>?)?.cast<String>() ?? [];
+        allTags.addAll(tags);
+      }
+
+      return allTags.toList()..sort();
+    } catch (e) {
+      throw Exception('Failed to fetch all tags: $e');
+    }
+  }
 }
