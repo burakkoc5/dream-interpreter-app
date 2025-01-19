@@ -7,23 +7,28 @@ abstract class AppRoute {
   static const onboarding = '/onboarding';
 
   // Root route
-  static const root = '/auth';
+  static const root = '/';
 
   // Reminder settings
   static const reminderSettings = '/reminder-settings';
 
   // Auth routes
-  static const login = '/auth/login';
-  static const register = '/auth/register';
-  static const passwordReset = '/auth/password-reset';
-  static const changePassword = '/auth/change-password';
+  static const login = '/login';
+  static const register = '/register';
+  static const passwordReset = '/password-reset';
+  static const changePassword = '/change-password';
 
   // Main navigation routes
-  static const dreamEntry = '/home/entry';
-  static const dreamHistory = '/home/dreams';
-  static const profile = '/home/profile';
+  static const home = '/home';
+  static const dreamEntry = '/dream-entry';
+  static const dreamHistory = '/dream-history';
+  static const profile = '/profile';
 
   // Detail routes
   static const dreamDetail = '/dream-detail';
   static const dreamInterpretation = '/dream-interpretation';
+
+  // New personalization route
+  static const personalization = '/personalization';
+  static const settings = '/settings';
 }

@@ -14,18 +14,9 @@ class InterpretationService {
 
   Future<String> interpretDream(String dreamContent) async {
     try {
-      final prompt = '''
-Analyze the following dream and provide an interpretation:
+      final prompt = dreamContent;
 
-$dreamContent
-
-Please provide:
-1. Key symbols and their meanings
-2. Overall theme
-3. Possible emotional significance
-4. Potential life connections
-''';
-
+      //final interpretation =
       //final interpretation =
       //await _openAIService.generateInterpretation(prompt);
       final interpretation =

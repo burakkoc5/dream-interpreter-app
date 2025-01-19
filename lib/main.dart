@@ -20,6 +20,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,12 +34,21 @@ void main() async {
   // Initialize dependency injection
   await configureDependencies();
 
+  // Check if this is a fresh install
+  final prefs = await SharedPreferences.getInstance();
+  final hasRunBefore = prefs.getBool('has_run_before') ?? false;
+
+  if (!hasRunBefore) {
+    // This is a fresh install, sign out any existing user
+    await FirebaseAuth.instance.signOut();
+    await prefs.setBool('has_run_before', true);
+  }
+
   // Initialize notifications
   final notificationRepository = getIt<NotificationRepository>();
   await notificationRepository.initialize();
 
   // Initialize localization with stored preference
-  final prefs = await SharedPreferences.getInstance();
   final savedLanguage = prefs.getString('appLanguage');
   if (savedLanguage != null) {
     LocaleSettings.setLocale(AppLocale.values.firstWhere(

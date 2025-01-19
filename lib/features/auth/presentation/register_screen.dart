@@ -79,9 +79,9 @@ class RegisterScreen extends StatelessWidget {
                     onSubmit: (email, password) async {
                       try {
                         await context.read<AuthCubit>().register(
-                              email,
-                              password,
-                              context,
+                              email: email,
+                              password: password,
+                              context: context,
                             );
                       } catch (e) {
                         if (context.mounted) {

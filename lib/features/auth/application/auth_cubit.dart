@@ -9,13 +9,16 @@ import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'auth_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dream/features/profile/repositories/profile_repository.dart';
+import 'package:dream/features/profile/application/profile_cubit.dart';
 
 @injectable
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _authRepository;
   final FirebaseAuth _auth;
+  final ProfileRepository _profileRepository;
 
-  AuthCubit(this._authRepository, this._auth)
+  AuthCubit(this._authRepository, this._auth, this._profileRepository)
       : super(const AuthState(isInitializing: true)) {
     _auth.authStateChanges().listen((User? user) {
       debugPrint('AuthCubit - Auth state changed: ${user?.uid}');
@@ -40,7 +43,35 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final user = await _authRepository.signIn(email, password);
       debugPrint('AuthCubit - Sign in successful: ${user.id}');
-      emit(state.copyWith(user: user, isLoading: false));
+
+      if (!context.mounted) return;
+
+      // Wait for Firebase Auth state to be updated
+      int attempts = 0;
+      while (_auth.currentUser == null && attempts < 3) {
+        await Future.delayed(const Duration(milliseconds: 300));
+        attempts++;
+      }
+
+      final currentUser = _auth.currentUser;
+      if (currentUser == null) {
+        debugPrint('AuthCubit - User still null after waiting');
+        throw FirebaseAuthException(
+          code: 'user-not-found',
+          message: t.core.errors.userNotAuthenticated,
+        );
+      }
+
+      emit(state.copyWith(
+        user: UserModel(
+          id: currentUser.uid,
+          email: currentUser.email ?? email,
+        ),
+        isLoading: false,
+      ));
+      debugPrint('AuthCubit - Sign in successful: ${user.id}');
+
+      if (!context.mounted) return;
       context.go(AppRoute.dreamEntry);
     } catch (e) {
       debugPrint('AuthCubit - Sign in error: $e');
@@ -60,6 +91,22 @@ class AuthCubit extends Cubit<AuthState> {
           case 'user-disabled':
             errorMessage = t.core.errors.userNotAuthenticated;
             break;
+          default:
+            errorMessage = e.message ?? t.core.errors.unknown;
+        }
+      } else if (e is AuthError) {
+        switch (e) {
+          case AuthError.userNotFound:
+            errorMessage = t.core.errors.userNotFound;
+            break;
+          case AuthError.wrongPassword:
+            errorMessage = t.core.errors.wrongPassword;
+            break;
+          case AuthError.invalidEmail:
+            errorMessage = t.core.errors.invalidEmail;
+            break;
+          default:
+            errorMessage = t.core.errors.unknown;
         }
       }
 
@@ -76,22 +123,70 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const AuthState());
   }
 
-  Future<void> register(
-      String email, String password, BuildContext context) async {
+  Future<void> register({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
     emit(state.copyWith(isLoading: true, error: null));
-    debugPrint('AuthCubit - Registering user with email: $email');
+
     try {
-      final user = await _authRepository.register(email, password);
-      debugPrint('AuthCubit - User registered: ${user.id}');
-      emit(state.copyWith(user: user, isLoading: false));
+      final userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Create initial profile and wait for it
+      await _profileRepository.createInitialProfile(
+        userId: userCredential.user!.uid,
+        email: email,
+      );
+
+      // Load profile into ProfileCubit
       if (context.mounted) {
-        context.go(AppRoute.dreamEntry);
+        final profileCubit = context.read<ProfileCubit>();
+        profileCubit.loadProfile(userCredential.user!.uid);
       }
-    } catch (e) {
-      debugPrint('AuthCubit - Registration error: $e');
+
+      final user = UserModel(
+        id: userCredential.user!.uid,
+        email: userCredential.user!.email ?? email,
+      );
+
       emit(state.copyWith(
-        error: e is AuthError ? e.toString() : 'Unknown error occurred',
         isLoading: false,
+        user: user,
+      ));
+
+      if (context.mounted) {
+        context.go(AppRoute.personalization);
+      }
+    } on FirebaseAuthException catch (e) {
+      String errorMessage;
+      switch (e.code) {
+        case 'email-already-in-use':
+          errorMessage = t.core.errors.emailAlreadyInUse;
+          break;
+        case 'invalid-email':
+          errorMessage = t.core.errors.invalidEmail;
+          break;
+        case 'operation-not-allowed':
+          errorMessage = t.core.errors.unknown;
+          break;
+        case 'weak-password':
+          errorMessage = t.core.errors.weakPassword;
+          break;
+        default:
+          errorMessage = t.core.errors.unknown;
+      }
+      emit(state.copyWith(
+        isLoading: false,
+        error: errorMessage,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        isLoading: false,
+        error: t.core.errors.unknown,
       ));
     }
   }
@@ -103,8 +198,23 @@ class AuthCubit extends Cubit<AuthState> {
       await _authRepository.resetPassword(email);
       emit(state.copyWith(isLoading: false));
     } catch (e) {
+      String errorMessage;
+      if (e is AuthError) {
+        switch (e) {
+          case AuthError.userNotFound:
+            errorMessage = t.core.errors.userNotFound;
+            break;
+          case AuthError.invalidEmail:
+            errorMessage = t.core.errors.invalidEmail;
+            break;
+          default:
+            errorMessage = t.core.errors.unknown;
+        }
+      } else {
+        errorMessage = t.core.errors.unknown;
+      }
       emit(state.copyWith(
-        error: e is AuthError ? e.toString() : 'Unknown error occurred',
+        error: errorMessage,
         isLoading: false,
       ));
     }

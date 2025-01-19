@@ -15,15 +15,15 @@
       "weakPassword": "Şifre çok zayıf",
       "unknown": "E-posta veya şifre yanlış",
       "tryAgain": "Lütfen tekrar deneyin",
-      "userNotAuthenticated": "Kullanıcı kimliği doğrulanmadı"
+      "userNotAuthenticated": "Kullanıcı doğrulanamadı"
     },
     "success": "Başarılı"
   },
   "registration": {
-    "welcomeText": "Hoş Geldiniz",
+    "welcomeText": "Tekrar Hoş Geldiniz",
     "email": {
       "emailText": "E-posta",
-      "emailHint": "Lütfen e-posta adresinizi girin",
+      "emailHint": "Lütfen e-postanızı girin",
       "emailValidation": "E-posta gerekli",
       "emailInvalid": "Lütfen geçerli bir e-posta girin"
     },
@@ -33,38 +33,38 @@
       "passwordValidation": "Şifre gerekli",
       "passwordShort": "Şifre en az $minPasswordSize karakter olmalı",
       "changePassword": {
-        "changePasswordText": "Şifreyi Değiştir",
+        "changePasswordText": "Şifre Değiştir",
         "currentPassword": "Mevcut Şifre",
         "currentPasswordValidator": "Lütfen mevcut şifrenizi girin",
         "newPassword": "Yeni Şifre",
-        "newPasswordValidator": "Lütfen yeni şifrenizi girin",
+        "newPasswordValidator": "Lütfen yeni bir şifre girin",
         "resetPasswordButton": "Şifreyi Sıfırla",
         "confirmNewPassword": "Yeni Şifreyi Onayla",
         "success": "Şifre başarıyla değiştirildi"
       },
       "resetPassword": {
-        "resetPasswordText": "Şifreyi Sıfırla",
-        "resetPasswordButton": "Sıfırlama linkini gönder",
-        "resetPasswordCaption": "E-posta adresinizi girin ve şifrenizi sıfırlamak için bir link gönderelim.",
+        "resetPasswordText": "Şifre Sıfırla",
+        "resetPasswordButton": "Sıfırlama Bağlantısı Gönder",
+        "resetPasswordCaption": "E-posta adresinizi girin, size şifre sıfırlama bağlantısını gönderelim.",
         "resetPasswordSuccess": "Şifre sıfırlama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin.",
         "resetPasswordError": "Şifre sıfırlama e-postası gönderilirken hata oluştu",
-        "backToSignIn": "Giriş Sayfasına Geri Dön"
+        "backToSignIn": "Girişe Geri Dön"
       }
     },
     "confirmPassword": {
       "confirmPasswordText": "Şifreyi Onayla",
-      "confirmPasswordHint": "Şifrenizi tekrar girin",
-      "confirmPasswordValidation": "Şifreyi tekrar girmeniz gerekiyor",
-      "confirmPasswordMismatch": "Şifreler eşleşmiyor"
+      "confirmPasswordHint": "Şifrenizi yeniden girin",
+      "confirmPasswordValidation": "Şifreyi yeniden girmek gerekli",
+      "confirmPasswordMismatch": "Şifreler uyuşmuyor"
     },
     "signUp": {
       "signUpText": "Hesap Oluştur",
-      "signUpCaption": "Bugün Rüya Günlüğüne katılın",
+      "signUpCaption": "Rüya Günlüğü'ne bugün katılın",
       "alreadyHaveAccount": "Zaten bir hesabınız var mı?"
     },
     "signIn": {
       "signInText": "Giriş Yap",
-      "forgotPassword": "Şifrenizi mi unuttunuz?"
+      "forgotPassword": "Şifremi Unuttum?"
     },
     "signOut": {
       "signOutText": "Çıkış Yap"
@@ -73,11 +73,11 @@
   "dreamEntry": {
     "newDream": "Yeni Rüya",
     "saveDream": "Rüyayı Kaydet",
-    "discardDream": "At",
+    "discardDream": "Vazgeç",
     "shareDream": "Paylaş",
     "dreamTitle": "Rüya Başlığı",
     "dreamTitleHint": "Lütfen rüyanız için bir başlık girin",
-    "yourDream": "Sizin Rüyanız",
+    "yourDream": "Rüyanız",
     "tags": {
       "tags": "Etiketler",
       "Happiness": "mutluluk",
@@ -85,18 +85,18 @@
       "Fear": "korku",
       "Joy": "neşe",
       "Anger": "öfke",
-      "Confusion": "karışıklık",
+      "Confusion": "karmaşa",
       "Love": "sevgi",
-      "Peace": "barış",
+      "Peace": "huzur",
       "Sadness": "üzüntü",
       "Excitement": "heyecan"
     },
-    "moodRating": "Ruh Hali",
+    "moodRating": "Duygu Derecesi",
     "failedToSaveDream": "Rüya kaydedilemedi",
     "dreamDetails": {
-      "addDetails": "Ayrıntı Ekle",
-      "addTags": "Etiketler Ekle",
-      "moodRating": "Ruh Hali Değerlendirmesi",
+      "addDetails": "Detay Ekle",
+      "addTags": "Etiket Ekle",
+      "moodRating": "Duygu Derecesi",
       "confirmButton": "Onayla"
     },
     "dreamForm": {
@@ -106,8 +106,8 @@
       "getInterpretation": "Yorum Al"
     },
     "interpretation": {
-      "title": "Rüya Yorumlaması",
-      "interpretationText": "Yorumlama",
+      "title": "Rüya Yorumu",
+      "interpretationText": "Yorum",
       "saveButton": "Yorumu Kaydet",
       "shareButton": "Yorumu Paylaş"
     }
@@ -116,60 +116,125 @@
   "dreamFilterOptions": {
     "selectTag": "Etiket Seç",
     "tags": "Etiketler",
-    "all": "Tüm",
+    "all": "Tümü",
     "week": "Bu Hafta",
     "month": "Bu Ay",
     "favorites": "Favoriler"
   },
   "searchDreams": {
-    "searchDreams": "Rüyaları Ara",
+    "searchDreams": "Rüya Ara",
     "retryButton": "Tekrar Dene",
-    "noResults": "Hiç rüya bulunamadı",
+    "noResults": "Rüya bulunamadı",
     "delete": "Sil",
     "undoButton": "Geri Al",
     "dreamDeleted": "Rüya silindi"
   },
   "dreamHistory": {
-    "dreamHistory": "Rüya Günlüğü",
-    "noDreams": "Kaydedilen rüya yok",
+    "dreamHistory": "Geçmiş Rüyalar",
+    "noDreams": "Hiç rüya kaydedilmedi",
     "noDreamsCaption": "Henüz hiçbir rüya kaydetmediniz. Bugün rüyalarınızı kaydetmeye başlayın."
   },
   "profile": {
     "profile": "Profil",
     "username": "Kullanıcı Adı",
+    "email": "E-posta",
+    "notifications": "Bildirimler",
+    "settings": "Ayarlar",
+    "logout": "Çıkış Yap",
+    "changePassword": "Şifre Değiştir",
     "profileNotFound": "Profil bulunamadı",
+    "closeBackgroundAnimation": "Arka Plan Animasyonunu Kapat",
+    "personalization": {
+      "title": "Profilinizi Kişiselleştirin",
+      "description": "Sizi daha iyi anlayarak daha kişiselleştirilmiş rüya yorumları sunmamıza yardımcı olun.",
+      "gender": "Cinsiyet",
+      "birthDate": "Doğum Tarihi",
+      "selectBirthDate": "Doğum Tarihini Seç",
+      "horoscope": "Burç",
+      "occupation": "Meslek",
+      "occupationOptions": {
+        "homemaker": "Ev Hanımı",
+        "unemployed": "Çalışmıyor",
+        "jobSeeker": "İş Arıyor",
+        "student": "Öğrenci",
+        "academic": "Akademisyen",
+        "selfEmployed": "Kendi İşini Yapıyor",
+        "publicSector": "Kamu Sektörü",
+        "privateSector": "Özel Sektör",
+        "retired": "Emekli"
+      },
+      "relationshipStatus": "İlişki Durumu",
+      "interests": "İlgi Alanlarınız",
+      "submit": "Kaydet ve Devam Et",
+      "genderOptions": {
+        "male": "Erkek",
+        "female": "Kadın",
+        "other": "Diğer",
+        "preferNotToSay": "Belirtmek istemiyorum"
+      },
+      "horoscopeOptions": {
+        "aries": "Koç",
+        "taurus": "Boğa",
+        "gemini": "İkizler",
+        "cancer": "Yengeç",
+        "leo": "Aslan",
+        "virgo": "Başak",
+        "libra": "Terazi",
+        "scorpio": "Akrep",
+        "sagittarius": "Yay",
+        "capricorn": "Oğlak",
+        "aquarius": "Kova",
+        "pisces": "Balık"
+      },
+      "relationshipOptions": {
+        "single": "Bekar",
+        "inRelationship": "Bir ilişkide",
+        "married": "Evli",
+        "preferNotToSay": "Belirtmek istemiyorum"
+      },
+      "interestOptions": {
+        "spirituality": "Spiritüellik",
+        "meditation": "Meditasyon",
+        "psychology": "Psikoloji",
+        "selfImprovement": "Kişisel Gelişim",
+        "art": "Sanat",
+        "music": "Müzik",
+        "travel": "Seyahat",
+        "nature": "Doğa",
+        "technology": "Teknoloji",
+        "science": "Bilim",
+        "sports": "Spor",
+        "cooking": "Yemek Pişirme",
+        "reading": "Okuma",
+        "writing": "Yazma",
+        "photography": "Fotoğrafçılık"
+      }
+    },
     "dreamStats": "Rüya İstatistikleri",
-    "totalDreams": "Toplam Rüyalar",
-    "weeklyDreams": "Haftalık Rüyalar",
     "currentStreak": "Mevcut Seri",
     "longestStreak": "En Uzun Seri",
+    "totalDreams": "Toplam Rüya",
+    "weeklyDreams": "Haftalık Rüyalar",
     "completionRate": "Tamamlama Oranı",
-    "settings": "Ayarlar",
-    "notifications": "Bildirimler",
     "language": "Dil",
     "english": "İngilizce",
     "turkish": "Türkçe",
     "german": "Almanca",
-    "changePassword": "Şifre Değiştir",
-    "logout": "Çıkış Yap",
-    "closeBackgroundAnimation": "Arka Plan Animasyonunu Kapat",
-    "displayNameUpdated": "Kullanıcı adı başarıyla güncellendi",
-    "reminderUpdated": "Rüya hatırlatıcısı başarıyla güncellendi",
     "reminder": {
-      "setTime": "Rüya hatırlatıcı zamanını ayarla",
+      "setTime": "Rüya hatırlatma zamanını ayarlayın",
       "chooseTime": "Hatırlatılmak istediğiniz zamanı seçin",
-      "description": "Rüyalarınızı hatırlamanıza yardımcı olmak için size bildirim göndereceğiz",
+      "description": "Rüyalarınızı hatırlamanız için size bir bildirim göndereceğiz",
       "earlyMorning": "Erken sabah",
-      "earlyMorningTime": "06:00",
+      "earlyMorningTime": "6:00 AM",
       "afternoon": "Öğleden sonra",
-      "afternoonTime": "14:00",
+      "afternoonTime": "2:00 PM",
       "nighttime": "Gece",
-      "nighttimeTime": "22:00",
+      "nighttimeTime": "10:00 PM",
       "custom": "Özel",
       "setCustomTime": "Zamanınızı ayarlayın",
-      "saveButton": "Hatırlatıcıyı Kaydet",
+      "saveButton": "Hatırlatmayı Kaydet",
       "skipButton": "Şimdilik Geç",
-      "savedSuccess": "Hatırlatıcı ayarları başarıyla kaydedildi"
+      "savedSuccess": "Hatırlatma ayarları başarıyla kaydedildi"
     }
   }
 }

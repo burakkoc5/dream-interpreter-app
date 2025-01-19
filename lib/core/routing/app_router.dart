@@ -13,6 +13,7 @@ import 'package:dream/features/dream_history/models/dream_history_model.dart';
 import 'package:dream/features/dream_history/presentation/dream_detail_screen.dart';
 import 'package:dream/features/dream_history/presentation/dream_history_screen.dart';
 import 'package:dream/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:dream/features/profile/presentation/personalization_screen.dart';
 import 'package:dream/features/profile/presentation/profile_screen.dart';
 import 'package:dream/features/profile/presentation/reminder_settings_screen.dart';
 import 'package:dream/features/splash/presentation/splash_screen.dart';
@@ -21,11 +22,9 @@ import 'package:go_router/go_router.dart';
 
 class FadeSlideTransitionPage extends CustomTransitionPage<void> {
   FadeSlideTransitionPage({
-    required Widget child,
-    LocalKey? key,
+    required super.child,
+    super.key,
   }) : super(
-          key: key,
-          child: child,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(0.0, 0.05);
             const end = Offset.zero;
@@ -158,6 +157,14 @@ class AppRouter {
               path: AppRoute.reminderSettings,
               pageBuilder: (context, state) => FadeSlideTransitionPage(
                 child: const ReminderSettingsScreen(),
+              ),
+            ),
+
+            // Personalization route
+            GoRoute(
+              path: AppRoute.personalization,
+              pageBuilder: (context, state) => FadeSlideTransitionPage(
+                child: const PersonalizationScreen(),
               ),
             ),
           ],

@@ -3,35 +3,35 @@
     "appName": "Traumtagebuch",
     "mode": {
       "systemMode": "System",
-      "darkMode": "Dunkelmodus",
-      "lightMode": "Hellmodus"
+      "darkMode": "Dunkler Modus",
+      "lightMode": "Heller Modus"
     },
     "errors": {
       "error": "Fehler",
       "userNotFound": "Benutzer nicht gefunden",
       "wrongPassword": "Ungültiges Passwort",
-      "emailAlreadyInUse": "E-Mail ist bereits registriert",
+      "emailAlreadyInUse": "E-Mail bereits registriert",
       "invalidEmail": "Ungültiges E-Mail-Format",
-      "weakPassword": "Passwort ist zu schwach",
-      "unknown": "E-Mail oder Passwort ist falsch",
+      "weakPassword": "Passwort zu schwach",
+      "unknown": "E-Mail oder Passwort falsch",
       "tryAgain": "Bitte versuchen Sie es erneut",
-      "userNotAuthenticated": "Benutzer nicht authentifiziert"
+      "userNotAuthenticated": "Benutzer konnte nicht authentifiziert werden"
     },
-    "success": "Erfolg"
+    "success": "Erfolgreich"
   },
   "registration": {
     "welcomeText": "Willkommen zurück",
     "email": {
       "emailText": "E-Mail",
-      "emailHint": "Bitte geben Sie Ihre E-Mail-Adresse ein",
-      "emailValidation": "E-Mail ist erforderlich",
-      "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
+      "emailHint": "Bitte geben Sie Ihre E-Mail ein",
+      "emailValidation": "E-Mail erforderlich",
+      "emailInvalid": "Bitte geben Sie eine gültige E-Mail ein"
     },
     "password": {
       "passwordText": "Passwort",
       "passwordHint": "Bitte geben Sie Ihr Passwort ein",
-      "passwordValidation": "Passwort ist erforderlich",
-      "passwordShort": "Das Passwort muss mindestens $minPasswordSize Zeichen lang sein",
+      "passwordValidation": "Passwort erforderlich",
+      "passwordShort": "Passwort muss mindestens $minPasswordSize Zeichen lang sein",
       "changePassword": {
         "changePasswordText": "Passwort ändern",
         "currentPassword": "Aktuelles Passwort",
@@ -44,17 +44,17 @@
       },
       "resetPassword": {
         "resetPasswordText": "Passwort zurücksetzen",
-        "resetPasswordButton": "Zurücksetz-Link senden",
-        "resetPasswordCaption": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.",
+        "resetPasswordButton": "Zurücksetzungslink senden",
+        "resetPasswordCaption": "Geben Sie Ihre E-Mail-Adresse ein, wir senden Ihnen einen Link zum Zurücksetzen des Passworts.",
         "resetPasswordSuccess": "E-Mail zum Zurücksetzen des Passworts gesendet. Bitte überprüfen Sie Ihren Posteingang.",
-        "resetPasswordError": "Fehler beim Senden der Passwort-Zurücksetzungs-E-Mail",
+        "resetPasswordError": "Fehler beim Senden der Zurücksetzungs-E-Mail",
         "backToSignIn": "Zurück zur Anmeldung"
       }
     },
     "confirmPassword": {
       "confirmPasswordText": "Passwort bestätigen",
-      "confirmPasswordHint": "Geben Sie Ihr Passwort erneut ein",
-      "confirmPasswordValidation": "Passwortbestätigung ist erforderlich",
+      "confirmPasswordHint": "Bitte geben Sie Ihr Passwort erneut ein",
+      "confirmPasswordValidation": "Passwortbestätigung erforderlich",
       "confirmPasswordMismatch": "Passwörter stimmen nicht überein"
     },
     "signUp": {
@@ -73,7 +73,7 @@
   "dreamEntry": {
     "newDream": "Neuer Traum",
     "saveDream": "Traum speichern",
-    "discardDream": "At",
+    "discardDream": "Verwerfen",
     "shareDream": "Teilen",
     "dreamTitle": "Traumtitel",
     "dreamTitleHint": "Bitte geben Sie einen Titel für Ihren Traum ein",
@@ -92,7 +92,7 @@
       "Excitement": "Aufregung"
     },
     "moodRating": "Stimmungsbewertung",
-    "failedToSaveDream": "Fehler beim Speichern des Traums",
+    "failedToSaveDream": "Traum konnte nicht gespeichert werden",
     "dreamDetails": {
       "addDetails": "Details hinzufügen",
       "addTags": "Tags hinzufügen",
@@ -100,10 +100,10 @@
       "confirmButton": "Bestätigen"
     },
     "dreamForm": {
-      "record": "Traum aufzeichnen",
+      "record": "Ihren Traum aufnehmen",
       "content": "Trauminhalt",
       "contentHint": "Bitte geben Sie den Inhalt Ihres Traums ein",
-      "getInterpretation": "Deutung erhalten"
+      "getInterpretation": "Interpretation erhalten"
     },
     "interpretation": {
       "title": "Traumdeutung",
@@ -118,43 +118,108 @@
     "tags": "Tags",
     "all": "Alle",
     "week": "Diese Woche",
-    "month": "Diesen Monat",
+    "month": "Dieser Monat",
     "favorites": "Favoriten"
   },
   "searchDreams": {
-    "searchDreams": "Träume suchen",
+    "searchDreams": "Traum suchen",
     "retryButton": "Erneut versuchen",
-    "noResults": "Keine Träume gefunden",
+    "noResults": "Kein Traum gefunden",
     "delete": "Löschen",
-    "undoButton": "Rückgängig machen",
+    "undoButton": "Rückgängig",
     "dreamDeleted": "Traum gelöscht"
   },
   "dreamHistory": {
-    "dreamHistory": "Traumtagebuch",
-    "noDreams": "Keine Träume aufgezeichnet",
-    "noDreamsCaption": "Sie haben noch keine Träume aufgezeichnet. Beginnen Sie noch heute, Ihre Träume zu protokollieren."
+    "dreamHistory": "Traumhistorie",
+    "noDreams": "Keine Träume gespeichert",
+    "noDreamsCaption": "Sie haben noch keine Träume gespeichert. Beginnen Sie noch heute damit."
   },
   "profile": {
     "profile": "Profil",
     "username": "Benutzername",
+    "email": "E-Mail",
+    "notifications": "Benachrichtigungen",
+    "settings": "Einstellungen",
+    "logout": "Abmelden",
+    "changePassword": "Passwort ändern",
     "profileNotFound": "Profil nicht gefunden",
+    "closeBackgroundAnimation": "Hintergrundanimation schließen",
+    "personalization": {
+      "title": "Personalisieren Sie Ihr Profil",
+      "description": "Helfen Sie uns, Sie besser zu verstehen, um personalisierte Traumdeutungen anzubieten.",
+      "gender": "Geschlecht",
+      "birthDate": "Geburtsdatum",
+      "selectBirthDate": "Geburtsdatum auswählen",
+      "horoscope": "Sternzeichen",
+      "occupation": "Beruf",
+      "occupationOptions": {
+        "homemaker": "Hausfrau/Hausmann",
+        "unemployed": "Arbeitslos",
+        "jobSeeker": "Arbeitssuchend",
+        "student": "Student/in",
+        "academic": "Akademiker/in",
+        "selfEmployed": "Selbstständig",
+        "publicSector": "Öffentlicher Dienst",
+        "privateSector": "Privatwirtschaft",
+        "retired": "Rentner/in"
+      },
+      "relationshipStatus": "Beziehungsstatus",
+      "interests": "Ihre Interessen",
+      "submit": "Speichern und fortfahren",
+      "genderOptions": {
+        "male": "Männlich",
+        "female": "Weiblich",
+        "other": "Andere",
+        "preferNotToSay": "Möchte ich nicht angeben"
+      },
+      "horoscopeOptions": {
+        "aries": "Widder",
+        "taurus": "Stier",
+        "gemini": "Zwillinge",
+        "cancer": "Krebs",
+        "leo": "Löwe",
+        "virgo": "Jungfrau",
+        "libra": "Waage",
+        "scorpio": "Skorpion",
+        "sagittarius": "Schütze",
+        "capricorn": "Steinbock",
+        "aquarius": "Wassermann",
+        "pisces": "Fische"
+      },
+      "relationshipOptions": {
+        "single": "Single",
+        "inRelationship": "In einer Beziehung",
+        "married": "Verheiratet",
+        "preferNotToSay": "Möchte ich nicht angeben"
+      },
+      "interestOptions": {
+        "spirituality": "Spiritualität",
+        "meditation": "Meditation",
+        "psychology": "Psychologie",
+        "selfImprovement": "Selbstverbesserung",
+        "art": "Kunst",
+        "music": "Musik",
+        "travel": "Reisen",
+        "nature": "Natur",
+        "technology": "Technologie",
+        "science": "Wissenschaft",
+        "sports": "Sport",
+        "cooking": "Kochen",
+        "reading": "Lesen",
+        "writing": "Schreiben",
+        "photography": "Fotografie"
+      }
+    },
     "dreamStats": "Traumstatistiken",
-    "totalDreams": "Gesamtträume",
-    "weeklyDreams": "Wöchentliche Träume",
     "currentStreak": "Aktuelle Serie",
     "longestStreak": "Längste Serie",
+    "totalDreams": "Gesamte Träume",
+    "weeklyDreams": "Wöchentliche Träume",
     "completionRate": "Abschlussrate",
-    "settings": "Einstellungen",
-    "notifications": "Benachrichtigungen",
     "language": "Sprache",
     "english": "Englisch",
     "turkish": "Türkisch",
     "german": "Deutsch",
-    "changePassword": "Passwort ändern",
-    "logout": "Abmelden",
-    "closeBackgroundAnimation": "Hintergrundanimation schließen",
-    "displayNameUpdated": "Benutzername erfolgreich aktualisiert",
-    "reminderUpdated": "Traum-Erinnerung erfolgreich aktualisiert",
     "reminder": {
       "setTime": "Traum-Erinnerungszeit einstellen",
       "chooseTime": "Wählen Sie aus, wann Sie erinnert werden möchten",

@@ -50,6 +50,7 @@ class ProfileRepository {
       print('ProfileRepository: Starting profile creation for user $userId');
 
       final now = FieldValue.serverTimestamp();
+
       await _firestore.collection('users').doc(userId).set({
         'userId': userId,
         'email': email,
@@ -59,9 +60,18 @@ class ProfileRepository {
         'lastActive': now,
         'notificationsEnabled': false,
         'preferences': {},
+        'gender': null,
+        'horoscope': null,
+        'occupation': null,
+        'relationshipStatus': null,
+        'birthDate': null,
+        'interests': <String>[],
+        'hasCompletedPersonalization': false,
       });
 
       print('ProfileRepository: Profile created successfully for user $userId');
+
+      //return Profile.fromJson(Map<String, dynamic>.from(data));
     } catch (e) {
       print('ProfileRepository: Error creating profile: $e');
       rethrow;

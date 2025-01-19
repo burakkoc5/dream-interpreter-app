@@ -2,8 +2,9 @@ import 'package:dream/features/auth/models/auth_error.dart';
 import 'package:dream/features/auth/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
-
+import 'package:dream/i18n/strings.g.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 /// Service handling Firebase authentication operations.
 @injectable
@@ -27,15 +28,44 @@ class FirebaseAuthService {
         password: password,
       );
 
-      // Create or update user document in Firestore
-      await _firestore.collection('users').doc(userCredential.user!.uid).set({
-        'email': email,
-        'lastLogin': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+      if (userCredential.user == null) {
+        throw FirebaseAuthException(
+          code: 'user-not-found',
+          message: t.core.errors.userNotFound,
+        );
+      }
 
-      return UserModel.fromFirebaseUser(userCredential.user!);
+      // Wait for the user to be fully loaded first
+      await userCredential.user!.reload();
+      final currentUser = _firebaseAuth.currentUser;
+
+      if (currentUser == null) {
+        throw FirebaseAuthException(
+          code: 'user-not-found',
+          message: t.core.errors.userNotAuthenticated,
+        );
+      }
+
+      // Create or update user document in Firestore
+      try {
+        await _firestore.collection('users').doc(currentUser.uid).set({
+          'email': email,
+          'lastLogin': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+      } catch (e) {
+        // Don't fail the sign-in if Firestore update fails
+        debugPrint('Failed to update user document: $e');
+      }
+
+      return UserModel(
+        id: currentUser.uid,
+        email: currentUser.email ?? email,
+      );
     } on FirebaseAuthException catch (e) {
       throw _handleFirebaseAuthError(e);
+    } catch (e) {
+      debugPrint('Unexpected error during sign in: $e');
+      throw AuthError.unknown;
     }
   }
 
@@ -67,6 +97,8 @@ class FirebaseAuthService {
         'notificationsEnabled': true,
         'preferences': {},
       });
+
+      print('User created: ${userCredential.user!.uid}');
 
       return userCredential;
     } on FirebaseAuthException catch (e) {

@@ -116,14 +116,15 @@ Future<_i174.GetIt> init(
   gh.factory<_i877.AuthCubit>(() => _i877.AuthCubit(
         gh<_i1041.AuthRepository>(),
         gh<_i59.FirebaseAuth>(),
-      ));
-  gh.factory<_i127.DreamHistoryCubit>(() => _i127.DreamHistoryCubit(
-        gh<_i386.DreamHistoryRepository>(),
-        gh<_i877.AuthCubit>(),
+        gh<_i155.ProfileRepository>(),
       ));
   gh.factory<_i234.DreamEntryCubit>(() => _i234.DreamEntryCubit(
         gh<_i947.InterpretationService>(),
         gh<_i567.LocalStorageService>(),
+        gh<_i877.AuthCubit>(),
+      ));
+  gh.factory<_i127.DreamHistoryCubit>(() => _i127.DreamHistoryCubit(
+        gh<_i386.DreamHistoryRepository>(),
         gh<_i877.AuthCubit>(),
       ));
   return getIt;

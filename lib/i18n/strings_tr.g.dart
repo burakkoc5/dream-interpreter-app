@@ -63,7 +63,7 @@ class _TranslationsRegistrationTr implements TranslationsRegistrationEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get welcomeText => 'Hoş Geldiniz';
+	@override String get welcomeText => 'Tekrar Hoş Geldiniz';
 	@override late final _TranslationsRegistrationEmailTr email = _TranslationsRegistrationEmailTr._(_root);
 	@override late final _TranslationsRegistrationPasswordTr password = _TranslationsRegistrationPasswordTr._(_root);
 	@override late final _TranslationsRegistrationConfirmPasswordTr confirmPassword = _TranslationsRegistrationConfirmPasswordTr._(_root);
@@ -81,13 +81,13 @@ class _TranslationsDreamEntryTr implements TranslationsDreamEntryEn {
 	// Translations
 	@override String get newDream => 'Yeni Rüya';
 	@override String get saveDream => 'Rüyayı Kaydet';
-	@override String get discardDream => 'At';
+	@override String get discardDream => 'Vazgeç';
 	@override String get shareDream => 'Paylaş';
 	@override String get dreamTitle => 'Rüya Başlığı';
 	@override String get dreamTitleHint => 'Lütfen rüyanız için bir başlık girin';
-	@override String get yourDream => 'Sizin Rüyanız';
+	@override String get yourDream => 'Rüyanız';
 	@override late final _TranslationsDreamEntryTagsTr tags = _TranslationsDreamEntryTagsTr._(_root);
-	@override String get moodRating => 'Ruh Hali';
+	@override String get moodRating => 'Duygu Derecesi';
 	@override String get failedToSaveDream => 'Rüya kaydedilemedi';
 	@override late final _TranslationsDreamEntryDreamDetailsTr dreamDetails = _TranslationsDreamEntryDreamDetailsTr._(_root);
 	@override late final _TranslationsDreamEntryDreamFormTr dreamForm = _TranslationsDreamEntryDreamFormTr._(_root);
@@ -103,7 +103,7 @@ class _TranslationsDreamFilterOptionsTr implements TranslationsDreamFilterOption
 	// Translations
 	@override String get selectTag => 'Etiket Seç';
 	@override String get tags => 'Etiketler';
-	@override String get all => 'Tüm';
+	@override String get all => 'Tümü';
 	@override String get week => 'Bu Hafta';
 	@override String get month => 'Bu Ay';
 	@override String get favorites => 'Favoriler';
@@ -116,9 +116,9 @@ class _TranslationsSearchDreamsTr implements TranslationsSearchDreamsEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get searchDreams => 'Rüyaları Ara';
+	@override String get searchDreams => 'Rüya Ara';
 	@override String get retryButton => 'Tekrar Dene';
-	@override String get noResults => 'Hiç rüya bulunamadı';
+	@override String get noResults => 'Rüya bulunamadı';
 	@override String get delete => 'Sil';
 	@override String get undoButton => 'Geri Al';
 	@override String get dreamDeleted => 'Rüya silindi';
@@ -131,8 +131,8 @@ class _TranslationsDreamHistoryTr implements TranslationsDreamHistoryEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get dreamHistory => 'Rüya Günlüğü';
-	@override String get noDreams => 'Kaydedilen rüya yok';
+	@override String get dreamHistory => 'Geçmiş Rüyalar';
+	@override String get noDreams => 'Hiç rüya kaydedilmedi';
 	@override String get noDreamsCaption => 'Henüz hiçbir rüya kaydetmediniz. Bugün rüyalarınızı kaydetmeye başlayın.';
 }
 
@@ -145,24 +145,24 @@ class _TranslationsProfileTr implements TranslationsProfileEn {
 	// Translations
 	@override String get profile => 'Profil';
 	@override String get username => 'Kullanıcı Adı';
+	@override String get email => 'E-posta';
+	@override String get notifications => 'Bildirimler';
+	@override String get settings => 'Ayarlar';
+	@override String get logout => 'Çıkış Yap';
+	@override String get changePassword => 'Şifre Değiştir';
 	@override String get profileNotFound => 'Profil bulunamadı';
+	@override String get closeBackgroundAnimation => 'Arka Plan Animasyonunu Kapat';
+	@override late final _TranslationsProfilePersonalizationTr personalization = _TranslationsProfilePersonalizationTr._(_root);
 	@override String get dreamStats => 'Rüya İstatistikleri';
-	@override String get totalDreams => 'Toplam Rüyalar';
-	@override String get weeklyDreams => 'Haftalık Rüyalar';
 	@override String get currentStreak => 'Mevcut Seri';
 	@override String get longestStreak => 'En Uzun Seri';
+	@override String get totalDreams => 'Toplam Rüya';
+	@override String get weeklyDreams => 'Haftalık Rüyalar';
 	@override String get completionRate => 'Tamamlama Oranı';
-	@override String get settings => 'Ayarlar';
-	@override String get notifications => 'Bildirimler';
 	@override String get language => 'Dil';
 	@override String get english => 'İngilizce';
 	@override String get turkish => 'Türkçe';
 	@override String get german => 'Almanca';
-	@override String get changePassword => 'Şifre Değiştir';
-	@override String get logout => 'Çıkış Yap';
-	@override String get closeBackgroundAnimation => 'Arka Plan Animasyonunu Kapat';
-	@override String get displayNameUpdated => 'Kullanıcı adı başarıyla güncellendi';
-	@override String get reminderUpdated => 'Rüya hatırlatıcısı başarıyla güncellendi';
 	@override late final _TranslationsProfileReminderTr reminder = _TranslationsProfileReminderTr._(_root);
 }
 
@@ -193,7 +193,7 @@ class _TranslationsCoreErrorsTr implements TranslationsCoreErrorsEn {
 	@override String get weakPassword => 'Şifre çok zayıf';
 	@override String get unknown => 'E-posta veya şifre yanlış';
 	@override String get tryAgain => 'Lütfen tekrar deneyin';
-	@override String get userNotAuthenticated => 'Kullanıcı kimliği doğrulanmadı';
+	@override String get userNotAuthenticated => 'Kullanıcı doğrulanamadı';
 }
 
 // Path: registration.email
@@ -204,7 +204,7 @@ class _TranslationsRegistrationEmailTr implements TranslationsRegistrationEmailE
 
 	// Translations
 	@override String get emailText => 'E-posta';
-	@override String get emailHint => 'Lütfen e-posta adresinizi girin';
+	@override String get emailHint => 'Lütfen e-postanızı girin';
 	@override String get emailValidation => 'E-posta gerekli';
 	@override String get emailInvalid => 'Lütfen geçerli bir e-posta girin';
 }
@@ -232,9 +232,9 @@ class _TranslationsRegistrationConfirmPasswordTr implements TranslationsRegistra
 
 	// Translations
 	@override String get confirmPasswordText => 'Şifreyi Onayla';
-	@override String get confirmPasswordHint => 'Şifrenizi tekrar girin';
-	@override String get confirmPasswordValidation => 'Şifreyi tekrar girmeniz gerekiyor';
-	@override String get confirmPasswordMismatch => 'Şifreler eşleşmiyor';
+	@override String get confirmPasswordHint => 'Şifrenizi yeniden girin';
+	@override String get confirmPasswordValidation => 'Şifreyi yeniden girmek gerekli';
+	@override String get confirmPasswordMismatch => 'Şifreler uyuşmuyor';
 }
 
 // Path: registration.signUp
@@ -245,7 +245,7 @@ class _TranslationsRegistrationSignUpTr implements TranslationsRegistrationSignU
 
 	// Translations
 	@override String get signUpText => 'Hesap Oluştur';
-	@override String get signUpCaption => 'Bugün Rüya Günlüğüne katılın';
+	@override String get signUpCaption => 'Rüya Günlüğü\'ne bugün katılın';
 	@override String get alreadyHaveAccount => 'Zaten bir hesabınız var mı?';
 }
 
@@ -257,7 +257,7 @@ class _TranslationsRegistrationSignInTr implements TranslationsRegistrationSignI
 
 	// Translations
 	@override String get signInText => 'Giriş Yap';
-	@override String get forgotPassword => 'Şifrenizi mi unuttunuz?';
+	@override String get forgotPassword => 'Şifremi Unuttum?';
 }
 
 // Path: registration.signOut
@@ -283,9 +283,9 @@ class _TranslationsDreamEntryTagsTr implements TranslationsDreamEntryTagsEn {
 	@override String get Fear => 'korku';
 	@override String get Joy => 'neşe';
 	@override String get Anger => 'öfke';
-	@override String get Confusion => 'karışıklık';
+	@override String get Confusion => 'karmaşa';
 	@override String get Love => 'sevgi';
-	@override String get Peace => 'barış';
+	@override String get Peace => 'huzur';
 	@override String get Sadness => 'üzüntü';
 	@override String get Excitement => 'heyecan';
 }
@@ -297,9 +297,9 @@ class _TranslationsDreamEntryDreamDetailsTr implements TranslationsDreamEntryDre
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get addDetails => 'Ayrıntı Ekle';
-	@override String get addTags => 'Etiketler Ekle';
-	@override String get moodRating => 'Ruh Hali Değerlendirmesi';
+	@override String get addDetails => 'Detay Ekle';
+	@override String get addTags => 'Etiket Ekle';
+	@override String get moodRating => 'Duygu Derecesi';
 	@override String get confirmButton => 'Onayla';
 }
 
@@ -323,10 +323,34 @@ class _TranslationsDreamEntryInterpretationTr implements TranslationsDreamEntryI
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Rüya Yorumlaması';
-	@override String get interpretationText => 'Yorumlama';
+	@override String get title => 'Rüya Yorumu';
+	@override String get interpretationText => 'Yorum';
 	@override String get saveButton => 'Yorumu Kaydet';
 	@override String get shareButton => 'Yorumu Paylaş';
+}
+
+// Path: profile.personalization
+class _TranslationsProfilePersonalizationTr implements TranslationsProfilePersonalizationEn {
+	_TranslationsProfilePersonalizationTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Profilinizi Kişiselleştirin';
+	@override String get description => 'Sizi daha iyi anlayarak daha kişiselleştirilmiş rüya yorumları sunmamıza yardımcı olun.';
+	@override String get gender => 'Cinsiyet';
+	@override String get birthDate => 'Doğum Tarihi';
+	@override String get selectBirthDate => 'Doğum Tarihini Seç';
+	@override String get horoscope => 'Burç';
+	@override String get occupation => 'Meslek';
+	@override late final _TranslationsProfilePersonalizationOccupationOptionsTr occupationOptions = _TranslationsProfilePersonalizationOccupationOptionsTr._(_root);
+	@override String get relationshipStatus => 'İlişki Durumu';
+	@override String get interests => 'İlgi Alanlarınız';
+	@override String get submit => 'Kaydet ve Devam Et';
+	@override late final _TranslationsProfilePersonalizationGenderOptionsTr genderOptions = _TranslationsProfilePersonalizationGenderOptionsTr._(_root);
+	@override late final _TranslationsProfilePersonalizationHoroscopeOptionsTr horoscopeOptions = _TranslationsProfilePersonalizationHoroscopeOptionsTr._(_root);
+	@override late final _TranslationsProfilePersonalizationRelationshipOptionsTr relationshipOptions = _TranslationsProfilePersonalizationRelationshipOptionsTr._(_root);
+	@override late final _TranslationsProfilePersonalizationInterestOptionsTr interestOptions = _TranslationsProfilePersonalizationInterestOptionsTr._(_root);
 }
 
 // Path: profile.reminder
@@ -336,20 +360,20 @@ class _TranslationsProfileReminderTr implements TranslationsProfileReminderEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get setTime => 'Rüya hatırlatıcı zamanını ayarla';
+	@override String get setTime => 'Rüya hatırlatma zamanını ayarlayın';
 	@override String get chooseTime => 'Hatırlatılmak istediğiniz zamanı seçin';
-	@override String get description => 'Rüyalarınızı hatırlamanıza yardımcı olmak için size bildirim göndereceğiz';
+	@override String get description => 'Rüyalarınızı hatırlamanız için size bir bildirim göndereceğiz';
 	@override String get earlyMorning => 'Erken sabah';
-	@override String get earlyMorningTime => '06:00';
+	@override String get earlyMorningTime => '6:00 AM';
 	@override String get afternoon => 'Öğleden sonra';
-	@override String get afternoonTime => '14:00';
+	@override String get afternoonTime => '2:00 PM';
 	@override String get nighttime => 'Gece';
-	@override String get nighttimeTime => '22:00';
+	@override String get nighttimeTime => '10:00 PM';
 	@override String get custom => 'Özel';
 	@override String get setCustomTime => 'Zamanınızı ayarlayın';
-	@override String get saveButton => 'Hatırlatıcıyı Kaydet';
+	@override String get saveButton => 'Hatırlatmayı Kaydet';
 	@override String get skipButton => 'Şimdilik Geç';
-	@override String get savedSuccess => 'Hatırlatıcı ayarları başarıyla kaydedildi';
+	@override String get savedSuccess => 'Hatırlatma ayarları başarıyla kaydedildi';
 }
 
 // Path: registration.password.changePassword
@@ -359,11 +383,11 @@ class _TranslationsRegistrationPasswordChangePasswordTr implements TranslationsR
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get changePasswordText => 'Şifreyi Değiştir';
+	@override String get changePasswordText => 'Şifre Değiştir';
 	@override String get currentPassword => 'Mevcut Şifre';
 	@override String get currentPasswordValidator => 'Lütfen mevcut şifrenizi girin';
 	@override String get newPassword => 'Yeni Şifre';
-	@override String get newPasswordValidator => 'Lütfen yeni şifrenizi girin';
+	@override String get newPasswordValidator => 'Lütfen yeni bir şifre girin';
 	@override String get resetPasswordButton => 'Şifreyi Sıfırla';
 	@override String get confirmNewPassword => 'Yeni Şifreyi Onayla';
 	@override String get success => 'Şifre başarıyla değiştirildi';
@@ -376,12 +400,101 @@ class _TranslationsRegistrationPasswordResetPasswordTr implements TranslationsRe
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get resetPasswordText => 'Şifreyi Sıfırla';
-	@override String get resetPasswordButton => 'Sıfırlama linkini gönder';
-	@override String get resetPasswordCaption => 'E-posta adresinizi girin ve şifrenizi sıfırlamak için bir link gönderelim.';
+	@override String get resetPasswordText => 'Şifre Sıfırla';
+	@override String get resetPasswordButton => 'Sıfırlama Bağlantısı Gönder';
+	@override String get resetPasswordCaption => 'E-posta adresinizi girin, size şifre sıfırlama bağlantısını gönderelim.';
 	@override String get resetPasswordSuccess => 'Şifre sıfırlama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin.';
 	@override String get resetPasswordError => 'Şifre sıfırlama e-postası gönderilirken hata oluştu';
-	@override String get backToSignIn => 'Giriş Sayfasına Geri Dön';
+	@override String get backToSignIn => 'Girişe Geri Dön';
+}
+
+// Path: profile.personalization.occupationOptions
+class _TranslationsProfilePersonalizationOccupationOptionsTr implements TranslationsProfilePersonalizationOccupationOptionsEn {
+	_TranslationsProfilePersonalizationOccupationOptionsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get homemaker => 'Ev Hanımı';
+	@override String get unemployed => 'Çalışmıyor';
+	@override String get jobSeeker => 'İş Arıyor';
+	@override String get student => 'Öğrenci';
+	@override String get academic => 'Akademisyen';
+	@override String get selfEmployed => 'Kendi İşini Yapıyor';
+	@override String get publicSector => 'Kamu Sektörü';
+	@override String get privateSector => 'Özel Sektör';
+	@override String get retired => 'Emekli';
+}
+
+// Path: profile.personalization.genderOptions
+class _TranslationsProfilePersonalizationGenderOptionsTr implements TranslationsProfilePersonalizationGenderOptionsEn {
+	_TranslationsProfilePersonalizationGenderOptionsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get male => 'Erkek';
+	@override String get female => 'Kadın';
+	@override String get other => 'Diğer';
+	@override String get preferNotToSay => 'Belirtmek istemiyorum';
+}
+
+// Path: profile.personalization.horoscopeOptions
+class _TranslationsProfilePersonalizationHoroscopeOptionsTr implements TranslationsProfilePersonalizationHoroscopeOptionsEn {
+	_TranslationsProfilePersonalizationHoroscopeOptionsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get aries => 'Koç';
+	@override String get taurus => 'Boğa';
+	@override String get gemini => 'İkizler';
+	@override String get cancer => 'Yengeç';
+	@override String get leo => 'Aslan';
+	@override String get virgo => 'Başak';
+	@override String get libra => 'Terazi';
+	@override String get scorpio => 'Akrep';
+	@override String get sagittarius => 'Yay';
+	@override String get capricorn => 'Oğlak';
+	@override String get aquarius => 'Kova';
+	@override String get pisces => 'Balık';
+}
+
+// Path: profile.personalization.relationshipOptions
+class _TranslationsProfilePersonalizationRelationshipOptionsTr implements TranslationsProfilePersonalizationRelationshipOptionsEn {
+	_TranslationsProfilePersonalizationRelationshipOptionsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get single => 'Bekar';
+	@override String get inRelationship => 'Bir ilişkide';
+	@override String get married => 'Evli';
+	@override String get preferNotToSay => 'Belirtmek istemiyorum';
+}
+
+// Path: profile.personalization.interestOptions
+class _TranslationsProfilePersonalizationInterestOptionsTr implements TranslationsProfilePersonalizationInterestOptionsEn {
+	_TranslationsProfilePersonalizationInterestOptionsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get spirituality => 'Spiritüellik';
+	@override String get meditation => 'Meditasyon';
+	@override String get psychology => 'Psikoloji';
+	@override String get selfImprovement => 'Kişisel Gelişim';
+	@override String get art => 'Sanat';
+	@override String get music => 'Müzik';
+	@override String get travel => 'Seyahat';
+	@override String get nature => 'Doğa';
+	@override String get technology => 'Teknoloji';
+	@override String get science => 'Bilim';
+	@override String get sports => 'Spor';
+	@override String get cooking => 'Yemek Pişirme';
+	@override String get reading => 'Okuma';
+	@override String get writing => 'Yazma';
+	@override String get photography => 'Fotoğrafçılık';
 }
 
 /// Flat map(s) containing all translations.
@@ -401,123 +514,176 @@ extension on TranslationsTr {
 			case 'core.errors.weakPassword': return 'Şifre çok zayıf';
 			case 'core.errors.unknown': return 'E-posta veya şifre yanlış';
 			case 'core.errors.tryAgain': return 'Lütfen tekrar deneyin';
-			case 'core.errors.userNotAuthenticated': return 'Kullanıcı kimliği doğrulanmadı';
+			case 'core.errors.userNotAuthenticated': return 'Kullanıcı doğrulanamadı';
 			case 'core.success': return 'Başarılı';
-			case 'registration.welcomeText': return 'Hoş Geldiniz';
+			case 'registration.welcomeText': return 'Tekrar Hoş Geldiniz';
 			case 'registration.email.emailText': return 'E-posta';
-			case 'registration.email.emailHint': return 'Lütfen e-posta adresinizi girin';
+			case 'registration.email.emailHint': return 'Lütfen e-postanızı girin';
 			case 'registration.email.emailValidation': return 'E-posta gerekli';
 			case 'registration.email.emailInvalid': return 'Lütfen geçerli bir e-posta girin';
 			case 'registration.password.passwordText': return 'Şifre';
 			case 'registration.password.passwordHint': return 'Lütfen şifrenizi girin';
 			case 'registration.password.passwordValidation': return 'Şifre gerekli';
 			case 'registration.password.passwordShort': return ({required Object minPasswordSize}) => 'Şifre en az ${minPasswordSize} karakter olmalı';
-			case 'registration.password.changePassword.changePasswordText': return 'Şifreyi Değiştir';
+			case 'registration.password.changePassword.changePasswordText': return 'Şifre Değiştir';
 			case 'registration.password.changePassword.currentPassword': return 'Mevcut Şifre';
 			case 'registration.password.changePassword.currentPasswordValidator': return 'Lütfen mevcut şifrenizi girin';
 			case 'registration.password.changePassword.newPassword': return 'Yeni Şifre';
-			case 'registration.password.changePassword.newPasswordValidator': return 'Lütfen yeni şifrenizi girin';
+			case 'registration.password.changePassword.newPasswordValidator': return 'Lütfen yeni bir şifre girin';
 			case 'registration.password.changePassword.resetPasswordButton': return 'Şifreyi Sıfırla';
 			case 'registration.password.changePassword.confirmNewPassword': return 'Yeni Şifreyi Onayla';
 			case 'registration.password.changePassword.success': return 'Şifre başarıyla değiştirildi';
-			case 'registration.password.resetPassword.resetPasswordText': return 'Şifreyi Sıfırla';
-			case 'registration.password.resetPassword.resetPasswordButton': return 'Sıfırlama linkini gönder';
-			case 'registration.password.resetPassword.resetPasswordCaption': return 'E-posta adresinizi girin ve şifrenizi sıfırlamak için bir link gönderelim.';
+			case 'registration.password.resetPassword.resetPasswordText': return 'Şifre Sıfırla';
+			case 'registration.password.resetPassword.resetPasswordButton': return 'Sıfırlama Bağlantısı Gönder';
+			case 'registration.password.resetPassword.resetPasswordCaption': return 'E-posta adresinizi girin, size şifre sıfırlama bağlantısını gönderelim.';
 			case 'registration.password.resetPassword.resetPasswordSuccess': return 'Şifre sıfırlama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin.';
 			case 'registration.password.resetPassword.resetPasswordError': return 'Şifre sıfırlama e-postası gönderilirken hata oluştu';
-			case 'registration.password.resetPassword.backToSignIn': return 'Giriş Sayfasına Geri Dön';
+			case 'registration.password.resetPassword.backToSignIn': return 'Girişe Geri Dön';
 			case 'registration.confirmPassword.confirmPasswordText': return 'Şifreyi Onayla';
-			case 'registration.confirmPassword.confirmPasswordHint': return 'Şifrenizi tekrar girin';
-			case 'registration.confirmPassword.confirmPasswordValidation': return 'Şifreyi tekrar girmeniz gerekiyor';
-			case 'registration.confirmPassword.confirmPasswordMismatch': return 'Şifreler eşleşmiyor';
+			case 'registration.confirmPassword.confirmPasswordHint': return 'Şifrenizi yeniden girin';
+			case 'registration.confirmPassword.confirmPasswordValidation': return 'Şifreyi yeniden girmek gerekli';
+			case 'registration.confirmPassword.confirmPasswordMismatch': return 'Şifreler uyuşmuyor';
 			case 'registration.signUp.signUpText': return 'Hesap Oluştur';
-			case 'registration.signUp.signUpCaption': return 'Bugün Rüya Günlüğüne katılın';
+			case 'registration.signUp.signUpCaption': return 'Rüya Günlüğü\'ne bugün katılın';
 			case 'registration.signUp.alreadyHaveAccount': return 'Zaten bir hesabınız var mı?';
 			case 'registration.signIn.signInText': return 'Giriş Yap';
-			case 'registration.signIn.forgotPassword': return 'Şifrenizi mi unuttunuz?';
+			case 'registration.signIn.forgotPassword': return 'Şifremi Unuttum?';
 			case 'registration.signOut.signOutText': return 'Çıkış Yap';
 			case 'dreamEntry.newDream': return 'Yeni Rüya';
 			case 'dreamEntry.saveDream': return 'Rüyayı Kaydet';
-			case 'dreamEntry.discardDream': return 'At';
+			case 'dreamEntry.discardDream': return 'Vazgeç';
 			case 'dreamEntry.shareDream': return 'Paylaş';
 			case 'dreamEntry.dreamTitle': return 'Rüya Başlığı';
 			case 'dreamEntry.dreamTitleHint': return 'Lütfen rüyanız için bir başlık girin';
-			case 'dreamEntry.yourDream': return 'Sizin Rüyanız';
+			case 'dreamEntry.yourDream': return 'Rüyanız';
 			case 'dreamEntry.tags.tags': return 'Etiketler';
 			case 'dreamEntry.tags.Happiness': return 'mutluluk';
 			case 'dreamEntry.tags.Anxiety': return 'kaygı';
 			case 'dreamEntry.tags.Fear': return 'korku';
 			case 'dreamEntry.tags.Joy': return 'neşe';
 			case 'dreamEntry.tags.Anger': return 'öfke';
-			case 'dreamEntry.tags.Confusion': return 'karışıklık';
+			case 'dreamEntry.tags.Confusion': return 'karmaşa';
 			case 'dreamEntry.tags.Love': return 'sevgi';
-			case 'dreamEntry.tags.Peace': return 'barış';
+			case 'dreamEntry.tags.Peace': return 'huzur';
 			case 'dreamEntry.tags.Sadness': return 'üzüntü';
 			case 'dreamEntry.tags.Excitement': return 'heyecan';
-			case 'dreamEntry.moodRating': return 'Ruh Hali';
+			case 'dreamEntry.moodRating': return 'Duygu Derecesi';
 			case 'dreamEntry.failedToSaveDream': return 'Rüya kaydedilemedi';
-			case 'dreamEntry.dreamDetails.addDetails': return 'Ayrıntı Ekle';
-			case 'dreamEntry.dreamDetails.addTags': return 'Etiketler Ekle';
-			case 'dreamEntry.dreamDetails.moodRating': return 'Ruh Hali Değerlendirmesi';
+			case 'dreamEntry.dreamDetails.addDetails': return 'Detay Ekle';
+			case 'dreamEntry.dreamDetails.addTags': return 'Etiket Ekle';
+			case 'dreamEntry.dreamDetails.moodRating': return 'Duygu Derecesi';
 			case 'dreamEntry.dreamDetails.confirmButton': return 'Onayla';
 			case 'dreamEntry.dreamForm.record': return 'Rüyanızı Kaydedin';
 			case 'dreamEntry.dreamForm.content': return 'Rüya İçeriği';
 			case 'dreamEntry.dreamForm.contentHint': return 'Lütfen rüya içeriğinizi girin';
 			case 'dreamEntry.dreamForm.getInterpretation': return 'Yorum Al';
-			case 'dreamEntry.interpretation.title': return 'Rüya Yorumlaması';
-			case 'dreamEntry.interpretation.interpretationText': return 'Yorumlama';
+			case 'dreamEntry.interpretation.title': return 'Rüya Yorumu';
+			case 'dreamEntry.interpretation.interpretationText': return 'Yorum';
 			case 'dreamEntry.interpretation.saveButton': return 'Yorumu Kaydet';
 			case 'dreamEntry.interpretation.shareButton': return 'Yorumu Paylaş';
 			case 'dreamDetail': return 'Rüya Açıklaması';
 			case 'dreamFilterOptions.selectTag': return 'Etiket Seç';
 			case 'dreamFilterOptions.tags': return 'Etiketler';
-			case 'dreamFilterOptions.all': return 'Tüm';
+			case 'dreamFilterOptions.all': return 'Tümü';
 			case 'dreamFilterOptions.week': return 'Bu Hafta';
 			case 'dreamFilterOptions.month': return 'Bu Ay';
 			case 'dreamFilterOptions.favorites': return 'Favoriler';
-			case 'searchDreams.searchDreams': return 'Rüyaları Ara';
+			case 'searchDreams.searchDreams': return 'Rüya Ara';
 			case 'searchDreams.retryButton': return 'Tekrar Dene';
-			case 'searchDreams.noResults': return 'Hiç rüya bulunamadı';
+			case 'searchDreams.noResults': return 'Rüya bulunamadı';
 			case 'searchDreams.delete': return 'Sil';
 			case 'searchDreams.undoButton': return 'Geri Al';
 			case 'searchDreams.dreamDeleted': return 'Rüya silindi';
-			case 'dreamHistory.dreamHistory': return 'Rüya Günlüğü';
-			case 'dreamHistory.noDreams': return 'Kaydedilen rüya yok';
+			case 'dreamHistory.dreamHistory': return 'Geçmiş Rüyalar';
+			case 'dreamHistory.noDreams': return 'Hiç rüya kaydedilmedi';
 			case 'dreamHistory.noDreamsCaption': return 'Henüz hiçbir rüya kaydetmediniz. Bugün rüyalarınızı kaydetmeye başlayın.';
 			case 'profile.profile': return 'Profil';
 			case 'profile.username': return 'Kullanıcı Adı';
+			case 'profile.email': return 'E-posta';
+			case 'profile.notifications': return 'Bildirimler';
+			case 'profile.settings': return 'Ayarlar';
+			case 'profile.logout': return 'Çıkış Yap';
+			case 'profile.changePassword': return 'Şifre Değiştir';
 			case 'profile.profileNotFound': return 'Profil bulunamadı';
+			case 'profile.closeBackgroundAnimation': return 'Arka Plan Animasyonunu Kapat';
+			case 'profile.personalization.title': return 'Profilinizi Kişiselleştirin';
+			case 'profile.personalization.description': return 'Sizi daha iyi anlayarak daha kişiselleştirilmiş rüya yorumları sunmamıza yardımcı olun.';
+			case 'profile.personalization.gender': return 'Cinsiyet';
+			case 'profile.personalization.birthDate': return 'Doğum Tarihi';
+			case 'profile.personalization.selectBirthDate': return 'Doğum Tarihini Seç';
+			case 'profile.personalization.horoscope': return 'Burç';
+			case 'profile.personalization.occupation': return 'Meslek';
+			case 'profile.personalization.occupationOptions.homemaker': return 'Ev Hanımı';
+			case 'profile.personalization.occupationOptions.unemployed': return 'Çalışmıyor';
+			case 'profile.personalization.occupationOptions.jobSeeker': return 'İş Arıyor';
+			case 'profile.personalization.occupationOptions.student': return 'Öğrenci';
+			case 'profile.personalization.occupationOptions.academic': return 'Akademisyen';
+			case 'profile.personalization.occupationOptions.selfEmployed': return 'Kendi İşini Yapıyor';
+			case 'profile.personalization.occupationOptions.publicSector': return 'Kamu Sektörü';
+			case 'profile.personalization.occupationOptions.privateSector': return 'Özel Sektör';
+			case 'profile.personalization.occupationOptions.retired': return 'Emekli';
+			case 'profile.personalization.relationshipStatus': return 'İlişki Durumu';
+			case 'profile.personalization.interests': return 'İlgi Alanlarınız';
+			case 'profile.personalization.submit': return 'Kaydet ve Devam Et';
+			case 'profile.personalization.genderOptions.male': return 'Erkek';
+			case 'profile.personalization.genderOptions.female': return 'Kadın';
+			case 'profile.personalization.genderOptions.other': return 'Diğer';
+			case 'profile.personalization.genderOptions.preferNotToSay': return 'Belirtmek istemiyorum';
+			case 'profile.personalization.horoscopeOptions.aries': return 'Koç';
+			case 'profile.personalization.horoscopeOptions.taurus': return 'Boğa';
+			case 'profile.personalization.horoscopeOptions.gemini': return 'İkizler';
+			case 'profile.personalization.horoscopeOptions.cancer': return 'Yengeç';
+			case 'profile.personalization.horoscopeOptions.leo': return 'Aslan';
+			case 'profile.personalization.horoscopeOptions.virgo': return 'Başak';
+			case 'profile.personalization.horoscopeOptions.libra': return 'Terazi';
+			case 'profile.personalization.horoscopeOptions.scorpio': return 'Akrep';
+			case 'profile.personalization.horoscopeOptions.sagittarius': return 'Yay';
+			case 'profile.personalization.horoscopeOptions.capricorn': return 'Oğlak';
+			case 'profile.personalization.horoscopeOptions.aquarius': return 'Kova';
+			case 'profile.personalization.horoscopeOptions.pisces': return 'Balık';
+			case 'profile.personalization.relationshipOptions.single': return 'Bekar';
+			case 'profile.personalization.relationshipOptions.inRelationship': return 'Bir ilişkide';
+			case 'profile.personalization.relationshipOptions.married': return 'Evli';
+			case 'profile.personalization.relationshipOptions.preferNotToSay': return 'Belirtmek istemiyorum';
+			case 'profile.personalization.interestOptions.spirituality': return 'Spiritüellik';
+			case 'profile.personalization.interestOptions.meditation': return 'Meditasyon';
+			case 'profile.personalization.interestOptions.psychology': return 'Psikoloji';
+			case 'profile.personalization.interestOptions.selfImprovement': return 'Kişisel Gelişim';
+			case 'profile.personalization.interestOptions.art': return 'Sanat';
+			case 'profile.personalization.interestOptions.music': return 'Müzik';
+			case 'profile.personalization.interestOptions.travel': return 'Seyahat';
+			case 'profile.personalization.interestOptions.nature': return 'Doğa';
+			case 'profile.personalization.interestOptions.technology': return 'Teknoloji';
+			case 'profile.personalization.interestOptions.science': return 'Bilim';
+			case 'profile.personalization.interestOptions.sports': return 'Spor';
+			case 'profile.personalization.interestOptions.cooking': return 'Yemek Pişirme';
+			case 'profile.personalization.interestOptions.reading': return 'Okuma';
+			case 'profile.personalization.interestOptions.writing': return 'Yazma';
+			case 'profile.personalization.interestOptions.photography': return 'Fotoğrafçılık';
 			case 'profile.dreamStats': return 'Rüya İstatistikleri';
-			case 'profile.totalDreams': return 'Toplam Rüyalar';
-			case 'profile.weeklyDreams': return 'Haftalık Rüyalar';
 			case 'profile.currentStreak': return 'Mevcut Seri';
 			case 'profile.longestStreak': return 'En Uzun Seri';
+			case 'profile.totalDreams': return 'Toplam Rüya';
+			case 'profile.weeklyDreams': return 'Haftalık Rüyalar';
 			case 'profile.completionRate': return 'Tamamlama Oranı';
-			case 'profile.settings': return 'Ayarlar';
-			case 'profile.notifications': return 'Bildirimler';
 			case 'profile.language': return 'Dil';
 			case 'profile.english': return 'İngilizce';
 			case 'profile.turkish': return 'Türkçe';
 			case 'profile.german': return 'Almanca';
-			case 'profile.changePassword': return 'Şifre Değiştir';
-			case 'profile.logout': return 'Çıkış Yap';
-			case 'profile.closeBackgroundAnimation': return 'Arka Plan Animasyonunu Kapat';
-			case 'profile.displayNameUpdated': return 'Kullanıcı adı başarıyla güncellendi';
-			case 'profile.reminderUpdated': return 'Rüya hatırlatıcısı başarıyla güncellendi';
-			case 'profile.reminder.setTime': return 'Rüya hatırlatıcı zamanını ayarla';
+			case 'profile.reminder.setTime': return 'Rüya hatırlatma zamanını ayarlayın';
 			case 'profile.reminder.chooseTime': return 'Hatırlatılmak istediğiniz zamanı seçin';
-			case 'profile.reminder.description': return 'Rüyalarınızı hatırlamanıza yardımcı olmak için size bildirim göndereceğiz';
+			case 'profile.reminder.description': return 'Rüyalarınızı hatırlamanız için size bir bildirim göndereceğiz';
 			case 'profile.reminder.earlyMorning': return 'Erken sabah';
-			case 'profile.reminder.earlyMorningTime': return '06:00';
+			case 'profile.reminder.earlyMorningTime': return '6:00 AM';
 			case 'profile.reminder.afternoon': return 'Öğleden sonra';
-			case 'profile.reminder.afternoonTime': return '14:00';
+			case 'profile.reminder.afternoonTime': return '2:00 PM';
 			case 'profile.reminder.nighttime': return 'Gece';
-			case 'profile.reminder.nighttimeTime': return '22:00';
+			case 'profile.reminder.nighttimeTime': return '10:00 PM';
 			case 'profile.reminder.custom': return 'Özel';
 			case 'profile.reminder.setCustomTime': return 'Zamanınızı ayarlayın';
-			case 'profile.reminder.saveButton': return 'Hatırlatıcıyı Kaydet';
+			case 'profile.reminder.saveButton': return 'Hatırlatmayı Kaydet';
 			case 'profile.reminder.skipButton': return 'Şimdilik Geç';
-			case 'profile.reminder.savedSuccess': return 'Hatırlatıcı ayarları başarıyla kaydedildi';
+			case 'profile.reminder.savedSuccess': return 'Hatırlatma ayarları başarıyla kaydedildi';
 			default: return null;
 		}
 	}

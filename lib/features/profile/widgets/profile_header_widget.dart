@@ -70,7 +70,7 @@ class EditableProfileHeader extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             EditableNameSection(
-              initialName: profile.displayName!,
+              initialName: profile.displayName ?? profile.email.split('@')[0],
               onNameChanged: onDisplayNameChanged,
             ),
             const SizedBox(height: 8),

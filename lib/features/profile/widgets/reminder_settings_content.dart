@@ -97,6 +97,8 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
       setState(() {
         selectedType = ReminderType.custom;
         selectedCustomTime = selectedTime;
+
+        debugPrint(selectedCustomTime.toString());
       });
     }
   }
