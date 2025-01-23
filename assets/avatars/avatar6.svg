@@ -1,8 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="40" fill="#20B2AA"/>
-  <polygon points="50,20 30,50 70,50" fill="#FFFFFF"/>
-  <rect x="35" y="50" width="30" height="25" fill="#FFFFFF"/>
-  <circle cx="42" cy="40" r="3" fill="#20B2AA"/>
-  <circle cx="58" cy="40" r="3" fill="#20B2AA"/>
-  <path d="M42 60 Q50 65 58 60" stroke="#20B2AA" stroke-width="2" fill="none"/>
+  <defs>
+    <!-- Enhanced gradients -->
+    <linearGradient id="deepSpace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0B0B1A;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1a1a3a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a2a4a;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="enhancedMoonGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#E6E6FA;stop-opacity:0.8" />
+      <stop offset="75%" style="stop-color:#B19CD9;stop-opacity:0.5" />
+      <stop offset="100%" style="stop-color:#9370DB;stop-opacity:0.3" />
+    </radialGradient>
+    <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E6E6FA;stop-opacity:0" />
+    </radialGradient>
+    <filter id="enhancedGlow">
+      <feGaussianBlur stdDeviation="2" result="glow"/>
+      <feComposite operator="over" in="glow" in2="SourceGraphic"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Enhanced Moon Avatar -->
+  <g transform="translate(0, 0)">
+    <!-- Background -->
+    <circle cx="50" cy="50" r="45" fill="url(#deepSpace)"/>
+
+    <!-- Enhanced moon phases circle -->
+    <g transform="translate(50 50)">
+      <circle r="32" fill="none" stroke="#4A4A6A" stroke-width="0.5" opacity="0.4"/>
+      <circle r="31" fill="none" stroke="#4A4A6A" stroke-width="0.3" opacity="0.2"/>
+      
+      <!-- Enhanced moon phases -->
+      <!-- New Moon -->
+      <circle cx="-27" cy="0" r="5" fill="#1a1a3a" stroke="#B19CD9" stroke-width="0.5"/>
+      <!-- Waxing Crescent -->
+      <path d="M-19.68 19.68A8 8 0 0 1-19.68 8.32A6 6 0 0 0-19.68 19.68" fill="#E6E6FA" opacity="0.8"/>
+      <!-- First Quarter -->
+      <circle cx="0" cy="27" r="7" fill="url(#enhancedMoonGlow)" filter="url(#enhancedGlow)"/>
+      <!-- Waxing Gibbous -->
+      <path d="M19.68 19.68A8 8 0 0 1 8.32 19.68A6 6 0 0 0 19.68 19.68" fill="#E6E6FA" opacity="0.9"/>
+      <!-- Full Moon -->
+      <circle cx="27" cy="0" r="8" fill="url(#enhancedMoonGlow)" filter="url(#enhancedGlow)"/>
+      <!-- Waning Gibbous -->
+      <path d="M19.68 -19.68A8 8 0 0 1 19.68 -8.32A6 6 0 0 0 19.68 -19.68" fill="#E6E6FA" opacity="0.9"/>
+      <!-- Last Quarter -->
+      <circle cx="0" cy="-27" r="7" fill="url(#enhancedMoonGlow)" filter="url(#enhancedGlow)"/>
+      <!-- Waning Crescent -->
+      <path d="M-19.68 -19.68A8 8 0 0 1-8.32 -19.68A6 6 0 0 0-19.68 -19.68" fill="#E6E6FA" opacity="0.8"/>
+    </g>
+
+    <!-- Enhanced central moon -->
+    <g transform="translate(50 50)">
+      <circle r="16" fill="url(#enhancedMoonGlow)" filter="url(#enhancedGlow)"/>
+      <!-- Enhanced moon details -->
+      <path d="M-6 -3Q0 -8 6 -3Q0 2 -6 -3Z" fill="#E6E6FA" opacity="0.4"/>
+      <path d="M-8 6Q0 1 8 6Q0 11 -8 6Z" fill="#E6E6FA" opacity="0.4"/>
+      <!-- Enhanced crater details -->
+      <circle cx="-6" cy="-6" r="2.5" fill="#E6E6FA" opacity="0.3"/>
+      <circle cx="5" cy="5" r="2" fill="#E6E6FA" opacity="0.3"/>
+      <circle cx="0" cy="-4" r="1.5" fill="#E6E6FA" opacity="0.3"/>
+      <circle cx="-3" cy="2" r="1" fill="#E6E6FA" opacity="0.2"/>
+    </g>
+  </g>
 </svg>

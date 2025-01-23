@@ -14,30 +14,42 @@ service cloud.firestore {
     
     match /dreams/{dreamId} {
       // Allow reading the collection
-      allow list: if request.auth != null;
+      allow list: if isAuthenticated();
       
       // Allow reading individual documents if authenticated
-      allow get: if request.auth != null;
+      allow get: if isAuthenticated();
       
       // Allow creating and updating
-      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
-      allow update: if request.auth != null && 
+      allow create: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
+      allow update: if isAuthenticated() && 
                       request.auth.uid == resource.data.userId && 
                       request.auth.uid == request.resource.data.userId;
       
       // Allow deleting own dreams
-      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow delete: if isAuthenticated() && request.auth.uid == resource.data.userId;
+    }
+    
+    match /streaks/{streakId} {
+      allow list, get: if isAuthenticated();  // Only authenticated users can read
+  
+      // Only the owner can create/update their streak document
+      allow create: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
+      allow update: if isAuthenticated() && 
+                  request.auth.uid == resource.data.userId && 
+                  request.auth.uid == request.resource.data.userId;
+  
+      allow delete: if isAuthenticated() && request.auth.uid == resource.data.userId;
     }
     
     // Rules for users collection
     match /users/{userId} {
-      allow read: if isAuthenticated();
-      allow write: if isOwner(userId);
+      allow read: if isAuthenticated() && (isOwner(userId) || request.auth.uid == userId);
+      allow write: if isAuthenticated() && isOwner(userId);
       
       // Optional: Allow specific fields to be updated
-      allow update: if isOwner(userId) 
+      allow update: if isAuthenticated() && isOwner(userId) 
         && request.resource.data.diff(resource.data).affectedKeys()
-            .hasOnly(['displayName', 'photoUrl', 'settings']);
+            .hasOnly(['displayName', 'photoUrl', 'settings', 'notificationsEnabled', 'preferences']);
     }
   }
 } 

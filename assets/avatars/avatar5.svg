@@ -1,7 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="40" fill="#FF7F50"/>
-  <rect x="35" y="30" width="30" height="30" rx="5" fill="#FFFFFF"/>
-  <circle cx="42" cy="45" r="3" fill="#FF7F50"/>
-  <circle cx="58" cy="45" r="3" fill="#FF7F50"/>
-  <line x1="42" y1="55" x2="58" y2="55" stroke="#FF7F50" stroke-width="2"/>
+    <defs>
+    <linearGradient id="moonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C8A2C8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9B6B9B;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="starGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFE5B4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFC0CB;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E0FFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B0E2FF;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="mysticGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" style="stop-color:#E6E6FA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DDA0DD;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+
+    <circle cx="50" cy="50" r="45" fill="url(#mysticGradient)"/>
+    <path d="M25 50C25 50 35 30 50 30C65 30 75 50 75 50C75 50 65 70 50 70C35 70 25 50 25 50Z" fill="#B19CD9" opacity="0.8"/>
+    <circle cx="50" cy="50" r="15" fill="#9370DB" opacity="0.8"/>
+    <circle cx="50" cy="50" r="7" fill="#483D8B"/>
+    <circle cx="53" cy="47" r="3" fill="#FFFFFF" opacity="0.8"/>
+
 </svg>

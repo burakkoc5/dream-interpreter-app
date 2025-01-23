@@ -18,6 +18,9 @@ class ProfilePhotoPickerWidget extends StatelessWidget {
     'assets/avatars/avatar4.svg',
     'assets/avatars/avatar5.svg',
     'assets/avatars/avatar6.svg',
+    'assets/avatars/avatar8.svg',
+    'assets/avatars/avatar9.svg',
+    'assets/avatars/avatar12.svg',
   ];
 
   void _showPhotoSelector(BuildContext context) {

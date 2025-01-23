@@ -1,7 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="40" fill="#50C878"/>
-  <circle cx="50" cy="45" r="18" fill="#FFFFFF"/>
-  <path d="M25 45 L75 45 L50 75 Z" fill="#FFFFFF"/>
-  <circle cx="42" cy="40" r="4" fill="#50C878"/>
-  <circle cx="58" cy="40" r="4" fill="#50C878"/>
-</svg>
+    <defs>
+    <linearGradient id="moonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C8A2C8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9B6B9B;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="starGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFE5B4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFC0CB;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E0FFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B0E2FF;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="mysticGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" style="stop-color:#E6E6FA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DDA0DD;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+
+  <!-- Avatar 1: Ethereal Moon -->
+    <circle cx="50" cy="50" r="45" fill="url(#starGradient)"/>
+    <path d="M50 15L56 40L82 40L61 55L68 80L50 65L32 80L39 55L18 40L44 40L50 15Z" fill="#FFD700" opacity="0.7"/>
+    <circle cx="50" cy="50" r="12" fill="#FFF5EE" opacity="0.5"/>
+    <circle cx="35" cy="35" r="2" fill="#FFFFFF"/>
+    <circle cx="65" cy="35" r="2" fill="#FFFFFF"/>
+    <circle cx="50" cy="65" r="2" fill="#FFFFFF"/>
+  </g>
