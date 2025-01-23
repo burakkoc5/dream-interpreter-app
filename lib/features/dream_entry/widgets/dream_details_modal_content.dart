@@ -44,8 +44,6 @@ class _DreamDetailsModalContentState extends State<DreamDetailsModalContent> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
-    final bottomNavBarHeight =
-        MediaQuery.of(context).padding.bottom + kBottomNavigationBarHeight;
 
     return ModalContainer(
       child: Column(
@@ -71,12 +69,12 @@ class _DreamDetailsModalContentState extends State<DreamDetailsModalContent> {
                       controller: _titleController,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         letterSpacing: 0.2,
-                        color: theme.colorScheme.primary,
+                        color: theme.colorScheme.onSurface,
                       ),
                       decoration: InputDecoration(
                         hintText: t.dreamEntry.dreamTitle,
                         hintStyle: TextStyle(
-                          color: theme.colorScheme.primary.withOpacity(0.5),
+                          color: theme.colorScheme.onSurface.withOpacity(0.5),
                         ),
                         border: InputBorder.none,
                         contentPadding: const EdgeInsets.all(20),
@@ -136,7 +134,24 @@ class _DreamDetailsModalContentState extends State<DreamDetailsModalContent> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  InputContainer(
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surface.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: theme.colorScheme.primary.withOpacity(0.1),
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.primary.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
                     child: MoodRatingWidget(
                       rating: _moodRating,
                       onRatingChanged: (rating) =>
@@ -148,8 +163,7 @@ class _DreamDetailsModalContentState extends State<DreamDetailsModalContent> {
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(
-                24, 20, 24, bottomPadding + bottomNavBarHeight + 20),
+            padding: EdgeInsets.fromLTRB(24, 20, 24, bottomPadding + 20),
             child: AppButton(
               text: t.dreamEntry.dreamDetails.confirmButton,
               onPressed: () {

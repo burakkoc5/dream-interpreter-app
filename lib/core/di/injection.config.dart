@@ -38,8 +38,10 @@ import '../../features/dream_history/repositories/dream_history_repository.dart'
 import '../../features/onboarding/cubit/onboarding_cubit.dart' as _i547;
 import '../../features/profile/application/profile_cubit.dart' as _i402;
 import '../../features/profile/application/stats_cubit.dart' as _i382;
+import '../../features/profile/application/streak_cubit.dart' as _i1050;
 import '../../features/profile/repositories/profile_repository.dart' as _i155;
 import '../../features/profile/repositories/stats_repository.dart' as _i733;
+import '../../features/profile/repository/streak_repository.dart' as _i122;
 import '../../shared/repositories/notification_repository.dart' as _i517;
 import '../../shared/repositories/time_zone_repository.dart' as _i246;
 import '../../shared/services/android_notification_settings.dart' as _i368;
@@ -95,10 +97,14 @@ Future<_i174.GetIt> init(
         gh<_i604.ITimeZoneService>(),
         gh<_i460.SharedPreferences>(),
       ));
+  gh.factory<_i122.StreakRepository>(
+      () => _i122.StreakRepository(gh<_i974.FirebaseFirestore>()));
   gh.factory<_i733.StatsRepository>(
       () => _i733.StatsRepository(gh<_i974.FirebaseFirestore>()));
   gh.factory<_i155.ProfileRepository>(
       () => _i155.ProfileRepository(gh<_i974.FirebaseFirestore>()));
+  gh.factory<_i1050.StreakCubit>(
+      () => _i1050.StreakCubit(gh<_i122.StreakRepository>()));
   gh.factory<_i38.FirebaseAuthService>(() => _i38.FirebaseAuthService(
         gh<_i59.FirebaseAuth>(),
         gh<_i974.FirebaseFirestore>(),
@@ -111,8 +117,6 @@ Future<_i174.GetIt> init(
       () => _i382.StatsCubit(gh<_i733.StatsRepository>()));
   gh.factory<_i1041.AuthRepository>(
       () => _i1041.AuthRepository(gh<_i38.FirebaseAuthService>()));
-  gh.factory<_i402.ProfileCubit>(
-      () => _i402.ProfileCubit(gh<_i155.ProfileRepository>()));
   gh.factory<_i877.AuthCubit>(() => _i877.AuthCubit(
         gh<_i1041.AuthRepository>(),
         gh<_i59.FirebaseAuth>(),
@@ -125,6 +129,10 @@ Future<_i174.GetIt> init(
       ));
   gh.factory<_i127.DreamHistoryCubit>(() => _i127.DreamHistoryCubit(
         gh<_i386.DreamHistoryRepository>(),
+        gh<_i877.AuthCubit>(),
+      ));
+  gh.factory<_i402.ProfileCubit>(() => _i402.ProfileCubit(
+        gh<_i155.ProfileRepository>(),
         gh<_i877.AuthCubit>(),
       ));
   return getIt;

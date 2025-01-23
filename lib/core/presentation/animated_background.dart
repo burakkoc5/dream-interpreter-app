@@ -55,18 +55,15 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
                 colors: isDarkMode
                     ? [
                         theme.colorScheme.surface.withOpacity(0.95),
-                        theme.colorScheme.surfaceContainerHighest
-                            .withOpacity(0.85),
-                        theme.colorScheme.surfaceContainerHighest
-                            .withOpacity(0.8),
                         theme.colorScheme.surface.withOpacity(0.9),
+                        theme.colorScheme.surface.withOpacity(0.85),
+                        theme.colorScheme.surface.withOpacity(0.95),
                       ]
                     : [
-                        theme.colorScheme.primary.withOpacity(0.15),
-                        theme.colorScheme.surface.withOpacity(0.2),
-                        theme.colorScheme.surfaceContainerHighest
-                            .withOpacity(0.18),
-                        theme.colorScheme.secondary.withOpacity(0.15),
+                        theme.colorScheme.surface.withOpacity(0.95),
+                        theme.colorScheme.surface.withOpacity(0.9),
+                        theme.colorScheme.surface.withOpacity(0.85),
+                        theme.colorScheme.surface.withOpacity(0.95),
                       ],
                 stops: const [0.0, 0.3, 0.7, 1.0],
               ),

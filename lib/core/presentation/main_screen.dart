@@ -49,65 +49,67 @@ class _MainScreenState extends State<MainScreen> {
     final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
         (context.watch<ThemeCubit>().state == ThemeMode.system &&
             brightness == Brightness.dark);
+    final keyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
           widget.child,
-          Positioned(
-            left: 8,
-            right: 8,
-            bottom: 8,
-            child: SafeArea(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                  child: Container(
-                    height: 72,
-                    decoration: BoxDecoration(
-                      color: (isDarkMode
-                              ? theme.colorScheme.surface
-                              : theme.colorScheme.surface)
-                          .withOpacity(isDarkMode ? 0.5 : 0.7),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: theme.colorScheme.primary.withOpacity(0.1),
-                        width: 1,
+          if (!keyboardVisible)
+            Positioned(
+              left: 8,
+              right: 8,
+              bottom: 0,
+              child: SafeArea(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                    child: Container(
+                      height: 72,
+                      decoration: BoxDecoration(
+                        color: (isDarkMode
+                                ? theme.colorScheme.surface
+                                : theme.colorScheme.surface)
+                            .withOpacity(isDarkMode ? 0.5 : 0.7),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: theme.colorScheme.primary.withOpacity(0.1),
+                          width: 1,
+                        ),
                       ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        NavItemWidget(
-                          icon: Icons.auto_awesome_outlined,
-                          selectedIcon: Icons.auto_awesome,
-                          label: t.dreamHistory.dreamHistory,
-                          isSelected: _selectedIndex == 0,
-                          onTap: () => _onItemTapped(0),
-                        ),
-                        NavItemWidget(
-                          icon: Icons.add_circle_outline,
-                          selectedIcon: Icons.add_circle,
-                          label: t.dreamEntry.newDream,
-                          isSelected: _selectedIndex == 1,
-                          onTap: () => _onItemTapped(1),
-                        ),
-                        NavItemWidget(
-                          icon: Icons.person_outline,
-                          selectedIcon: Icons.person,
-                          label: t.profile.profile,
-                          isSelected: _selectedIndex == 2,
-                          onTap: () => _onItemTapped(2),
-                        ),
-                      ],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          NavItemWidget(
+                            icon: Icons.auto_awesome_outlined,
+                            selectedIcon: Icons.auto_awesome,
+                            label: t.dreamHistory.dreamHistory,
+                            isSelected: _selectedIndex == 0,
+                            onTap: () => _onItemTapped(0),
+                          ),
+                          NavItemWidget(
+                            icon: Icons.add_circle_outline,
+                            selectedIcon: Icons.add_circle,
+                            label: t.dreamEntry.newDream,
+                            isSelected: _selectedIndex == 1,
+                            onTap: () => _onItemTapped(1),
+                          ),
+                          NavItemWidget(
+                            icon: Icons.person_outline,
+                            selectedIcon: Icons.person,
+                            label: t.profile.profile,
+                            isSelected: _selectedIndex == 2,
+                            onTap: () => _onItemTapped(2),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );

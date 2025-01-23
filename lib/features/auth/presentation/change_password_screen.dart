@@ -38,7 +38,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       type: ToastificationType.success,
       style: ToastificationStyle.flat,
       autoCloseDuration: const Duration(seconds: 3),
-      title: const Text('Success'),
+      title: Text(t.core.success),
       description: Text(message),
     );
   }

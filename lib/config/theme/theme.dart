@@ -13,8 +13,6 @@ class AppTheme {
   static const _darkBackgroundColor =
       Color(0xFF1A1625); // Deep mysterious background
   static const _accentColor = Color(0xFFFFA6B9); // Soft pink accent
-  static const _successColor = Color(0xFF6BCB77); // Soft green
-  static const _warningColor = Color(0xFFFFB347); // Soft orange
 
   /// Creates the light theme configuration for the application.
   static ThemeData lightTheme() {

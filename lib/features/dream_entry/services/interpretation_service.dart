@@ -3,24 +3,27 @@ import 'package:dream/core/di/injection.dart';
 import 'package:dream/features/dream_entry/services/openai_service.dart';
 import 'package:injectable/injectable.dart';
 import '../models/dream_entry_model.dart';
+import 'package:dream/features/profile/application/profile_cubit.dart';
 
 @singleton
 class InterpretationService {
   final OpenAIService _openAIService;
-
   final FirebaseFirestore _firebaseFirestore = getIt<FirebaseFirestore>();
 
   InterpretationService(this._openAIService);
 
   Future<String> interpretDream(String dreamContent) async {
     try {
-      final prompt = dreamContent;
+      final profile = getIt<ProfileCubit>().state.profile;
 
-      //final interpretation =
-      //final interpretation =
-      //await _openAIService.generateInterpretation(prompt);
-      final interpretation =
-          await _openAIService.generateMockInterpretation(dreamContent);
+      final interpretation = await _openAIService.generateMockInterpretation(
+        dreamContent,
+        gender: profile?.gender,
+        horoscope: profile?.horoscope,
+        occupation: profile?.occupation,
+        birthDate: profile?.birthDate,
+        interests: profile?.interests,
+      );
       return interpretation;
     } catch (e) {
       throw InterpretationException('Failed to interpret dream: $e');

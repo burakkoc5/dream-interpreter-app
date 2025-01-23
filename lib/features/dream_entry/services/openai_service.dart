@@ -13,8 +13,31 @@ class OpenAIService {
   OpenAIService() : apiKey = '';
 
   /// Generates dream interpretation using OpenAI API
-  Future<String> generateInterpretation(String dreamContent) async {
+  Future<String> generateInterpretation(
+    String dreamContent, {
+    String? gender,
+    String? horoscope,
+    String? occupation,
+    String? relationshipStatus,
+    DateTime? birthDate,
+    List<String>? interests,
+  }) async {
     try {
+      // Build personal context string
+      final List<String> personalContext = [];
+      if (gender != null) personalContext.add('Gender: $gender');
+      if (horoscope != null) personalContext.add('Zodiac Sign: $horoscope');
+      if (occupation != null) personalContext.add('Occupation: $occupation');
+      if (relationshipStatus != null)
+        personalContext.add('Relationship Status: $relationshipStatus');
+      if (birthDate != null) {
+        final age = DateTime.now().difference(birthDate).inDays ~/ 365;
+        personalContext.add('Age: $age years old');
+      }
+      if (interests != null && interests.isNotEmpty) {
+        personalContext.add('Interests: ${interests.join(", ")}');
+      }
+
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: {
@@ -26,19 +49,25 @@ class OpenAIService {
           'messages': [
             {
               'role': 'system',
-              'content': 'You are a dream interpretation expert.'
+              'content':
+                  '''You are a dream interpretation expert who provides personalized interpretations based on the dreamer's personal context.
+              Consider how their personal circumstances, life stage, and interests might influence the dream's meaning.'''
             },
             {
               'role': 'user',
               'content': '''
-              Analyze the following dream and provide an interpretation:
+              Personal Context:
+              ${personalContext.join('\n')}
+              
+              Analyze the following dream and provide a personalized interpretation:
               
               Dream: $dreamContent
               
               Please provide:
-              1. Key symbols and their meanings
-              2. Overall interpretation
-              3. Potential life connections
+              1. Key symbols and their meanings (considering personal context)
+              2. Overall interpretation (tailored to the individual's circumstances)
+              3. Potential life connections (relating to their current life situation)
+              4. Actionable insights (based on their interests and life stage)
               '''
             }
           ],
@@ -58,12 +87,21 @@ class OpenAIService {
     }
   }
 
-  Future<String> generateMockInterpretation(String dreamContent) async {
+  Future<String> generateMockInterpretation(
+    String dreamContent, {
+    String? gender,
+    String? horoscope,
+    String? occupation,
+    String? relationshipStatus,
+    DateTime? birthDate,
+    List<String>? interests,
+  }) async {
     return Future.delayed(Duration(seconds: 2), () {
       return '''
-      Key symbols: Water, boat, lighthouse
-      Overall interpretation: Dream suggests you are navigating through a difficult situation in your life. The water represents your emotions, the boat is your journey, and the lighthouse is a symbol of hope and guidance.
-      Potential life connections: The dream may be reflecting your current struggles and the need for direction and support.
+      Key symbols: Water, boat, lighthouse (interpreted in context of ${occupation ?? 'your'} career journey)
+      Overall interpretation: Given your ${relationshipStatus ?? 'current'} status and interest in ${interests?.firstOrNull ?? 'personal growth'}, this dream suggests you are navigating through a significant life transition.
+      Potential life connections: As a ${horoscope ?? 'person'} in ${occupation ?? 'your field'}, the dream may reflect your professional aspirations and emotional journey.
+      Actionable insights: Consider exploring ${interests?.firstOrNull ?? 'meditation'} to help navigate this period of change.
       ''';
     });
   }

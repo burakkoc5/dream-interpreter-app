@@ -50,6 +50,7 @@ class RouteGuard {
       if (isAuthRoute) {
         return null;
       }
+      print('RouteGuard - redirecting to login');
       return AppRoute.login;
     }
 
