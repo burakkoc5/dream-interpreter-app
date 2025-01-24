@@ -68,7 +68,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: theme.colorScheme.primary.withOpacity(0.1),
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
               blurRadius: 24,
               offset: const Offset(0, 8),
             ),

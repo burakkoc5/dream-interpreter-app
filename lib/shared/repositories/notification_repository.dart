@@ -1,12 +1,17 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:dream/shared/services/notification_servicess.dart';
 import 'package:dream/shared/services/platform_notification_settings.dart';
 import 'package:dream/shared/services/time_zone_service.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:injectable/injectable.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
+import 'package:dream/core/routing/app_route_names.dart';
+import 'package:dream/main.dart';
 
 /// Main notification service implementing the interface
 @singleton
@@ -23,6 +28,7 @@ class NotificationRepository implements INotificationService {
   static const String _channelName = 'Dream Reminders';
   static const String _channelDescription =
       'Notifications for dream recording reminders';
+  static const int _notificationId = 0; // Fixed notification ID for reminders
 
   NotificationRepository(
     this._notifications,
@@ -95,6 +101,7 @@ class NotificationRepository implements INotificationService {
           showBadge: true,
         ),
       );
+      debugPrint('Notification channel created');
     }
   }
 
@@ -102,11 +109,9 @@ class NotificationRepository implements INotificationService {
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-    print('NotificationRepository: Starting initialization');
+    debugPrint('NotificationRepository: Starting initialization');
     try {
       await _timeZoneService.initialize();
-      final settings = await _platformSettings.getSettings();
-
       // Ensure proper initialization with sound and icon
       final initializationSettingsAndroid =
           AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -123,14 +128,19 @@ class NotificationRepository implements INotificationService {
       final success = await _notifications.initialize(
         initializationSettings,
         onDidReceiveNotificationResponse: (details) {
-          print(
+          debugPrint(
               'NotificationRepository: Notification received: ${details.payload}');
+          // Get the BuildContext from the navigator key and navigate
+          final context = navigatorKey.currentContext;
+          if (context != null) {
+            context.go('/dream-entry');
+          }
         },
       );
-      print('NotificationRepository: Initialization result: $success');
+      debugPrint('NotificationRepository: Initialization result: $success');
 
       await _createNotificationChannel();
-      print('NotificationRepository: Notification channel created');
+      debugPrint('NotificationRepository: Notification channel created');
 
       // Request permissions on first app launch
       final permissionsRequested =
@@ -145,12 +155,42 @@ class NotificationRepository implements INotificationService {
       }
 
       _isInitialized = true;
-      print('NotificationRepository: Initialization completed');
+      debugPrint('NotificationRepository: Initialization completed');
     } catch (e) {
-      print('NotificationRepository: Initialization failed: $e');
+      debugPrint('NotificationRepository: Initialization failed: $e');
       _isInitialized = false;
       rethrow;
     }
+  }
+
+  void _logDebug(String message) {
+    debugPrint('🔔 NotificationDebug: $message');
+  }
+
+  Future<bool> isSystemNotificationsEnabled() async {
+    if (Platform.isIOS) {
+      final iosPlugin = _notifications.resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>();
+      if (iosPlugin == null) return false;
+
+      final result = await iosPlugin.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      // On iOS, if we can request permissions, it means notifications are enabled
+      return result != null;
+    } else if (Platform.isAndroid) {
+      final androidPlugin =
+          _notifications.resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>();
+      if (androidPlugin == null) return false;
+
+      final areNotificationsEnabled =
+          await androidPlugin.areNotificationsEnabled();
+      return areNotificationsEnabled ?? false;
+    }
+    return false;
   }
 
   @override
@@ -158,48 +198,56 @@ class NotificationRepository implements INotificationService {
     required DateTime time,
   }) async {
     if (!_isInitialized) {
-      print('NotificationRepository: Not initialized, initializing now...');
+      _logDebug('Not initialized, initializing now...');
       await initialize();
     }
 
-    print('NotificationRepository: Scheduling reminder for time: $time');
+    _logDebug('========================');
+    _logDebug('Starting notification scheduling process');
+    _logDebug('Target time: $time');
+    _logDebug('Current time: ${DateTime.now()}');
 
-    // Check permissions first
+    // Check system notification settings first
+    final systemNotificationsEnabled = await isSystemNotificationsEnabled();
+    _logDebug('System notifications enabled: $systemNotificationsEnabled');
+
+    if (!systemNotificationsEnabled) {
+      _logDebug('❌ System notifications are disabled');
+      await cancelAllReminders();
+      return;
+    }
+
+    // Check permissions
     final hasPermissions = await checkNotificationPermissions();
-    print(
-        'NotificationRepository: Has notification permissions: $hasPermissions');
+    _logDebug('Initial permission check: $hasPermissions');
+
     if (!hasPermissions) {
-      print('NotificationRepository: Missing required permissions');
-      await _checkAndRequestAndroidPermissions();
+      _logDebug('Missing permissions, requesting now...');
+      if (Platform.isIOS) {
+        await _platformSettings.requestPermissions(_notifications);
+      } else {
+        await _checkAndRequestAndroidPermissions();
+      }
       final newPermissions = await checkNotificationPermissions();
-      print(
-          'NotificationRepository: Permissions after request: $newPermissions');
+      _logDebug('Permissions after request: $newPermissions');
       if (!newPermissions) {
-        print(
-            'NotificationRepository: Failed to get permissions, cannot schedule notification');
+        _logDebug('❌ Failed to get permissions, cannot schedule notification');
+        await cancelAllReminders();
         return;
       }
     }
 
     // Cancel existing reminders before scheduling new one
-    print('NotificationRepository: Cancelling existing reminders');
+    _logDebug('Cancelling existing reminders');
     await cancelAllReminders();
 
     final scheduledDate = await _timeZoneService.getScheduledDate(time);
-    print('NotificationRepository: Converted to timezone date: $scheduledDate');
+    _logDebug('Timezone converted date: $scheduledDate');
 
     try {
-      // Verify Android plugin is available
-      final androidPlugin =
-          _notifications.resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>();
-      if (androidPlugin == null) {
-        print('NotificationRepository: Android plugin not available');
-        return;
-      }
-
+      _logDebug('Attempting to schedule notification...');
       await _notifications.zonedSchedule(
-        0,
+        _notificationId, // Use fixed notification ID
         'Dream Journal',
         'Time to record your dream!',
         scheduledDate,
@@ -210,14 +258,16 @@ class NotificationRepository implements INotificationService {
             channelDescription: _channelDescription,
             importance: Importance.high,
             priority: Priority.high,
-            enableVibration: true,
+            autoCancel: true,
+            icon: '@mipmap/ic_launcher',
+            largeIcon:
+                const DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
             enableLights: true,
             playSound: true,
-            icon: '@mipmap/ic_launcher',
+            showWhen: true,
             category: AndroidNotificationCategory.reminder,
             visibility: NotificationVisibility.public,
-            fullScreenIntent:
-                true, // Add this to ensure notification shows even on locked screen
+            fullScreenIntent: true,
           ),
           iOS: const DarwinNotificationDetails(
             presentAlert: true,
@@ -230,19 +280,28 @@ class NotificationRepository implements INotificationService {
             UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.time,
       );
-      print('NotificationRepository: Successfully scheduled notification');
+      _logDebug('✅ Successfully scheduled notification');
 
       // Verify the notification was scheduled
-      final pendingNotifs = await androidPlugin.pendingNotificationRequests();
-      print(
-          'NotificationRepository: Pending notifications: ${pendingNotifs.length}');
-      if (pendingNotifs.isEmpty) {
-        print(
-            'NotificationRepository: Warning - No pending notifications found after scheduling');
+      if (Platform.isAndroid) {
+        final androidPlugin =
+            _notifications.resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>();
+        if (androidPlugin != null) {
+          final pendingNotifs =
+              await androidPlugin.pendingNotificationRequests();
+          _logDebug('Number of pending notifications: ${pendingNotifs.length}');
+        }
       }
+
+      _logDebug('========================');
     } catch (e, stackTrace) {
-      print('NotificationRepository: Failed to schedule notification: $e');
-      print('NotificationRepository: Stack trace: $stackTrace');
+      _logDebug('❌ Failed to schedule notification');
+      _logDebug('Error: $e');
+      _logDebug('Stack trace: $stackTrace');
+      _logDebug('========================');
+      await cancelAllReminders();
+      rethrow;
     }
   }
 

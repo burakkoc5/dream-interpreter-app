@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import '../models/user_model.dart';
 import '../services/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart' show UserCredential;
 import 'package:firebase_auth/firebase_auth.dart' show EmailAuthProvider;
+import 'package:flutter/foundation.dart';
 
 /// Repository handling authentication operations.
 @injectable
@@ -24,6 +26,7 @@ class AuthRepository {
     return UserModel(
       id: userCredential.user!.uid,
       email: userCredential.user!.email!,
+      emailVerified: userCredential.user!.emailVerified,
     );
   }
 
@@ -39,12 +42,29 @@ class AuthRepository {
 
   /// Signs up a new user with email and password (returns UserCredential).
   Future<UserCredential> signUp(String email, String password) {
-    print('Signing up user with email: $email');
+    debugPrint('Signing up user with email: $email');
     return _authService.createUserWithEmailAndPassword(email, password);
   }
 
   /// Get the authentication status.
   bool get isAuthenticated => _authService.isAuthenticated;
+
+  /// Check if the current user's email is verified
+  bool get isEmailVerified => _authService.currentUser?.emailVerified ?? false;
+
+  /// Send email verification to current user
+  Future<void> sendEmailVerification() async {
+    await _authService.sendEmailVerification();
+  }
+
+  /// Reload the current user to get the latest verification status
+  Future<void> reloadUser() async {
+    await _authService.reloadUser();
+  }
+
+  /// Update user's email verification status in Firestore
+  Future<void> updateEmailVerificationStatus() =>
+      _authService.updateEmailVerificationStatus();
 
   Future<void> changePassword({
     required String currentPassword,
@@ -57,5 +77,9 @@ class AuthRepository {
     );
     await user.reauthenticateWithCredential(credential);
     await user.updatePassword(newPassword);
+  }
+
+  Future<void> deleteAccount() async {
+    await _authService.deleteAccount();
   }
 }

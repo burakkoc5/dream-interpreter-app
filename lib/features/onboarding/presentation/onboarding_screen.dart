@@ -174,7 +174,7 @@ class _OnboardingPage extends StatelessWidget {
                 Text(
                   step.title,
                   style: theme.textTheme.displaySmall?.copyWith(
-                    color: theme.colorScheme.primary.withOpacity(0.9),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.9),
                     fontWeight: FontWeight.w900,
                     letterSpacing: -1.0,
                     height: 1.2,
@@ -186,7 +186,7 @@ class _OnboardingPage extends StatelessWidget {
                 Text(
                   step.subtitle,
                   style: theme.textTheme.bodyLarge?.copyWith(
-                    color: theme.colorScheme.onBackground.withOpacity(0.75),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
                     fontWeight: FontWeight.w500,
                     height: 1.5,
                     letterSpacing: 0.3,
@@ -220,7 +220,7 @@ class _PageIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         color: isActive
             ? theme.colorScheme.primary
-            : theme.colorScheme.primary.withOpacity(0.25),
+            : theme.colorScheme.primary.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(5),
       ),
     );

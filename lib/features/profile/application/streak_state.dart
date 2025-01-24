@@ -1,12 +1,27 @@
 import 'package:dream/features/profile/models/streak_model.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter/foundation.dart';
 
-part 'streak_state.freezed.dart';
+@immutable
+class StreakState {
+  final bool isLoading;
+  final StreakModel? streak;
+  final String? error;
 
-@freezed
-class StreakState with _$StreakState {
-  const factory StreakState({
-    @Default(true) bool isLoading,
+  const StreakState({
+    this.isLoading = false,
+    this.streak,
+    this.error,
+  });
+
+  StreakState copyWith({
+    bool? isLoading,
     StreakModel? streak,
-  }) = _StreakState;
+    String? error,
+  }) {
+    return StreakState(
+      isLoading: isLoading ?? this.isLoading,
+      streak: streak ?? this.streak,
+      error: error ?? this.error,
+    );
+  }
 }

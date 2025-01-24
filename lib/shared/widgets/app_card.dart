@@ -95,7 +95,7 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
                 boxShadow: [
                   // Ambient shadow
                   BoxShadow(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                     spreadRadius: 0,
@@ -104,7 +104,7 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
                   if (_isHovered)
                     BoxShadow(
                       color: theme.colorScheme.primary
-                          .withOpacity(0.2 * _glowAnimation.value),
+                          .withValues(alpha: 0.2 * _glowAnimation.value),
                       blurRadius: 16,
                       spreadRadius: 4 * _glowAnimation.value,
                     ),
@@ -124,20 +124,20 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          theme.cardTheme.color?.withOpacity(
-                                  widget.isGlassmorphic ? 0.7 : 0.95) ??
-                              Colors.white.withOpacity(
-                                  widget.isGlassmorphic ? 0.7 : 0.95),
-                          theme.cardTheme.color?.withOpacity(
-                                  widget.isGlassmorphic ? 0.5 : 0.85) ??
-                              Colors.white.withOpacity(
-                                  widget.isGlassmorphic ? 0.5 : 0.85),
+                          theme.cardTheme.color?.withValues(
+                                  alpha: widget.isGlassmorphic ? 0.7 : 0.95) ??
+                              Colors.white.withValues(
+                                  alpha: widget.isGlassmorphic ? 0.7 : 0.95),
+                          theme.cardTheme.color?.withValues(
+                                  alpha: widget.isGlassmorphic ? 0.5 : 0.85) ??
+                              Colors.white.withValues(
+                                  alpha: widget.isGlassmorphic ? 0.5 : 0.85),
                         ],
                         stops: const [0.0, 1.0],
                       ),
                       border: Border.all(
                         color: theme.colorScheme.primary
-                            .withOpacity(_isHovered ? 0.2 : 0.1),
+                            .withValues(alpha: _isHovered ? 0.2 : 0.1),
                         width: 1,
                       ),
                     ),
@@ -146,9 +146,10 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
                       child: InkWell(
                         onTap: widget.onTap,
                         borderRadius: BorderRadius.circular(radius),
-                        splashColor: theme.colorScheme.primary.withOpacity(0.1),
+                        splashColor:
+                            theme.colorScheme.primary.withValues(alpha: 0.1),
                         highlightColor:
-                            theme.colorScheme.primary.withOpacity(0.05),
+                            theme.colorScheme.primary.withValues(alpha: 0.05),
                         child: Padding(
                           padding: widget.padding,
                           child: widget.child,

@@ -13,11 +13,11 @@ import '../widgets/settings_item_widget.dart';
 import 'dart:ui';
 import 'package:dream/core/presentation/animated_background.dart';
 import 'package:dream/features/profile/application/streak_cubit.dart';
-import 'package:dream/features/profile/repository/streak_repository.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:dream/core/routing/app_route_names.dart';
+import 'package:dream/core/di/injection.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -35,11 +35,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     _statsCubit = context.read<StatsCubit>();
-    _streakCubit = StreakCubit(repository: StreakRepository());
+    _streakCubit = getIt<StreakCubit>();
 
     final userId = context.read<AuthCubit>().state.user?.id;
     if (userId != null) {
-      context.read<ProfileCubit>().loadProfile(userId);
       _statsCubit.loadStats(userId);
       _streakCubit.watchUserStreak(userId);
     }
@@ -113,7 +112,7 @@ class _ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
-            color: theme.colorScheme.surface.withOpacity(0.5),
+            color: theme.colorScheme.surface.withValues(alpha: 0.5),
           ),
         ),
       ),
@@ -257,6 +256,16 @@ class _ProfileContent extends StatelessWidget {
 
   final dynamic profile;
 
+  String _getTranslatedGender(String gender) {
+    final genderMap = {
+      'male': t.profile.personalization.genderOptions.male,
+      'female': t.profile.personalization.genderOptions.female,
+      'other': t.profile.personalization.genderOptions.other,
+      'preferNotToSay': t.profile.personalization.genderOptions.preferNotToSay,
+    };
+    return genderMap[gender] ?? gender;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -269,9 +278,7 @@ class _ProfileContent extends StatelessWidget {
         EditableProfileHeader(
           profile: profile,
           onDisplayNameChanged: (newName) {
-            context
-                .read<ProfileCubit>()
-                .updateDisplayName(newName, profile.userId);
+            context.read<ProfileCubit>().updateDisplayName(newName);
             _showSuccessToast(context, 'Username updated successfully');
           },
         ),
@@ -311,7 +318,7 @@ class _ProfileContent extends StatelessWidget {
                         visualDensity: VisualDensity.compact,
                         style: IconButton.styleFrom(
                           backgroundColor:
-                              theme.colorScheme.primary.withOpacity(0.1),
+                              theme.colorScheme.primary.withValues(alpha: 0.1),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -323,7 +330,7 @@ class _ProfileContent extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       color: theme.colorScheme.surfaceContainerHighest
-                          .withOpacity(0.5),
+                          .withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -332,7 +339,7 @@ class _ProfileContent extends StatelessWidget {
                           _buildInfoTile(
                             context,
                             t.profile.personalization.gender,
-                            profile.gender,
+                            _getTranslatedGender(profile.gender!),
                             Icons.person,
                             showDivider: profile.birthDate != null ||
                                 profile.horoscope != null ||
@@ -382,17 +389,19 @@ class _ProfileContent extends StatelessWidget {
                     Text(
                       t.profile.personalization.interests,
                       style: theme.textTheme.titleSmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Container(
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surfaceContainerHighest
-                            .withOpacity(0.5),
+                            .withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: theme.colorScheme.outline.withOpacity(0.2),
+                          color:
+                              theme.colorScheme.outline.withValues(alpha: 0.2),
                           width: 1,
                         ),
                       ),
@@ -411,8 +420,8 @@ class _ProfileContent extends StatelessWidget {
                               ),
                               backgroundColor: colorScheme.surface,
                               side: BorderSide(
-                                color:
-                                    theme.colorScheme.outline.withOpacity(0.2),
+                                color: theme.colorScheme.outline
+                                    .withValues(alpha: 0.2),
                               ),
                             ),
                         ],
@@ -444,7 +453,7 @@ class _ProfileContent extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.1),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -461,7 +470,8 @@ class _ProfileContent extends StatelessWidget {
                     Text(
                       label,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ),
                     Text(
@@ -480,7 +490,7 @@ class _ProfileContent extends StatelessWidget {
           Divider(
             height: 1,
             thickness: 1,
-            color: theme.colorScheme.outline.withOpacity(0.1),
+            color: theme.colorScheme.outline.withValues(alpha: 0.1),
           ),
       ],
     );

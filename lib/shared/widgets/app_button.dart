@@ -98,7 +98,7 @@ class AppButton extends StatelessWidget {
           backgroundColor: theme.colorScheme.primary,
           foregroundColor: theme.colorScheme.onPrimary,
           elevation: 4,
-          shadowColor: theme.colorScheme.primary.withOpacity(0.3),
+          shadowColor: theme.colorScheme.primary.withValues(alpha: 0.3),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(defaultRadius),
           ),
@@ -108,7 +108,7 @@ class AppButton extends StatelessWidget {
           backgroundColor: theme.colorScheme.secondary,
           foregroundColor: theme.colorScheme.onSecondary,
           elevation: 3,
-          shadowColor: theme.colorScheme.secondary.withOpacity(0.3),
+          shadowColor: theme.colorScheme.secondary.withValues(alpha: 0.3),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(defaultRadius),
           ),
@@ -118,7 +118,7 @@ class AppButton extends StatelessWidget {
           backgroundColor: theme.colorScheme.tertiary,
           foregroundColor: theme.colorScheme.onTertiary,
           elevation: 2,
-          shadowColor: theme.colorScheme.tertiary.withOpacity(0.3),
+          shadowColor: theme.colorScheme.tertiary.withValues(alpha: 0.3),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(defaultRadius),
           ),
@@ -131,13 +131,13 @@ class AppButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(defaultRadius),
             side: BorderSide(
-              color: theme.colorScheme.primary.withOpacity(0.5),
+              color: theme.colorScheme.primary.withValues(alpha: 0.5),
               width: 1,
             ),
           ),
         ).copyWith(
           overlayColor: WidgetStateProperty.resolveWith((states) {
-            return theme.colorScheme.primary.withOpacity(0.1);
+            return theme.colorScheme.primary.withValues(alpha: 0.1);
           }),
         );
     }

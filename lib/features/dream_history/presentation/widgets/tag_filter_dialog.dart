@@ -17,13 +17,13 @@ class TagFilterDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    print(state.tagCounts);
+    debugPrint(state.tagCounts.toString());
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: BlocBuilder<DreamHistoryCubit, DreamHistoryState>(
         builder: (context, state) => AlertDialog(
-          backgroundColor: theme.colorScheme.surface.withOpacity(0.9),
+          backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.9),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),

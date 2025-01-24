@@ -56,8 +56,9 @@ class DreamFilterChips extends StatelessWidget {
           onSelected: (_) => context.read<DreamHistoryCubit>().updateFilter(
                 isSelected ? t.dreamFilterOptions.all : filter,
               ),
-          selectedColor: theme.colorScheme.primaryContainer.withOpacity(0.8),
-          backgroundColor: theme.colorScheme.surface.withOpacity(0.2),
+          selectedColor:
+              theme.colorScheme.primaryContainer.withValues(alpha: 0.8),
+          backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.2),
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           visualDensity: VisualDensity.compact,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -66,7 +67,7 @@ class DreamFilterChips extends StatelessWidget {
             side: BorderSide(
               color: isSelected
                   ? theme.colorScheme.primary
-                  : theme.colorScheme.primary.withOpacity(0.1),
+                  : theme.colorScheme.primary.withValues(alpha: 0.1),
               width: 0.5,
             ),
           ),

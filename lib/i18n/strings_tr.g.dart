@@ -41,6 +41,7 @@ class TranslationsTr implements Translations {
 	@override late final _TranslationsSearchDreamsTr searchDreams = _TranslationsSearchDreamsTr._(_root);
 	@override late final _TranslationsDreamHistoryTr dreamHistory = _TranslationsDreamHistoryTr._(_root);
 	@override late final _TranslationsProfileTr profile = _TranslationsProfileTr._(_root);
+	@override late final _TranslationsCommonTr common = _TranslationsCommonTr._(_root);
 }
 
 // Path: core
@@ -54,6 +55,8 @@ class _TranslationsCoreTr implements TranslationsCoreEn {
 	@override late final _TranslationsCoreModeTr mode = _TranslationsCoreModeTr._(_root);
 	@override late final _TranslationsCoreErrorsTr errors = _TranslationsCoreErrorsTr._(_root);
 	@override String get success => 'Başarılı';
+	@override late final _TranslationsCoreEmailVerificationTr emailVerification = _TranslationsCoreEmailVerificationTr._(_root);
+	@override late final _TranslationsCoreEmailVerificationDialogTr emailVerificationDialog = _TranslationsCoreEmailVerificationDialogTr._(_root);
 }
 
 // Path: registration
@@ -164,6 +167,21 @@ class _TranslationsProfileTr implements TranslationsProfileEn {
 	@override String get turkish => 'Türkçe';
 	@override String get german => 'Almanca';
 	@override late final _TranslationsProfileReminderTr reminder = _TranslationsProfileReminderTr._(_root);
+	@override late final _TranslationsProfileDeleteAccountTr deleteAccount = _TranslationsProfileDeleteAccountTr._(_root);
+}
+
+// Path: common
+class _TranslationsCommonTr implements TranslationsCommonEn {
+	_TranslationsCommonTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => 'İptal';
+	@override String get confirm => 'Onayla';
+	@override String get success => 'Başarılı';
+	@override String get error => 'Hata';
+	@override String get loading => 'Yükleniyor...';
 }
 
 // Path: core.mode
@@ -194,6 +212,38 @@ class _TranslationsCoreErrorsTr implements TranslationsCoreErrorsEn {
 	@override String get unknown => 'E-posta veya şifre yanlış';
 	@override String get tryAgain => 'Lütfen tekrar deneyin';
 	@override String get userNotAuthenticated => 'Kullanıcı doğrulanamadı';
+}
+
+// Path: core.emailVerification
+class _TranslationsCoreEmailVerificationTr implements TranslationsCoreEmailVerificationEn {
+	_TranslationsCoreEmailVerificationTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'E-postanızı Doğrulayın';
+	@override String get message => 'E-posta adresinize bir doğrulama e-postası gönderildi. Lütfen devam etmek için e-postanızı doğrulayın.';
+	@override String get continue_ => 'Yine de Devam Et';
+	@override String get resend => 'E-postayı Tekrar Gönder';
+	@override String get resent => 'Doğrulama e-postası tekrar gönderildi';
+}
+
+// Path: core.emailVerificationDialog
+class _TranslationsCoreEmailVerificationDialogTr implements TranslationsCoreEmailVerificationDialogEn {
+	_TranslationsCoreEmailVerificationDialogTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get notVerifiedTitle => 'E-posta Doğrulanmadı';
+	@override String get verifyTitle => 'E-postanızı Doğrulayın';
+	@override String get notVerifiedMessage => 'Lütfen giriş yapmadan önce e-postanızı doğrulayın. Doğrulama bağlantısı için gelen kutunuzu kontrol edin.';
+	@override String verifyMessage({required Object email}) => '${email} adresine bir doğrulama e-postası gönderildi. Lütfen devam etmek için e-postanızı doğrulayın.';
+	@override String get needVerification => 'Yeni bir doğrulama e-postasına mı ihtiyacınız var?';
+	@override String get checkInbox => 'Doğrulama bağlantısı için gelen kutunuzu ve spam klasörünüzü kontrol edin.';
+	@override String get cancel => 'İptal';
+	@override String get resend => 'Tekrar Gönder';
+	@override String get goToLogin => 'Girişe Git';
 }
 
 // Path: registration.email
@@ -310,13 +360,14 @@ class _TranslationsDreamEntryDreamFormTr implements TranslationsDreamEntryDreamF
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get record => 'Rüyanızı Kaydedin';
+	@override String get record => 'Rüyanı Kaydet';
 	@override String get content => 'Rüya İçeriği';
-	@override String get contentHint => 'Lütfen rüya içeriğinizi girin';
-	@override String get getInterpretation => 'Yorum Al';
-	@override String get noAttemptsLeft => 'Bugün için hakkınız kalmamıştır. Rüya yorumu almak için bir video izleyin.';
-	@override String get watchAdError => 'Lütfen bir video izleyin, rüya yorumu almak için.';
+	@override String get contentHint => 'Lütfen rüyanızı girin';
+	@override String get getInterpretation => 'Yorumla';
+	@override String get noAttemptsLeft => 'Bugün için kalan hakkınız yok. Daha fazla rüya yorumlamak için reklam izleyin.';
+	@override String get watchAdError => 'Bugün daha fazla rüya yorumlamak için lütfen reklamı izleyin.';
 	@override String get dreamSaved => 'Rüya başarıyla kaydedildi';
+	@override String get remainingAttempts => 'Bugün kalan hakkınız';
 }
 
 // Path: dreamEntry.interpretation
@@ -377,6 +428,18 @@ class _TranslationsProfileReminderTr implements TranslationsProfileReminderEn {
 	@override String get saveButton => 'Hatırlatmayı Kaydet';
 	@override String get skipButton => 'Şimdilik Geç';
 	@override String get savedSuccess => 'Hatırlatma ayarları başarıyla kaydedildi';
+}
+
+// Path: profile.deleteAccount
+class _TranslationsProfileDeleteAccountTr implements TranslationsProfileDeleteAccountEn {
+	_TranslationsProfileDeleteAccountTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Hesabınızı Sil';
+	@override String get message => 'Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tüm verilerinizi (rüyalar, yorumlar ve ayarlar dahil) kalıcı olarak silecektir.';
+	@override String get confirm => 'Evet, Sil';
 }
 
 // Path: registration.password.changePassword
@@ -519,6 +582,20 @@ extension on TranslationsTr {
 			case 'core.errors.tryAgain': return 'Lütfen tekrar deneyin';
 			case 'core.errors.userNotAuthenticated': return 'Kullanıcı doğrulanamadı';
 			case 'core.success': return 'Başarılı';
+			case 'core.emailVerification.title': return 'E-postanızı Doğrulayın';
+			case 'core.emailVerification.message': return 'E-posta adresinize bir doğrulama e-postası gönderildi. Lütfen devam etmek için e-postanızı doğrulayın.';
+			case 'core.emailVerification.continue_': return 'Yine de Devam Et';
+			case 'core.emailVerification.resend': return 'E-postayı Tekrar Gönder';
+			case 'core.emailVerification.resent': return 'Doğrulama e-postası tekrar gönderildi';
+			case 'core.emailVerificationDialog.notVerifiedTitle': return 'E-posta Doğrulanmadı';
+			case 'core.emailVerificationDialog.verifyTitle': return 'E-postanızı Doğrulayın';
+			case 'core.emailVerificationDialog.notVerifiedMessage': return 'Lütfen giriş yapmadan önce e-postanızı doğrulayın. Doğrulama bağlantısı için gelen kutunuzu kontrol edin.';
+			case 'core.emailVerificationDialog.verifyMessage': return ({required Object email}) => '${email} adresine bir doğrulama e-postası gönderildi. Lütfen devam etmek için e-postanızı doğrulayın.';
+			case 'core.emailVerificationDialog.needVerification': return 'Yeni bir doğrulama e-postasına mı ihtiyacınız var?';
+			case 'core.emailVerificationDialog.checkInbox': return 'Doğrulama bağlantısı için gelen kutunuzu ve spam klasörünüzü kontrol edin.';
+			case 'core.emailVerificationDialog.cancel': return 'İptal';
+			case 'core.emailVerificationDialog.resend': return 'Tekrar Gönder';
+			case 'core.emailVerificationDialog.goToLogin': return 'Girişe Git';
 			case 'registration.welcomeText': return 'Tekrar Hoş Geldiniz';
 			case 'registration.email.emailText': return 'E-posta';
 			case 'registration.email.emailHint': return 'Lütfen e-postanızı girin';
@@ -576,13 +653,14 @@ extension on TranslationsTr {
 			case 'dreamEntry.dreamDetails.addTags': return 'Etiket Ekle';
 			case 'dreamEntry.dreamDetails.moodRating': return 'Duygu Derecesi';
 			case 'dreamEntry.dreamDetails.confirmButton': return 'Onayla';
-			case 'dreamEntry.dreamForm.record': return 'Rüyanızı Kaydedin';
+			case 'dreamEntry.dreamForm.record': return 'Rüyanı Kaydet';
 			case 'dreamEntry.dreamForm.content': return 'Rüya İçeriği';
-			case 'dreamEntry.dreamForm.contentHint': return 'Lütfen rüya içeriğinizi girin';
-			case 'dreamEntry.dreamForm.getInterpretation': return 'Yorum Al';
-			case 'dreamEntry.dreamForm.noAttemptsLeft': return 'Bugün için hakkınız kalmamıştır. Rüya yorumu almak için bir video izleyin.';
-			case 'dreamEntry.dreamForm.watchAdError': return 'Lütfen bir video izleyin, rüya yorumu almak için.';
+			case 'dreamEntry.dreamForm.contentHint': return 'Lütfen rüyanızı girin';
+			case 'dreamEntry.dreamForm.getInterpretation': return 'Yorumla';
+			case 'dreamEntry.dreamForm.noAttemptsLeft': return 'Bugün için kalan hakkınız yok. Daha fazla rüya yorumlamak için reklam izleyin.';
+			case 'dreamEntry.dreamForm.watchAdError': return 'Bugün daha fazla rüya yorumlamak için lütfen reklamı izleyin.';
 			case 'dreamEntry.dreamForm.dreamSaved': return 'Rüya başarıyla kaydedildi';
+			case 'dreamEntry.dreamForm.remainingAttempts': return 'Bugün kalan hakkınız';
 			case 'dreamEntry.interpretation.title': return 'Rüya Yorumu';
 			case 'dreamEntry.interpretation.interpretationText': return 'Yorum';
 			case 'dreamEntry.interpretation.saveButton': return 'Yorumu Kaydet';
@@ -690,6 +768,14 @@ extension on TranslationsTr {
 			case 'profile.reminder.saveButton': return 'Hatırlatmayı Kaydet';
 			case 'profile.reminder.skipButton': return 'Şimdilik Geç';
 			case 'profile.reminder.savedSuccess': return 'Hatırlatma ayarları başarıyla kaydedildi';
+			case 'profile.deleteAccount.title': return 'Hesabınızı Sil';
+			case 'profile.deleteAccount.message': return 'Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tüm verilerinizi (rüyalar, yorumlar ve ayarlar dahil) kalıcı olarak silecektir.';
+			case 'profile.deleteAccount.confirm': return 'Evet, Sil';
+			case 'common.cancel': return 'İptal';
+			case 'common.confirm': return 'Onayla';
+			case 'common.success': return 'Başarılı';
+			case 'common.error': return 'Hata';
+			case 'common.loading': return 'Yükleniyor...';
 			default: return null;
 		}
 	}

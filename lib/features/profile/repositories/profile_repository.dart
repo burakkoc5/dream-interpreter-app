@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dream/core/di/injection.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import '../models/profile_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,29 +14,40 @@ class ProfileRepository {
   ProfileRepository(this._firestore);
 
   Stream<Profile> getProfile(String userId) {
-    print('ProfileRepository: Getting profile for user $userId');
-    (_firestore
-        .collection('users')
-        .doc(userId)
-        .snapshots()
-        .length
-        .then((value) => print('ProfileRepository: Profile length: $value')));
+    debugPrint('ProfileRepository: Getting profile for user $userId');
     return _firestore
         .collection('users')
         .doc(userId)
         .snapshots()
-        .map((doc) => Profile.fromJson(doc.data()!));
+        .handleError((error, stackTrace) {
+      debugPrint('ProfileRepository: Error getting profile: $error');
+      if (error is FirebaseException && error.code == 'permission-denied') {
+        throw Exception('User not authenticated or email not verified');
+      }
+      throw error;
+    }).map((doc) {
+      if (!doc.exists) {
+        throw Exception('Profile not found');
+      }
+      try {
+        return Profile.fromJson(doc.data()!);
+      } catch (e) {
+        debugPrint('ProfileRepository: Error parsing profile: $e');
+        rethrow;
+      }
+    });
   }
 
   Future<void> updateProfile(Profile profile) async {
+    debugPrint('ProfileRepository: Updating profile: ${profile.toJson()}');
     await _firestore
         .collection('users')
         .doc(profile.userId)
-        .update(profile.toJson());
+        .set(profile.toJson(), SetOptions(merge: true));
   }
 
   Future<void> updateProfilePreferences(Map<String, dynamic> data) async {
-    print('ProfileRepository: Updating profile preferences');
+    debugPrint('ProfileRepository: Updating profile preferences');
     final userId = _auth.currentUser?.uid;
     if (userId == null) throw Exception('User not authenticated');
 
@@ -47,17 +59,17 @@ class ProfileRepository {
     required String email,
   }) async {
     try {
-      print('ProfileRepository: Starting profile creation for user $userId');
+      debugPrint(
+          'ProfileRepository: Starting profile creation for user $userId');
 
-      final now = FieldValue.serverTimestamp();
-
-      await _firestore.collection('users').doc(userId).set({
+      final now = DateTime.now();
+      final data = {
         'userId': userId,
         'email': email,
-        'displayName': null,
-        'photoUrl': null, // We'll update this when user selects a photo
-        'createdAt': now,
-        'lastActive': now,
+        'displayName': email.split('@').first, // Set a default display name
+        'photoUrl': null,
+        'createdAt': Timestamp.fromDate(now),
+        'lastActive': Timestamp.fromDate(now),
         'notificationsEnabled': false,
         'preferences': {},
         'gender': null,
@@ -67,13 +79,20 @@ class ProfileRepository {
         'birthDate': null,
         'interests': <String>[],
         'hasCompletedPersonalization': false,
-      });
+        'remainingDailyAttempts': 2,
+        'lastAttemptsResetDate': Timestamp.fromDate(now),
+      };
 
-      print('ProfileRepository: Profile created successfully for user $userId');
+      // Use set with merge to avoid overwriting if document already exists
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .set(data, SetOptions(merge: true));
 
-      //return Profile.fromJson(Map<String, dynamic>.from(data));
+      debugPrint(
+          'ProfileRepository: Profile created successfully for user $userId');
     } catch (e) {
-      print('ProfileRepository: Error creating profile: $e');
+      debugPrint('ProfileRepository: Error creating profile: $e');
       rethrow;
     }
   }
@@ -93,6 +112,6 @@ class ProfileRepository {
         .collection('users')
         .doc(user.uid)
         .update({'displayName': newName});
-    print('ProfileRepository: Display name updated successfully');
+    debugPrint('ProfileRepository: Display name updated successfully');
   }
 }

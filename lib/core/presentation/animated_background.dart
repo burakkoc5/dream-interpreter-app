@@ -54,16 +54,16 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
                 end: const Alignment(1, 1),
                 colors: isDarkMode
                     ? [
-                        theme.colorScheme.surface.withOpacity(0.95),
-                        theme.colorScheme.surface.withOpacity(0.9),
-                        theme.colorScheme.surface.withOpacity(0.85),
-                        theme.colorScheme.surface.withOpacity(0.95),
+                        theme.colorScheme.surface.withValues(alpha: 0.95),
+                        theme.colorScheme.surface.withValues(alpha: 0.9),
+                        theme.colorScheme.surface.withValues(alpha: 0.85),
+                        theme.colorScheme.surface.withValues(alpha: 0.95),
                       ]
                     : [
-                        theme.colorScheme.surface.withOpacity(0.95),
-                        theme.colorScheme.surface.withOpacity(0.9),
-                        theme.colorScheme.surface.withOpacity(0.85),
-                        theme.colorScheme.surface.withOpacity(0.95),
+                        theme.colorScheme.surface.withValues(alpha: 0.95),
+                        theme.colorScheme.surface.withValues(alpha: 0.9),
+                        theme.colorScheme.surface.withValues(alpha: 0.85),
+                        theme.colorScheme.surface.withValues(alpha: 0.95),
                       ],
                 stops: const [0.0, 0.3, 0.7, 1.0],
               ),
@@ -94,19 +94,20 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
                       ),
                       colors: isDarkMode
                           ? [
-                              theme.colorScheme.surface.withOpacity(0.95),
+                              theme.colorScheme.surface.withValues(alpha: 0.95),
                               theme.colorScheme.surfaceContainerHighest
-                                  .withOpacity(0.85),
+                                  .withValues(alpha: 0.85),
                               theme.colorScheme.surfaceContainerHighest
-                                  .withOpacity(0.8),
-                              theme.colorScheme.surface.withOpacity(0.9),
+                                  .withValues(alpha: 0.8),
+                              theme.colorScheme.surface.withValues(alpha: 0.9),
                             ]
                           : [
-                              theme.colorScheme.primary.withOpacity(0.15),
-                              theme.colorScheme.surface.withOpacity(0.2),
+                              theme.colorScheme.primary.withValues(alpha: 0.15),
+                              theme.colorScheme.surface.withValues(alpha: 0.2),
                               theme.colorScheme.surfaceContainerHighest
-                                  .withOpacity(0.18),
-                              theme.colorScheme.secondary.withOpacity(0.15),
+                                  .withValues(alpha: 0.18),
+                              theme.colorScheme.secondary
+                                  .withValues(alpha: 0.15),
                             ],
                       stops: const [0.0, 0.3, 0.7, 1.0],
                     ),
@@ -122,7 +123,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
                   painter: StarfieldPainter(
                     color: isDarkMode
                         ? Colors.white
-                        : theme.colorScheme.primary.withOpacity(0.8),
+                        : theme.colorScheme.primary.withValues(alpha: 0.8),
                     animation: _controller.value,
                     starCount: isDarkMode ? 200 : 150,
                     opacity: isDarkMode ? 0.5 : 0.8,
@@ -167,8 +168,8 @@ class StarfieldPainter extends CustomPainter {
       final yOffset = (animation * star.speed * size.height) % size.height;
       final y = (star.y * size.height + yOffset) % size.height;
       final paint = Paint()
-        ..color = color.withOpacity(
-          ((math.sin(animation * 2 * math.pi * star.speed +
+        ..color = color.withValues(
+          alpha: ((math.sin(animation * 2 * math.pi * star.speed +
                           star.brightness * 2 * math.pi) +
                       1) /
                   2 *

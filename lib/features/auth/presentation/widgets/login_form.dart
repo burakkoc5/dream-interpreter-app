@@ -74,10 +74,10 @@ class _LoginFormState extends State<LoginForm> {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withOpacity(0.8),
+        color: theme.colorScheme.surface.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: theme.colorScheme.primary.withOpacity(0.1),
+          color: theme.colorScheme.primary.withValues(alpha: 0.1),
         ),
       ),
       child: Form(
@@ -115,7 +115,7 @@ class _LoginFormState extends State<LoginForm> {
                 Text(
                   'Explore your dreams with AI',
                   style: theme.textTheme.bodyLarge?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.7),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -164,7 +164,7 @@ class _LoginFormState extends State<LoginForm> {
                   children: [
                     Expanded(
                       child: Divider(
-                        color: theme.colorScheme.primary.withOpacity(0.2),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.2),
                       ),
                     ),
                     Padding(
@@ -172,13 +172,14 @@ class _LoginFormState extends State<LoginForm> {
                       child: Text(
                         'OR',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.5),
                         ),
                       ),
                     ),
                     Expanded(
                       child: Divider(
-                        color: theme.colorScheme.primary.withOpacity(0.2),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.2),
                       ),
                     ),
                   ],

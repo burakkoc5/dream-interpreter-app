@@ -21,7 +21,7 @@ class DreamLoadingWidget extends StatelessWidget {
           Text(
             t.dreamEntry.interpretation.title,
             style: theme.textTheme.bodyLarge?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
         ],

@@ -11,6 +11,11 @@ import 'auth_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dream/features/profile/repositories/profile_repository.dart';
 import 'package:dream/features/profile/application/profile_cubit.dart';
+import 'package:dream/features/dream_entry/application/dream_entry_cubit.dart';
+import 'package:dream/features/dream_history/application/dream_history_cubit.dart';
+import 'package:dream/features/profile/application/stats_cubit.dart';
+import 'package:dream/features/profile/application/streak_cubit.dart';
+import 'package:dream/features/auth/presentation/widgets/email_verification_dialog.dart';
 
 @injectable
 class AuthCubit extends Cubit<AuthState> {
@@ -42,8 +47,9 @@ class AuthCubit extends Cubit<AuthState> {
 
     try {
       final user = await _authRepository.signIn(email, password);
-      debugPrint('AuthCubit - Sign in successful: ${user.id}');
-
+      debugPrint('AuthCubit: User signed in: ${user.id}');
+      debugPrint('AuthCubit: User signed in: ${user.email}');
+      debugPrint('AuthCubit: User signed in: ${user.emailVerified}');
       if (!context.mounted) return;
 
       // Wait for Firebase Auth state to be updated
@@ -62,17 +68,59 @@ class AuthCubit extends Cubit<AuthState> {
         );
       }
 
+      // Check email verification
+      await currentUser.reload();
+      if (!currentUser.emailVerified) {
+        emit(state.copyWith(isLoading: false));
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => EmailVerificationDialog(
+              email: email,
+              isSignIn: true,
+              onResendEmail: () async {
+                await currentUser.sendEmailVerification();
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                  showSuccessSnackBar(
+                    context,
+                    'Verification email sent',
+                  );
+                }
+              },
+            ),
+          );
+        }
+        return;
+      }
+
       emit(state.copyWith(
         user: UserModel(
-          id: currentUser.uid,
-          email: currentUser.email ?? email,
+          id: user.id,
+          email: user.email,
+          emailVerified: user.emailVerified,
         ),
         isLoading: false,
       ));
-      debugPrint('AuthCubit - Sign in successful: ${user.id}');
 
       if (!context.mounted) return;
-      context.go(AppRoute.dreamEntry);
+
+      // Check if personalization is completed
+      final profile = await _profileRepository.getProfile(user.id).first;
+      if (!profile.hasCompletedPersonalization) {
+        debugPrint(
+            'AuthCubit: Personalization not completed, navigating to personalization');
+        if (!context.mounted) return;
+
+        context.go(AppRoute.personalization);
+      } else {
+        debugPrint(
+            'AuthCubit: Personalization completed, navigating to dream entry');
+        if (!context.mounted) return;
+
+        context.go(AppRoute.dreamEntry);
+      }
     } catch (e) {
       debugPrint('AuthCubit - Sign in error: $e');
       String errorMessage = t.core.errors.unknown;
@@ -94,33 +142,16 @@ class AuthCubit extends Cubit<AuthState> {
           default:
             errorMessage = e.message ?? t.core.errors.unknown;
         }
-      } else if (e is AuthError) {
-        switch (e) {
-          case AuthError.userNotFound:
-            errorMessage = t.core.errors.userNotFound;
-            break;
-          case AuthError.wrongPassword:
-            errorMessage = t.core.errors.wrongPassword;
-            break;
-          case AuthError.invalidEmail:
-            errorMessage = t.core.errors.invalidEmail;
-            break;
-          default:
-            errorMessage = t.core.errors.unknown;
-        }
       }
 
       emit(state.copyWith(
         error: errorMessage,
         isLoading: false,
       ));
+      if (context.mounted) {
+        showErrorSnackBar(context, errorMessage);
+      }
     }
-  }
-
-  Future<void> signOut() async {
-    debugPrint('AuthCubit - Signing out');
-    await _authRepository.signOut();
-    emit(const AuthState());
   }
 
   Future<void> register({
@@ -136,30 +167,32 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
       );
 
+      // Send verification email
+      await userCredential.user?.sendEmailVerification();
+
       // Create initial profile and wait for it
       await _profileRepository.createInitialProfile(
         userId: userCredential.user!.uid,
         email: email,
       );
 
-      // Load profile into ProfileCubit
-      if (context.mounted) {
-        final profileCubit = context.read<ProfileCubit>();
-        profileCubit.loadProfile(userCredential.user!.uid);
-      }
-
-      final user = UserModel(
-        id: userCredential.user!.uid,
-        email: userCredential.user!.email ?? email,
-      );
+      // Sign out immediately after registration to force login after verification
+      await _auth.signOut();
 
       emit(state.copyWith(
         isLoading: false,
-        user: user,
+        user: null,
       ));
 
       if (context.mounted) {
-        context.go(AppRoute.personalization);
+        // Show email verification dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => EmailVerificationDialog(
+            email: email,
+          ),
+        );
       }
     } on FirebaseAuthException catch (e) {
       String errorMessage;
@@ -183,13 +216,120 @@ class AuthCubit extends Cubit<AuthState> {
         isLoading: false,
         error: errorMessage,
       ));
+      if (context.mounted) {
+        showErrorSnackBar(context, errorMessage);
+      }
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
         error: t.core.errors.unknown,
       ));
+      if (context.mounted) {
+        showErrorSnackBar(context, t.core.errors.unknown);
+      }
     }
   }
+
+  Future<void> signOut(BuildContext context) async {
+    try {
+      debugPrint('AuthCubit: Signing out');
+
+      // First emit unauthenticated state to prevent any subscriptions from trying to access data
+      emit(const AuthState(isInitializing: false));
+
+      // Then perform the actual sign out
+      await _authRepository.signOut();
+
+      // Only after sign out is complete, reset all states
+      if (context.mounted) {
+        try {
+          // Reset profile first since other cubits might depend on it
+          context.read<ProfileCubit>().reset();
+
+          // Reset other cubits
+          debugPrint('DreamEntryCubit: Resetting dream entry');
+          context.read<DreamEntryCubit>().reset();
+          debugPrint('DreamHistoryCubit: Resetting dream history');
+          context.read<DreamHistoryCubit>().reset();
+
+          debugPrint('StatsCubit: Resetting stats');
+          try {
+            context.read<StatsCubit>().reset();
+          } catch (e) {
+            debugPrint('Failed to reset StatsCubit: $e');
+          }
+
+          debugPrint('StreakCubit: Resetting streak');
+          try {
+            context.read<StreakCubit>().reset();
+          } catch (e) {
+            debugPrint('Failed to reset StreakCubit: $e');
+          }
+        } catch (e) {
+          debugPrint('Error resetting states: $e');
+          // Don't rethrow as we want to continue with navigation
+        }
+      }
+
+      // Finally navigate to login
+      if (context.mounted) {
+        debugPrint('Navigating to login');
+        context.go(AppRoute.login);
+      }
+    } catch (e) {
+      debugPrint('AuthCubit - Sign out error: $e');
+      // Even if there's an error, try to navigate to login
+      if (context.mounted) {
+        context.go(AppRoute.login);
+      }
+    }
+  }
+
+  Future<void> deleteAccount(BuildContext context) async {
+    try {
+      await _authRepository.deleteAccount();
+      if (!context.mounted) return;
+      context.go(AppRoute.login);
+    } catch (e) {
+      emit(state.copyWith(error: e.toString()));
+      if (context.mounted) {
+        showErrorSnackBar(context, e.toString());
+      }
+    }
+  }
+
+  /// Check email verification status and update if necessary
+  Future<void> checkEmailVerification() async {
+    if (state.user != null) {
+      await _authRepository.reloadUser();
+      if (_authRepository.isEmailVerified) {
+        await _authRepository.updateEmailVerificationStatus();
+      }
+    }
+  }
+
+  /// Resend verification email
+  Future<void> resendVerificationEmail(BuildContext context) async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        await user.sendEmailVerification();
+        if (context.mounted) {
+          showSuccessSnackBar(
+            context,
+            'Verification email sent',
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showErrorSnackBar(context, e.toString());
+      }
+    }
+  }
+
+  /// Get email verification status
+  bool get isEmailVerified => _authRepository.isEmailVerified;
 
   Future<void> resetPassword(String email) async {
     emit(state.copyWith(isLoading: true, error: null));
@@ -238,5 +378,23 @@ class AuthCubit extends Cubit<AuthState> {
         isLoading: false,
       ));
     }
+  }
+
+  void showErrorSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      ),
+    );
+  }
+
+  void showSuccessSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dream/core/di/injection.dart';
 import 'package:dream/features/auth/application/auth_cubit.dart';
 import 'package:dream/features/profile/repository/streak_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,7 @@ class DreamEntryCubit extends Cubit<DreamEntryState> {
 
   DreamEntryCubit(
       this._interpretationService, this._localStorageService, this._authCubit)
-      : _streakRepository = StreakRepository(),
+      : _streakRepository = getIt<StreakRepository>(),
         super(const DreamEntryState.initial());
 
   Future<void> interpretDream({

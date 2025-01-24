@@ -16,6 +16,7 @@ import 'package:dream/features/profile/presentation/profile_screen.dart';
 import 'package:dream/features/profile/presentation/reminder_settings_screen.dart';
 import 'package:dream/features/profile/presentation/settings_screen.dart';
 import 'package:dream/features/splash/presentation/splash_screen.dart';
+import 'package:dream/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -61,6 +62,7 @@ class AppRouter {
       : router = GoRouter(
           initialLocation: AppRoute.splash,
           redirect: RouteGuard.guard,
+          navigatorKey: navigatorKey,
           routes: [
             // Root route with auth check
             GoRoute(

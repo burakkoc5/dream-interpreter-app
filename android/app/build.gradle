@@ -32,6 +32,7 @@ android {
     }
 
     defaultConfig {
+        multiDexEnabled true
         applicationId = "com.burakkoc.dreamApp"
         minSdk = Math.max(flutter.minSdkVersion, 23)  // Updated for Firebase Auth compatibility
         targetSdk = flutter.targetSdkVersion
@@ -53,7 +54,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
     implementation 'com.google.android.gms:play-services-ads:22.6.0'
 }
 

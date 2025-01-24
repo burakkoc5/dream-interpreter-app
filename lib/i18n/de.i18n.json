@@ -17,7 +17,25 @@
       "tryAgain": "Bitte versuchen Sie es erneut",
       "userNotAuthenticated": "Benutzer konnte nicht authentifiziert werden"
     },
-    "success": "Erfolgreich"
+    "success": "Erfolgreich",
+    "emailVerification": {
+      "title": "E-Mail bestätigen",
+      "message": "Eine Bestätigungs-E-Mail wurde an Ihre E-Mail-Adresse gesendet. Bitte bestätigen Sie Ihre E-Mail, um fortzufahren.",
+      "continue_": "Trotzdem fortfahren",
+      "resend": "E-Mail erneut senden",
+      "resent": "Bestätigungs-E-Mail wurde erneut gesendet"
+    },
+    "emailVerificationDialog": {
+      "notVerifiedTitle": "E-Mail nicht verifiziert",
+      "verifyTitle": "E-Mail bestätigen",
+      "notVerifiedMessage": "Bitte bestätigen Sie Ihre E-Mail, bevor Sie sich anmelden. Überprüfen Sie Ihren Posteingang auf den Bestätigungslink.",
+      "verifyMessage": "Eine Bestätigungs-E-Mail wurde an $email gesendet. Bitte bestätigen Sie Ihre E-Mail, um fortzufahren.",
+      "needVerification": "Benötigen Sie eine neue Bestätigungs-E-Mail?",
+      "checkInbox": "Überprüfen Sie Ihren Posteingang und Spam-Ordner auf den Bestätigungslink.",
+      "cancel": "Abbrechen",
+      "resend": "Erneut senden",
+      "goToLogin": "Zur Anmeldung"
+    }
   },
   "registration": {
     "welcomeText": "Willkommen zurück",
@@ -100,13 +118,14 @@
       "confirmButton": "Bestätigen"
     },
     "dreamForm": {
-      "record": "Ihren Traum aufnehmen",
+      "record": "Traum aufzeichnen",
       "content": "Trauminhalt",
-      "contentHint": "Bitte geben Sie den Inhalt Ihres Traums ein",
+      "contentHint": "Bitte geben Sie Ihren Traum ein",
       "getInterpretation": "Interpretation erhalten",
-      "noAttemptsLeft": "Keine Versuche mehr für heute. Schauen Sie sich ein Video an, um mehr Träume zu interpretieren.",
-      "watchAdError": "Bitte schauen Sie sich das Video an, um mehr Träume zu interpretieren.",
-      "dreamSaved": "Traum erfolgreich gespeichert"
+      "noAttemptsLeft": "Keine Versuche mehr für heute. Sehen Sie sich eine Werbung an, um mehr Träume zu interpretieren.",
+      "watchAdError": "Bitte sehen Sie sich die Werbung an, um heute mehr Träume zu interpretieren.",
+      "dreamSaved": "Traum erfolgreich gespeichert",
+      "remainingAttempts": "Verbleibende Versuche heute"
     },
     "interpretation": {
       "title": "Traumdeutung",
@@ -238,6 +257,18 @@
       "saveButton": "Erinnerung speichern",
       "skipButton": "Jetzt überspringen",
       "savedSuccess": "Erinnerungseinstellungen erfolgreich gespeichert"
+    },
+    "deleteAccount": {
+      "title": "Konto löschen",
+      "message": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden und wird alle Ihre Daten einschließlich Träume, Deutungen und Einstellungen permanent löschen.",
+      "confirm": "Ja, löschen"
     }
+  },
+  "common": {
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "success": "Erfolgreich",
+    "error": "Fehler",
+    "loading": "Lädt..."
   }
 }

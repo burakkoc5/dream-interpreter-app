@@ -50,7 +50,7 @@ class RouteGuard {
       if (isAuthRoute) {
         return null;
       }
-      print('RouteGuard - redirecting to login');
+      debugPrint('RouteGuard - redirecting to login');
       return AppRoute.login;
     }
 
@@ -63,7 +63,7 @@ class RouteGuard {
     if (profileState.profile != null) {
       if (!profileState.profile!.hasCompletedPersonalization &&
           state.matchedLocation != AppRoute.personalization) {
-        print('RouteGuard - redirecting to personalization');
+        debugPrint('RouteGuard - redirecting to personalization');
         return AppRoute.personalization;
       }
     }

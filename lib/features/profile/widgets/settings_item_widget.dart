@@ -31,11 +31,11 @@ class SettingsItemWidget extends StatelessWidget {
 
         return Container(
           decoration: BoxDecoration(
-            color:
-                theme.colorScheme.surface.withOpacity(isDarkMode ? 0.4 : 0.7),
+            color: theme.colorScheme.surface
+                .withValues(alpha: isDarkMode ? 0.4 : 0.7),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: theme.colorScheme.primary.withOpacity(0.1),
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
               width: 1,
             ),
           ),
@@ -50,7 +50,7 @@ class SettingsItemWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.primary
-                            .withOpacity(isDarkMode ? 0.2 : 0.1),
+                            .withValues(alpha: isDarkMode ? 0.2 : 0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Icon(
@@ -79,7 +79,7 @@ class SettingsItemWidget extends StatelessWidget {
                 leading: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
@@ -104,11 +104,11 @@ class SettingsItemWidget extends StatelessWidget {
                     },
                     activeColor: theme.colorScheme.primary,
                     activeTrackColor:
-                        theme.colorScheme.primary.withOpacity(0.3),
+                        theme.colorScheme.primary.withValues(alpha: 0.3),
                     inactiveThumbColor:
-                        theme.colorScheme.onSurface.withOpacity(0.8),
+                        theme.colorScheme.onSurface.withValues(alpha: 0.8),
                     inactiveTrackColor:
-                        theme.colorScheme.onSurface.withOpacity(0.2),
+                        theme.colorScheme.onSurface.withValues(alpha: 0.2),
                   ),
                 ),
               ),
@@ -123,8 +123,8 @@ class SettingsItemWidget extends StatelessWidget {
                 trailing: Icon(
                   Icons.chevron_right,
                   color: profile.notificationsEnabled
-                      ? theme.colorScheme.onSurface.withOpacity(0.5)
-                      : theme.colorScheme.onSurface.withOpacity(0.2),
+                      ? theme.colorScheme.onSurface.withValues(alpha: 0.5)
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.2),
                 ),
               ),
               _buildDivider(context),
@@ -137,7 +137,7 @@ class SettingsItemWidget extends StatelessWidget {
                 leading: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
@@ -156,24 +156,24 @@ class SettingsItemWidget extends StatelessWidget {
                 trailing: Transform.scale(
                   scale: 0.8,
                   child: Switch.adaptive(
-                    value: profile.preferences['closeBackgroundAnimation']
+                    value: !(profile.preferences['closeBackgroundAnimation']
                             as bool? ??
-                        true,
+                        true),
                     onChanged: (enabled) {
                       context.read<ProfileCubit>().updateProfilePreferences({
                         'preferences': {
                           ...profile.preferences,
-                          'closeBackgroundAnimation': enabled,
+                          'closeBackgroundAnimation': !enabled,
                         }
                       });
                     },
                     activeColor: theme.colorScheme.primary,
                     activeTrackColor:
-                        theme.colorScheme.primary.withOpacity(0.3),
+                        theme.colorScheme.primary.withValues(alpha: 0.3),
                     inactiveThumbColor:
-                        theme.colorScheme.onSurface.withOpacity(0.8),
+                        theme.colorScheme.onSurface.withValues(alpha: 0.8),
                     inactiveTrackColor:
-                        theme.colorScheme.onSurface.withOpacity(0.2),
+                        theme.colorScheme.onSurface.withValues(alpha: 0.2),
                   ),
                 ),
               ),
@@ -195,13 +195,26 @@ class SettingsItemWidget extends StatelessWidget {
                 icon: Icons.logout,
                 title: t.profile.logout,
                 onTap: () async {
-                  await context.read<AuthCubit>().signOut();
+                  await context.read<AuthCubit>().signOut(context);
+                  debugPrint('AuthCubit: Signing out');
                   if (context.mounted) {
+                    debugPrint('DreamEntryCubit: Resetting dream entry');
                     context.read<DreamEntryCubit>().reset();
+                    debugPrint('DreamHistoryCubit: Resetting dream history');
                     context.read<DreamHistoryCubit>().reset();
+                    debugPrint('Navigating to login');
                     context.go(AppRoute.login);
                   }
                 },
+              ),
+              _buildDivider(context),
+              _buildSettingItem(
+                context,
+                icon: Icons.delete_forever_outlined,
+                title: t.profile.deleteAccount.title,
+                onTap: () => _showDeleteAccountConfirmation(context),
+                textColor: theme.colorScheme.error,
+                iconColor: theme.colorScheme.error,
               ),
             ],
           ),
@@ -210,15 +223,107 @@ class SettingsItemWidget extends StatelessWidget {
     );
   }
 
+  Future<void> _showDeleteAccountConfirmation(BuildContext context) async {
+    final theme = Theme.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        icon: Icon(
+          Icons.warning_rounded,
+          color: theme.colorScheme.error,
+          size: 32,
+        ),
+        title: Text(
+          t.profile.deleteAccount.title,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              t.profile.deleteAccount.message,
+              style: theme.textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.error.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                'This action cannot be undone.',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.error,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8, bottom: 8, left: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                OutlinedButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: theme.colorScheme.outline),
+                  ),
+                  child: Text(
+                    t.common.cancel,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                FilledButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop(true);
+                    if (context.mounted) {
+                      await context.read<AuthCubit>().deleteAccount(context);
+                    }
+                  },
+                  style: FilledButton.styleFrom(
+                    backgroundColor: theme.colorScheme.error,
+                    foregroundColor: theme.colorScheme.onError,
+                  ),
+                  child: Text(t.profile.deleteAccount.confirm),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && context.mounted) {
+      await context.read<AuthCubit>().deleteAccount(context);
+    }
+  }
+
   Widget _buildSettingItem(
     BuildContext context, {
     required IconData icon,
     required String title,
     VoidCallback? onTap,
     Widget? trailing,
+    Color? textColor,
+    Color? iconColor,
   }) {
     final theme = Theme.of(context);
     final isDisabled = onTap == null;
+    final effectiveTextColor = textColor ?? theme.colorScheme.onSurface;
+    final effectiveIconColor = iconColor ?? theme.colorScheme.primary;
 
     return ListTile(
       enabled: !isDisabled,
@@ -228,20 +333,19 @@ class SettingsItemWidget extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: theme.colorScheme.primary.withOpacity(isDisabled ? 0.05 : 0.1),
+          color: effectiveIconColor.withValues(alpha: isDisabled ? 0.05 : 0.1),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(
           icon,
           size: 18,
-          color: theme.colorScheme.primary.withOpacity(isDisabled ? 0.5 : 1.0),
+          color: effectiveIconColor.withValues(alpha: isDisabled ? 0.5 : 1.0),
         ),
       ),
       title: Text(
         title,
         style: theme.textTheme.titleMedium?.copyWith(
-          color:
-              theme.colorScheme.onSurface.withOpacity(isDisabled ? 0.5 : 1.0),
+          color: effectiveTextColor.withValues(alpha: isDisabled ? 0.5 : 1.0),
           fontSize: 14,
         ),
       ),
@@ -253,7 +357,7 @@ class SettingsItemWidget extends StatelessWidget {
   Widget _buildDivider(BuildContext context) {
     final theme = Theme.of(context);
     return Divider(
-      color: theme.colorScheme.primary.withOpacity(0.1),
+      color: theme.colorScheme.primary.withValues(alpha: 0.1),
       height: 1,
       indent: 12,
       endIndent: 12,

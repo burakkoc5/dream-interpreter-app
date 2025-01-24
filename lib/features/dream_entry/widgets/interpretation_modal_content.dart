@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import '../models/dream_entry_model.dart';
 import 'package:dream/shared/widgets/app_button.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:dream/shared/utils/share_utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dream/features/profile/application/profile_cubit.dart';
 
 class InterpretationModalContent extends StatefulWidget {
   final DreamEntry dreamEntry;
@@ -27,21 +29,16 @@ class InterpretationModalContent extends StatefulWidget {
 class _InterpretationModalContentState
     extends State<InterpretationModalContent> {
   Future<void> _shareDream() async {
-    final shareText = '''
-✨ Dream Journal Entry ✨
-━━━━━━━━━━━━━━━━━━━━━━
-
-🌙 My Dream:
-${widget.dreamEntry.content}
-
-🔮 Interpretation:
-${widget.dreamEntry.interpretation}
-
-━━━━━━━━━━━━━━━━━━━━━━
-📱 Shared from Dream Journal App
-''';
-
-    await Share.share(shareText);
+    final profile = context.read<ProfileCubit>().state.profile;
+    await ShareUtils.shareDreamAsImage(
+      context: context,
+      title: widget.dreamEntry.title,
+      content: widget.dreamEntry.content,
+      interpretation: widget.dreamEntry.interpretation,
+      date: widget.dreamEntry.createdAt,
+      moodRating: widget.dreamEntry.moodRating,
+      profile: profile,
+    );
   }
 
   @override
@@ -54,11 +51,11 @@ ${widget.dreamEntry.interpretation}
     return SingleChildScrollView(
       child: Container(
         decoration: BoxDecoration(
-          color: theme.colorScheme.surface.withOpacity(0.95),
+          color: theme.colorScheme.surface.withValues(alpha: 0.95),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -76,7 +73,7 @@ ${widget.dreamEntry.interpretation}
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.onSurface.withOpacity(0.2),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -97,10 +94,12 @@ ${widget.dreamEntry.interpretation}
                       Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withOpacity(0.08),
+                          color:
+                              theme.colorScheme.primary.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: theme.colorScheme.primary.withOpacity(0.15),
+                            color: theme.colorScheme.primary
+                                .withValues(alpha: 0.15),
                             width: 1.5,
                           ),
                         ),
@@ -110,7 +109,8 @@ ${widget.dreamEntry.interpretation}
                             fontStyle: FontStyle.italic,
                             height: 1.7,
                             letterSpacing: 0.2,
-                            color: theme.colorScheme.onSurface.withOpacity(0.9),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.9),
                           ),
                         ),
                       ),
@@ -127,11 +127,12 @@ ${widget.dreamEntry.interpretation}
                       Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.secondary.withOpacity(0.08),
+                          color: theme.colorScheme.secondary
+                              .withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color:
-                                theme.colorScheme.secondary.withOpacity(0.15),
+                            color: theme.colorScheme.secondary
+                                .withValues(alpha: 0.15),
                             width: 1.5,
                           ),
                         ),
@@ -140,7 +141,8 @@ ${widget.dreamEntry.interpretation}
                           style: theme.textTheme.bodyLarge?.copyWith(
                             height: 1.7,
                             letterSpacing: 0.2,
-                            color: theme.colorScheme.onSurface.withOpacity(0.9),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.9),
                           ),
                         ),
                       ),
@@ -154,7 +156,8 @@ ${widget.dreamEntry.interpretation}
                     color: theme.colorScheme.surface,
                     boxShadow: [
                       BoxShadow(
-                        color: theme.colorScheme.primary.withOpacity(0.05),
+                        color:
+                            theme.colorScheme.primary.withValues(alpha: 0.05),
                         blurRadius: 20,
                         offset: const Offset(0, -5),
                       ),

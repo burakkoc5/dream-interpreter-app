@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -20,7 +21,7 @@ class StatsRepository {
   }
 
   Stream<Map<String, dynamic>> getUserStats(String userId) {
-    print('Fetching stats for userId: $userId');
+    debugPrint('Fetching stats for userId: $userId');
 
     // Combine dreams and streak data streams
     final dreamsStream = _firestore
@@ -35,7 +36,7 @@ class StatsRepository {
       dreamsStream,
       streakStream,
       (QuerySnapshot dreamsSnapshot, DocumentSnapshot streakSnapshot) {
-        print('Number of documents: ${dreamsSnapshot.docs.length}');
+        debugPrint('Number of documents: ${dreamsSnapshot.docs.length}');
 
         // Get streak data
         final streakData = streakSnapshot.data() as Map<String, dynamic>?;
@@ -78,12 +79,12 @@ class StatsRepository {
 
           completionRate = double.parse(completionRate.toStringAsFixed(2));
 
-          print('Stats calculated successfully:');
-          print('Total dreams: $totalDreams');
-          print('Weekly dreams: $weeklyDreams');
-          print('Completion rate: $completionRate');
-          print('Current streak: $currentStreak');
-          print('Longest streak: $longestStreak');
+          debugPrint('Stats calculated successfully:');
+          debugPrint('Total dreams: $totalDreams');
+          debugPrint('Weekly dreams: $weeklyDreams');
+          debugPrint('Completion rate: $completionRate');
+          debugPrint('Current streak: $currentStreak');
+          debugPrint('Longest streak: $longestStreak');
 
           return {
             'totalDreams': totalDreams,
@@ -93,7 +94,7 @@ class StatsRepository {
             'longestStreak': longestStreak,
           };
         } catch (e) {
-          print('Error calculating stats: $e');
+          debugPrint('Error calculating stats: $e');
           return {
             'totalDreams': 0,
             'weeklyDreams': 0,

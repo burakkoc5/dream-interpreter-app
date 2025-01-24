@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:dream/features/auth/application/auth_cubit.dart';
 
 class PersonalizationScreen extends StatefulWidget {
   const PersonalizationScreen({super.key});
@@ -22,6 +23,13 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
   DateTime? _birthDate;
   List<String> _selectedInterests = [];
 
+  final Map<String, String> _genderMap = {
+    'male': t.profile.personalization.genderOptions.male,
+    'female': t.profile.personalization.genderOptions.female,
+    'other': t.profile.personalization.genderOptions.other,
+    'preferNotToSay': t.profile.personalization.genderOptions.preferNotToSay,
+  };
+
   @override
   void initState() {
     super.initState();
@@ -33,17 +41,14 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
         _occupation = profile.occupation;
         _relationshipStatus = profile.relationshipStatus;
         _birthDate = profile.birthDate;
-        _selectedInterests = List<String>.from(profile.interests ?? []);
+        _selectedInterests = List<String>.from(profile.interests);
       });
     }
   }
 
-  List<String> get _genderOptions => [
-        t.profile.personalization.genderOptions.male,
-        t.profile.personalization.genderOptions.female,
-        t.profile.personalization.genderOptions.other,
-        t.profile.personalization.genderOptions.preferNotToSay,
-      ];
+  List<String> get _genderOptions => _genderMap.keys.toList();
+
+  String _getGenderDisplay(String key) => _genderMap[key] ?? key;
 
   List<String> get _horoscopeOptions => [
         t.profile.personalization.horoscopeOptions.aries,
@@ -121,10 +126,11 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
       debugPrint('interests: $_selectedInterests');
 
       final profileCubit = context.read<ProfileCubit>();
-      final profile = profileCubit.state.profile;
+      final userId = context.read<AuthCubit>().state.user?.id;
+      debugPrint('userId: $userId');
 
-      if (profile == null) {
-        debugPrint('PersonalizationScreen: Profile is null, showing error');
+      if (userId == null) {
+        debugPrint('PersonalizationScreen: User ID is null, showing error');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(t.core.errors.tryAgain),
@@ -136,25 +142,46 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
         );
         return;
       }
-
-      _updateProfileAndNavigate(profileCubit);
+      debugPrint(
+          'PersonalizationScreen: User ID is not null, updating profile');
+      _updateProfileAndNavigate(profileCubit, userId);
     }
   }
 
-  Future<void> _updateProfileAndNavigate(ProfileCubit profileCubit) async {
+  Future<void> _updateProfileAndNavigate(
+      ProfileCubit profileCubit, String userId) async {
     debugPrint('PersonalizationScreen: Updating profile with new information');
-    await profileCubit.updatePersonalInfo(
-      gender: _gender,
-      horoscope: _horoscope,
-      occupation: _occupation,
-      relationshipStatus: _relationshipStatus,
-      birthDate: _birthDate,
-      interests: _selectedInterests,
-      hasCompletedPersonalization: true,
-    );
-    debugPrint('PersonalizationScreen: Submitting form');
-    if (mounted) {
-      context.go(AppRoute.dreamEntry);
+    try {
+      await profileCubit.updatePersonalInfo(
+        gender: _gender,
+        horoscope: _horoscope,
+        occupation: _occupation,
+        relationshipStatus: _relationshipStatus,
+        birthDate: _birthDate,
+        interests: _selectedInterests,
+        hasCompletedPersonalization: true,
+      );
+
+      // Wait for a short duration to ensure Firestore has updated
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      debugPrint('PersonalizationScreen: Profile update completed');
+      if (mounted) {
+        context.go(AppRoute.dreamEntry);
+      }
+    } catch (e) {
+      debugPrint('PersonalizationScreen: Error updating profile: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(t.core.errors.tryAgain),
+            action: SnackBarAction(
+              label: t.core.errors.tryAgain,
+              onPressed: _submitForm,
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -188,7 +215,8 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               Text(
                 t.profile.personalization.description,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.textTheme.bodyMedium?.color?.withOpacity(0.8),
+                  color:
+                      theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
                 ),
               ),
               const SizedBox(height: 24),
@@ -196,7 +224,8 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               // Gender Selection
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest
+                      .withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonFormField<String>(
@@ -212,21 +241,21 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
@@ -254,7 +283,7 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(
-                        value,
+                        _getGenderDisplay(value),
                         style: theme.textTheme.bodyMedium,
                       ),
                     );
@@ -267,7 +296,8 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               // Birth Date
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest
+                      .withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextFormField(
@@ -286,21 +316,21 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
@@ -335,7 +365,8 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               // Horoscope
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest
+                      .withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonFormField<String>(
@@ -351,21 +382,21 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
@@ -406,7 +437,8 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               // Occupation
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest
+                      .withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonFormField<String>(
@@ -422,21 +454,21 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
@@ -477,7 +509,8 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               // Relationship Status
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest
+                      .withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonFormField<String>(
@@ -493,21 +526,21 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: colorScheme.outline.withOpacity(0.5),
+                        color: colorScheme.outline.withValues(alpha: 0.5),
                         width: 1.5,
                       ),
                     ),
@@ -554,10 +587,11 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               const SizedBox(height: 8),
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                  color: colorScheme.surfaceContainerHighest
+                      .withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: colorScheme.outline.withOpacity(0.5),
+                    color: colorScheme.outline.withValues(alpha: 0.5),
                     width: 1.5,
                   ),
                 ),

@@ -26,14 +26,14 @@ class EmptyDreamList extends StatelessWidget {
                   Icon(
                     Icons.nights_stay_outlined,
                     size: 48,
-                    color: theme.colorScheme.primary.withOpacity(0.5),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.5),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     t.searchDreams.noResults,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
                 ],

@@ -45,10 +45,10 @@ class _EditableNameSectionState extends State<EditableNameSection> {
     if (_isEditing) {
       return Container(
         decoration: BoxDecoration(
-          color: theme.colorScheme.surface.withOpacity(0.7),
+          color: theme.colorScheme.surface.withValues(alpha: 0.7),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: theme.colorScheme.outline.withOpacity(0.3),
+            color: theme.colorScheme.outline.withValues(alpha: 0.3),
             width: 0.5,
           ),
         ),
@@ -101,7 +101,7 @@ class _EditableNameSectionState extends State<EditableNameSection> {
             icon: Icon(
               Icons.edit,
               size: 18,
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
             ),
             visualDensity: VisualDensity.compact,
             padding: EdgeInsets.zero,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 import 'dart:ui';
+import '../utils/share_utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dream/features/profile/application/profile_cubit.dart';
 
 class DreamCard extends StatefulWidget {
   final String title;
@@ -74,14 +76,14 @@ class _DreamCardState extends State<DreamCard>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: theme.colorScheme.primary.withOpacity(0.1),
+                color: theme.colorScheme.primary.withValues(alpha: 0.1),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
               if (_isPressed)
                 BoxShadow(
                   color: theme.colorScheme.primary
-                      .withOpacity(0.2 * _glowAnimation.value),
+                      .withValues(alpha: 0.2 * _glowAnimation.value),
                   blurRadius: 20,
                   spreadRadius: 4 * _glowAnimation.value,
                 ),
@@ -116,19 +118,19 @@ class _DreamCardState extends State<DreamCard>
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          theme.cardTheme.color?.withOpacity(
-                                  widget.isGlassmorphic ? 0.7 : 0.95) ??
-                              Colors.white.withOpacity(
-                                  widget.isGlassmorphic ? 0.7 : 0.95),
-                          theme.cardTheme.color?.withOpacity(
-                                  widget.isGlassmorphic ? 0.5 : 0.85) ??
-                              Colors.white.withOpacity(
-                                  widget.isGlassmorphic ? 0.5 : 0.85),
+                          theme.cardTheme.color?.withValues(
+                                  alpha: widget.isGlassmorphic ? 0.7 : 0.95) ??
+                              Colors.white.withValues(
+                                  alpha: widget.isGlassmorphic ? 0.7 : 0.95),
+                          theme.cardTheme.color?.withValues(
+                                  alpha: widget.isGlassmorphic ? 0.5 : 0.85) ??
+                              Colors.white.withValues(
+                                  alpha: widget.isGlassmorphic ? 0.5 : 0.85),
                         ],
                       ),
                       border: Border.all(
                         color: theme.colorScheme.primary
-                            .withOpacity(_isPressed ? 0.2 : 0.1),
+                            .withValues(alpha: _isPressed ? 0.2 : 0.1),
                         width: 1,
                       ),
                       borderRadius: BorderRadius.circular(24),
@@ -139,8 +141,8 @@ class _DreamCardState extends State<DreamCard>
                           Positioned.fill(
                             child: CustomPaint(
                               painter: StarfieldPainter(
-                                color: theme.colorScheme.primary
-                                    .withOpacity(0.1 * _glowAnimation.value),
+                                color: theme.colorScheme.primary.withValues(
+                                    alpha: 0.1 * _glowAnimation.value),
                               ),
                             ),
                           ),
@@ -154,7 +156,7 @@ class _DreamCardState extends State<DreamCard>
                                   Icon(
                                     Icons.nights_stay,
                                     color: theme.colorScheme.primary
-                                        .withOpacity(0.6),
+                                        .withValues(alpha: 0.6),
                                     size: 20,
                                   ),
                                   const SizedBox(width: 8),
@@ -190,7 +192,7 @@ class _DreamCardState extends State<DreamCard>
                                             Icons.calendar_today,
                                             size: 16,
                                             color: theme.colorScheme.primary
-                                                .withOpacity(0.6),
+                                                .withValues(alpha: 0.6),
                                           ),
                                           const SizedBox(width: 4),
                                           Text(
@@ -198,7 +200,7 @@ class _DreamCardState extends State<DreamCard>
                                             style: theme.textTheme.bodySmall
                                                 ?.copyWith(
                                               color: theme.colorScheme.onSurface
-                                                  .withOpacity(0.6),
+                                                  .withValues(alpha: 0.6),
                                             ),
                                           ),
                                         ],
@@ -211,7 +213,7 @@ class _DreamCardState extends State<DreamCard>
                                             Icons.mood,
                                             size: 16,
                                             color: theme.colorScheme.primary
-                                                .withOpacity(0.6),
+                                                .withValues(alpha: 0.6),
                                           ),
                                           const SizedBox(width: 4),
                                           Row(
@@ -222,7 +224,7 @@ class _DreamCardState extends State<DreamCard>
                                                     : Icons.star_border,
                                                 size: 12,
                                                 color: theme.colorScheme.primary
-                                                    .withOpacity(0.6),
+                                                    .withValues(alpha: 0.6),
                                               );
                                             }),
                                           ),
@@ -242,7 +244,7 @@ class _DreamCardState extends State<DreamCard>
                                           color: widget.isFavourite
                                               ? Colors.red
                                               : theme.colorScheme.primary
-                                                  .withOpacity(0.8),
+                                                  .withValues(alpha: 0.8),
                                           size: 20,
                                         ),
                                         onPressed: widget.onFavoriteToggle,
@@ -254,7 +256,7 @@ class _DreamCardState extends State<DreamCard>
                                         icon: Icon(
                                           Icons.share_outlined,
                                           color: theme.colorScheme.primary
-                                              .withOpacity(0.8),
+                                              .withValues(alpha: 0.8),
                                           size: 20,
                                         ),
                                         onPressed: () => _shareDream(
@@ -271,7 +273,7 @@ class _DreamCardState extends State<DreamCard>
                                           icon: Icon(
                                             Icons.delete_outline,
                                             color: theme.colorScheme.error
-                                                .withOpacity(0.8),
+                                                .withValues(alpha: 0.8),
                                             size: 20,
                                           ),
                                           onPressed: widget.onDelete,
@@ -321,9 +323,16 @@ class _DreamCardState extends State<DreamCard>
     String dream,
     String interpretation,
   ) async {
-    final text =
-        '✨ Dream: $title\n\n$dream\n\n🌙 Interpretation:\n$interpretation';
-    await Share.share(text);
+    final profile = context.read<ProfileCubit>().state.profile;
+    await ShareUtils.shareDreamAsImage(
+      context: context,
+      title: title,
+      content: dream,
+      interpretation: interpretation,
+      date: widget.date,
+      moodRating: widget.moodRating,
+      profile: profile,
+    );
   }
 }
 

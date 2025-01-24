@@ -28,8 +28,9 @@ class OpenAIService {
       if (gender != null) personalContext.add('Gender: $gender');
       if (horoscope != null) personalContext.add('Zodiac Sign: $horoscope');
       if (occupation != null) personalContext.add('Occupation: $occupation');
-      if (relationshipStatus != null)
+      if (relationshipStatus != null) {
         personalContext.add('Relationship Status: $relationshipStatus');
+      }
       if (birthDate != null) {
         final age = DateTime.now().difference(birthDate).inDays ~/ 365;
         personalContext.add('Age: $age years old');

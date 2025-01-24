@@ -17,7 +17,25 @@
       "tryAgain": "Lütfen tekrar deneyin",
       "userNotAuthenticated": "Kullanıcı doğrulanamadı"
     },
-    "success": "Başarılı"
+    "success": "Başarılı",
+    "emailVerification": {
+      "title": "E-postanızı Doğrulayın",
+      "message": "E-posta adresinize bir doğrulama e-postası gönderildi. Lütfen devam etmek için e-postanızı doğrulayın.",
+      "continue_": "Yine de Devam Et",
+      "resend": "E-postayı Tekrar Gönder",
+      "resent": "Doğrulama e-postası tekrar gönderildi"
+    },
+    "emailVerificationDialog": {
+      "notVerifiedTitle": "E-posta Doğrulanmadı",
+      "verifyTitle": "E-postanızı Doğrulayın",
+      "notVerifiedMessage": "Lütfen giriş yapmadan önce e-postanızı doğrulayın. Doğrulama bağlantısı için gelen kutunuzu kontrol edin.",
+      "verifyMessage": "$email adresine bir doğrulama e-postası gönderildi. Lütfen devam etmek için e-postanızı doğrulayın.",
+      "needVerification": "Yeni bir doğrulama e-postasına mı ihtiyacınız var?",
+      "checkInbox": "Doğrulama bağlantısı için gelen kutunuzu ve spam klasörünüzü kontrol edin.",
+      "cancel": "İptal",
+      "resend": "Tekrar Gönder",
+      "goToLogin": "Girişe Git"
+    }
   },
   "registration": {
     "welcomeText": "Tekrar Hoş Geldiniz",
@@ -100,13 +118,14 @@
       "confirmButton": "Onayla"
     },
     "dreamForm": {
-      "record": "Rüyanızı Kaydedin",
+      "record": "Rüyanı Kaydet",
       "content": "Rüya İçeriği",
-      "contentHint": "Lütfen rüya içeriğinizi girin",
-      "getInterpretation": "Yorum Al",
-      "noAttemptsLeft": "Bugün için hakkınız kalmamıştır. Rüya yorumu almak için bir video izleyin.",
-      "watchAdError": "Lütfen bir video izleyin, rüya yorumu almak için.",
-      "dreamSaved": "Rüya başarıyla kaydedildi"
+      "contentHint": "Lütfen rüyanızı girin",
+      "getInterpretation": "Yorumla",
+      "noAttemptsLeft": "Bugün için kalan hakkınız yok. Daha fazla rüya yorumlamak için reklam izleyin.",
+      "watchAdError": "Bugün daha fazla rüya yorumlamak için lütfen reklamı izleyin.",
+      "dreamSaved": "Rüya başarıyla kaydedildi",
+      "remainingAttempts": "Bugün kalan hakkınız"
     },
     "interpretation": {
       "title": "Rüya Yorumu",
@@ -238,6 +257,18 @@
       "saveButton": "Hatırlatmayı Kaydet",
       "skipButton": "Şimdilik Geç",
       "savedSuccess": "Hatırlatma ayarları başarıyla kaydedildi"
+    },
+    "deleteAccount": {
+      "title": "Hesabınızı Sil",
+      "message": "Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tüm verilerinizi (rüyalar, yorumlar ve ayarlar dahil) kalıcı olarak silecektir.",
+      "confirm": "Evet, Sil"
     }
+  },
+  "common": {
+    "cancel": "İptal",
+    "confirm": "Onayla",
+    "success": "Başarılı",
+    "error": "Hata",
+    "loading": "Yükleniyor..."
   }
 }

@@ -13,6 +13,7 @@ import 'package:dream/firebase_options.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:dream/shared/repositories/notification_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -22,7 +23,15 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
+  // Filter out MESA debug logs
+  debugPrint = (String? message, {int? wrapWidth}) {
+    if (message?.contains('MESA') ?? false) return;
+    debugPrintSynchronously(message ?? '', wrapWidth: wrapWidth);
+  };
+
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
 

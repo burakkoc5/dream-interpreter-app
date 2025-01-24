@@ -45,6 +45,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsSearchDreamsEn searchDreams = TranslationsSearchDreamsEn._(_root);
 	late final TranslationsDreamHistoryEn dreamHistory = TranslationsDreamHistoryEn._(_root);
 	late final TranslationsProfileEn profile = TranslationsProfileEn._(_root);
+	late final TranslationsCommonEn common = TranslationsCommonEn._(_root);
 }
 
 // Path: core
@@ -58,6 +59,8 @@ class TranslationsCoreEn {
 	late final TranslationsCoreModeEn mode = TranslationsCoreModeEn._(_root);
 	late final TranslationsCoreErrorsEn errors = TranslationsCoreErrorsEn._(_root);
 	String get success => 'Success';
+	late final TranslationsCoreEmailVerificationEn emailVerification = TranslationsCoreEmailVerificationEn._(_root);
+	late final TranslationsCoreEmailVerificationDialogEn emailVerificationDialog = TranslationsCoreEmailVerificationDialogEn._(_root);
 }
 
 // Path: registration
@@ -168,6 +171,21 @@ class TranslationsProfileEn {
 	String get turkish => 'Turkish';
 	String get german => 'German';
 	late final TranslationsProfileReminderEn reminder = TranslationsProfileReminderEn._(_root);
+	late final TranslationsProfileDeleteAccountEn deleteAccount = TranslationsProfileDeleteAccountEn._(_root);
+}
+
+// Path: common
+class TranslationsCommonEn {
+	TranslationsCommonEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get cancel => 'Cancel';
+	String get confirm => 'Confirm';
+	String get success => 'Success';
+	String get error => 'Error';
+	String get loading => 'Loading...';
 }
 
 // Path: core.mode
@@ -198,6 +216,38 @@ class TranslationsCoreErrorsEn {
 	String get unknown => 'Email or password is incorrect';
 	String get tryAgain => 'Please try again';
 	String get userNotAuthenticated => 'User not authenticated';
+}
+
+// Path: core.emailVerification
+class TranslationsCoreEmailVerificationEn {
+	TranslationsCoreEmailVerificationEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Verify Your Email';
+	String get message => 'A verification email has been sent to your email address. Please verify your email to continue.';
+	String get continue_ => 'Continue Anyway';
+	String get resend => 'Resend Email';
+	String get resent => 'Verification email has been resent';
+}
+
+// Path: core.emailVerificationDialog
+class TranslationsCoreEmailVerificationDialogEn {
+	TranslationsCoreEmailVerificationDialogEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get notVerifiedTitle => 'Email Not Verified';
+	String get verifyTitle => 'Verify Your Email';
+	String get notVerifiedMessage => 'Please verify your email before signing in. Check your inbox for the verification link.';
+	String verifyMessage({required Object email}) => 'A verification email has been sent to ${email}. Please verify your email to continue.';
+	String get needVerification => 'Need a new verification email?';
+	String get checkInbox => 'Check your inbox and spam folder for the verification link.';
+	String get cancel => 'Cancel';
+	String get resend => 'Resend';
+	String get goToLogin => 'Go to Login';
 }
 
 // Path: registration.email
@@ -321,6 +371,7 @@ class TranslationsDreamEntryDreamFormEn {
 	String get noAttemptsLeft => 'No attempts left for today. Watch an ad to interpret more dreams.';
 	String get watchAdError => 'Please watch the ad to interpret more dreams today.';
 	String get dreamSaved => 'Dream saved successfully';
+	String get remainingAttempts => 'Remaining attempts today';
 }
 
 // Path: dreamEntry.interpretation
@@ -381,6 +432,18 @@ class TranslationsProfileReminderEn {
 	String get saveButton => 'Save Reminder';
 	String get skipButton => 'Skip for now';
 	String get savedSuccess => 'Reminder settings saved successfully';
+}
+
+// Path: profile.deleteAccount
+class TranslationsProfileDeleteAccountEn {
+	TranslationsProfileDeleteAccountEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Delete Account';
+	String get message => 'Are you sure you want to delete your account? This action cannot be undone and will permanently delete all your data including dreams, interpretations, and settings.';
+	String get confirm => 'Yes, Delete';
 }
 
 // Path: registration.password.changePassword
@@ -523,6 +586,20 @@ extension on Translations {
 			case 'core.errors.tryAgain': return 'Please try again';
 			case 'core.errors.userNotAuthenticated': return 'User not authenticated';
 			case 'core.success': return 'Success';
+			case 'core.emailVerification.title': return 'Verify Your Email';
+			case 'core.emailVerification.message': return 'A verification email has been sent to your email address. Please verify your email to continue.';
+			case 'core.emailVerification.continue_': return 'Continue Anyway';
+			case 'core.emailVerification.resend': return 'Resend Email';
+			case 'core.emailVerification.resent': return 'Verification email has been resent';
+			case 'core.emailVerificationDialog.notVerifiedTitle': return 'Email Not Verified';
+			case 'core.emailVerificationDialog.verifyTitle': return 'Verify Your Email';
+			case 'core.emailVerificationDialog.notVerifiedMessage': return 'Please verify your email before signing in. Check your inbox for the verification link.';
+			case 'core.emailVerificationDialog.verifyMessage': return ({required Object email}) => 'A verification email has been sent to ${email}. Please verify your email to continue.';
+			case 'core.emailVerificationDialog.needVerification': return 'Need a new verification email?';
+			case 'core.emailVerificationDialog.checkInbox': return 'Check your inbox and spam folder for the verification link.';
+			case 'core.emailVerificationDialog.cancel': return 'Cancel';
+			case 'core.emailVerificationDialog.resend': return 'Resend';
+			case 'core.emailVerificationDialog.goToLogin': return 'Go to Login';
 			case 'registration.welcomeText': return 'Welcome Back';
 			case 'registration.email.emailText': return 'Email';
 			case 'registration.email.emailHint': return 'Please enter your email';
@@ -587,6 +664,7 @@ extension on Translations {
 			case 'dreamEntry.dreamForm.noAttemptsLeft': return 'No attempts left for today. Watch an ad to interpret more dreams.';
 			case 'dreamEntry.dreamForm.watchAdError': return 'Please watch the ad to interpret more dreams today.';
 			case 'dreamEntry.dreamForm.dreamSaved': return 'Dream saved successfully';
+			case 'dreamEntry.dreamForm.remainingAttempts': return 'Remaining attempts today';
 			case 'dreamEntry.interpretation.title': return 'Dream Interpretation';
 			case 'dreamEntry.interpretation.interpretationText': return 'Interpretation';
 			case 'dreamEntry.interpretation.saveButton': return 'Save Interpretation';
@@ -694,6 +772,14 @@ extension on Translations {
 			case 'profile.reminder.saveButton': return 'Save Reminder';
 			case 'profile.reminder.skipButton': return 'Skip for now';
 			case 'profile.reminder.savedSuccess': return 'Reminder settings saved successfully';
+			case 'profile.deleteAccount.title': return 'Delete Account';
+			case 'profile.deleteAccount.message': return 'Are you sure you want to delete your account? This action cannot be undone and will permanently delete all your data including dreams, interpretations, and settings.';
+			case 'profile.deleteAccount.confirm': return 'Yes, Delete';
+			case 'common.cancel': return 'Cancel';
+			case 'common.confirm': return 'Confirm';
+			case 'common.success': return 'Success';
+			case 'common.error': return 'Error';
+			case 'common.loading': return 'Loading...';
 			default: return null;
 		}
 	}

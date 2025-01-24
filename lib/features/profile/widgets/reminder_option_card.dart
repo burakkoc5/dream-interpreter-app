@@ -32,13 +32,13 @@ class ReminderOptionCard extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: isSelected
-                ? theme.colorScheme.primary.withOpacity(0.1)
-                : theme.colorScheme.surface.withOpacity(0.4),
+                ? theme.colorScheme.primary.withValues(alpha: 0.1)
+                : theme.colorScheme.surface.withValues(alpha: 0.4),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isSelected
                   ? theme.colorScheme.primary
-                  : theme.colorScheme.primary.withOpacity(0.1),
+                  : theme.colorScheme.primary.withValues(alpha: 0.1),
               width: 0.5,
             ),
           ),
@@ -49,8 +49,8 @@ class ReminderOptionCard extends StatelessWidget {
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? theme.colorScheme.primary.withOpacity(0.15)
-                      : theme.colorScheme.primary.withOpacity(0.05),
+                      ? theme.colorScheme.primary.withValues(alpha: 0.15)
+                      : theme.colorScheme.primary.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -71,7 +71,7 @@ class ReminderOptionCard extends StatelessWidget {
               Text(
                 subtitle,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   fontSize: 12,
                 ),
               ),

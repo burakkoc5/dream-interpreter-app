@@ -57,7 +57,7 @@ class _AppTextFieldState extends State<AppTextField> {
         boxShadow: [
           if (_isFocused)
             BoxShadow(
-              color: theme.colorScheme.primary.withOpacity(0.1),
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
               blurRadius: 8,
               spreadRadius: 2,
             ),
@@ -82,7 +82,7 @@ class _AppTextFieldState extends State<AppTextField> {
                     widget.prefixIcon,
                     color: _isFocused
                         ? theme.colorScheme.primary
-                        : theme.colorScheme.onSurface.withOpacity(0.6),
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   )
                 : null,
             suffixIcon: widget.suffixIcon != null
@@ -91,23 +91,23 @@ class _AppTextFieldState extends State<AppTextField> {
                       widget.suffixIcon,
                       color: _isFocused
                           ? theme.colorScheme.primary
-                          : theme.colorScheme.onSurface.withOpacity(0.6),
+                          : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                     onPressed: widget.onSuffixIconTap,
                   )
                 : null,
             filled: widget.filled,
-            fillColor: theme.colorScheme.surface.withOpacity(0.8),
+            fillColor: theme.colorScheme.surface.withValues(alpha: 0.8),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(radius),
               borderSide: BorderSide(
-                color: theme.colorScheme.primary.withOpacity(0.2),
+                color: theme.colorScheme.primary.withValues(alpha: 0.2),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(radius),
               borderSide: BorderSide(
-                color: theme.colorScheme.primary.withOpacity(0.2),
+                color: theme.colorScheme.primary.withValues(alpha: 0.2),
               ),
             ),
             focusedBorder: OutlineInputBorder(
@@ -147,7 +147,7 @@ class _AppTextFieldState extends State<AppTextField> {
               return TextStyle(
                 color: _isFocused
                     ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurface.withOpacity(0.7),
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               );

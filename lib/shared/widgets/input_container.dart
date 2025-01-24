@@ -2,32 +2,32 @@ import 'package:flutter/material.dart';
 
 class InputContainer extends StatelessWidget {
   final Widget child;
-  final EdgeInsets? padding;
-  final double borderRadius;
-  final Color? backgroundColor;
 
   const InputContainer({
     super.key,
     required this.child,
-    this.padding,
-    this.borderRadius = 20,
-    this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    final isDarkMode = brightness == Brightness.dark;
 
     return Container(
-      padding: padding,
       decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.white.withOpacity(0.7),
-        borderRadius: BorderRadius.circular(borderRadius),
+        color:
+            theme.colorScheme.surface.withValues(alpha: isDarkMode ? 0.7 : 0.8),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: theme.colorScheme.primary.withValues(alpha: 0.1),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.primary.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: theme.colorScheme.primary.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),

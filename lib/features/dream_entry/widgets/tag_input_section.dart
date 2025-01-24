@@ -13,21 +13,34 @@ class TagInputSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
         Expanded(
           child: TextField(
             controller: tagController,
-            decoration: InputDecoration(
-              labelText: t.dreamEntry.dreamDetails.addTags,
-              border: OutlineInputBorder(),
+            style: theme.textTheme.bodyLarge?.copyWith(
+              letterSpacing: 0.2,
+              color: theme.colorScheme.onSurface,
             ),
+            decoration: InputDecoration(
+              hintText: t.dreamEntry.dreamDetails.addTags,
+              hintStyle: TextStyle(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.all(20),
+            ),
+            onSubmitted: (_) => onAddTag(),
           ),
         ),
-        const SizedBox(width: 8),
         IconButton(
+          icon: Icon(
+            Icons.add_circle,
+            color: theme.colorScheme.primary,
+          ),
           onPressed: onAddTag,
-          icon: const Icon(Icons.add),
         ),
       ],
     );

@@ -7,6 +7,7 @@ import '../models/reminder_settings_model.dart';
 import '../widgets/reminder_option_card.dart';
 import 'package:dream/config/theme/theme_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart';
 
 class ReminderSettingsContent extends StatefulWidget {
   final ReminderSettings? initialSettings;
@@ -97,7 +98,6 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
       setState(() {
         selectedType = ReminderType.custom;
         selectedCustomTime = selectedTime;
-
         debugPrint(selectedCustomTime.toString());
       });
     }
@@ -144,7 +144,7 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
             Text(
               t.profile.reminder.description,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 fontSize: 15,
                 height: 1.4,
                 letterSpacing: 0.1,
@@ -226,8 +226,8 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
               },
               style: FilledButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                backgroundColor:
-                    theme.colorScheme.primary.withOpacity(isDarkMode ? 0.8 : 1),
+                backgroundColor: theme.colorScheme.primary
+                    .withValues(alpha: isDarkMode ? 0.8 : 1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -253,7 +253,7 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
               child: Text(
                 t.profile.reminder.skipButton,
                 style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.primary.withOpacity(0.8),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.8),
                   fontSize: 14,
                 ),
               ),

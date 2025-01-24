@@ -47,7 +47,7 @@ class TagDialogHeader extends StatelessWidget {
             style: theme.textTheme.labelLarge?.copyWith(
               color: hasSelectedTags
                   ? theme.colorScheme.primary
-                  : theme.colorScheme.onSurface.withOpacity(0.38),
+                  : theme.colorScheme.onSurface.withValues(alpha: 0.38),
               fontWeight: FontWeight.w600,
             ),
           ),

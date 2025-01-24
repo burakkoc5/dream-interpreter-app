@@ -17,8 +17,6 @@ import '../widgets/dream_loading_widget.dart';
 import '../widgets/dream_error_widget.dart';
 import 'dart:ui';
 import 'package:dream/config/theme/theme_cubit.dart';
-import 'package:dream/features/auth/application/auth_cubit.dart';
-import 'package:dream/features/profile/application/profile_cubit.dart';
 
 /// Screen for entering and interpreting dreams
 class DreamEntryScreen extends StatefulWidget {
@@ -32,10 +30,6 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
   @override
   void initState() {
     super.initState();
-    final userId = context.read<AuthCubit>().state.user?.id;
-    if (userId != null) {
-      context.read<ProfileCubit>().loadProfile(userId);
-    }
   }
 
   @override
@@ -121,15 +115,15 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
             color: (isDarkMode
                     ? theme.colorScheme.surface
                     : theme.colorScheme.surface)
-                .withOpacity(isDarkMode ? 0.4 : 0.7),
+                .withValues(alpha: isDarkMode ? 0.4 : 0.7),
             borderRadius: BorderRadius.circular(32),
             border: Border.all(
-              color: theme.colorScheme.primary.withOpacity(0.2),
+              color: theme.colorScheme.primary.withValues(alpha: 0.2),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: theme.colorScheme.primary.withOpacity(0.1),
+                color: theme.colorScheme.primary.withValues(alpha: 0.1),
                 blurRadius: 16,
                 offset: const Offset(0, 8),
               ),
@@ -159,10 +153,12 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withOpacity(0.1),
+                          color:
+                              theme.colorScheme.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: theme.colorScheme.primary.withOpacity(0.2),
+                            color: theme.colorScheme.primary
+                                .withValues(alpha: 0.2),
                           ),
                         ),
                         child: Text(
@@ -185,10 +181,12 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.secondary.withOpacity(0.1),
+                          color: theme.colorScheme.secondary
+                              .withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: theme.colorScheme.secondary.withOpacity(0.2),
+                            color: theme.colorScheme.secondary
+                                .withValues(alpha: 0.2),
                           ),
                         ),
                         child: Text(

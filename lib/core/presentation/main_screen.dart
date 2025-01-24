@@ -72,10 +72,11 @@ class _MainScreenState extends State<MainScreen> {
                         color: (isDarkMode
                                 ? theme.colorScheme.surface
                                 : theme.colorScheme.surface)
-                            .withOpacity(isDarkMode ? 0.5 : 0.7),
+                            .withValues(alpha: isDarkMode ? 0.5 : 0.7),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: theme.colorScheme.primary.withOpacity(0.1),
+                          color:
+                              theme.colorScheme.primary.withValues(alpha: 0.1),
                           width: 1,
                         ),
                       ),

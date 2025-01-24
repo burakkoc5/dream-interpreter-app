@@ -25,7 +25,7 @@ class DialogTagChip extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: theme.colorScheme.secondary.withOpacity(0.3),
+                  color: theme.colorScheme.secondary.withValues(alpha: 0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -59,8 +59,9 @@ class DialogTagChip extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? theme.colorScheme.onSecondaryContainer.withOpacity(0.2)
-                    : theme.colorScheme.onSurface.withOpacity(0.1),
+                    ? theme.colorScheme.onSecondaryContainer
+                        .withValues(alpha: 0.2)
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -68,7 +69,7 @@ class DialogTagChip extends StatelessWidget {
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: isSelected
                       ? theme.colorScheme.onSecondaryContainer
-                      : theme.colorScheme.onSurface.withOpacity(0.7),
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   fontWeight: FontWeight.w500,
                   fontSize: 11,
                 ),
@@ -79,14 +80,14 @@ class DialogTagChip extends StatelessWidget {
         selected: isSelected,
         onSelected: onSelected,
         selectedColor: theme.colorScheme.secondaryContainer,
-        backgroundColor: theme.colorScheme.surface.withOpacity(0.2),
+        backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.2),
         showCheckmark: false,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
           side: BorderSide(
             color: isSelected
                 ? theme.colorScheme.secondary
-                : theme.colorScheme.outline.withOpacity(0.3),
+                : theme.colorScheme.outline.withValues(alpha: 0.3),
             width: 0.5,
           ),
         ),

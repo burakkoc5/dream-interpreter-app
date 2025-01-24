@@ -35,7 +35,8 @@ class NavItemWidget extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: isSelected
-                ? theme.colorScheme.primary.withOpacity(isDarkMode ? 0.15 : 0.1)
+                ? theme.colorScheme.primary
+                    .withValues(alpha: isDarkMode ? 0.15 : 0.1)
                 : Colors.transparent,
           ),
           child: Column(
@@ -45,7 +46,7 @@ class NavItemWidget extends StatelessWidget {
                 isSelected ? selectedIcon : icon,
                 color: isSelected
                     ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurface.withOpacity(0.7),
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 size: 20,
               ),
               const SizedBox(height: 2),
@@ -55,7 +56,7 @@ class NavItemWidget extends StatelessWidget {
                   fontSize: 10,
                   color: isSelected
                       ? theme.colorScheme.primary
-                      : theme.colorScheme.onSurface.withOpacity(0.7),
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
                 textAlign: TextAlign.center,
               ),

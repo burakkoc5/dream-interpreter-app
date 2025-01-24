@@ -27,7 +27,7 @@ class SearchBarWidget extends StatelessWidget {
       child: Container(
         height: 36,
         decoration: BoxDecoration(
-          color: theme.colorScheme.surface.withOpacity(0.2),
+          color: theme.colorScheme.surface.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(8),
         ),
         child: TextField(
@@ -40,19 +40,19 @@ class SearchBarWidget extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               fontSize: 13,
             ),
             prefixIcon: Icon(
               Icons.search,
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               size: 18,
             ),
             suffixIcon: controller.text.isNotEmpty
                 ? IconButton(
                     icon: Icon(
                       Icons.clear,
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       size: 16,
                     ),
                     onPressed: () {

@@ -47,7 +47,7 @@ class _DreamHistoryScreenState extends State<DreamHistoryScreen>
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                 child: Container(
-                  color: theme.colorScheme.surface.withOpacity(0.5),
+                  color: theme.colorScheme.surface.withValues(alpha: 0.5),
                 ),
               ),
             ),
@@ -72,11 +72,12 @@ class _DreamHistoryScreenState extends State<DreamHistoryScreen>
                           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.surface.withOpacity(0.7),
+                              color: theme.colorScheme.surface
+                                  .withValues(alpha: 0.7),
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color:
-                                    theme.colorScheme.primary.withOpacity(0.1),
+                                color: theme.colorScheme.primary
+                                    .withValues(alpha: 0.1),
                               ),
                             ),
                             child: Column(

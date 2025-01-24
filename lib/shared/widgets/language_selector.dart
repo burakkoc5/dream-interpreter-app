@@ -30,7 +30,7 @@ class LanguageSelector extends StatelessWidget {
           leading: Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.1),
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
@@ -50,7 +50,7 @@ class LanguageSelector extends StatelessWidget {
             value: currentLocale,
             icon: Icon(
               Icons.arrow_drop_down,
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               size: 18,
             ),
             elevation: 2,

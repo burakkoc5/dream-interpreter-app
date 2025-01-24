@@ -44,7 +44,7 @@ class DreamHistoryContent extends StatelessWidget {
         debugPrint('DreamHistoryMixin - Pull-to-refresh of dreams');
         await context.read<DreamHistoryCubit>().loadDreams(refresh: true);
       },
-      backgroundColor: theme.colorScheme.surface.withOpacity(0.9),
+      backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.9),
       color: theme.colorScheme.primary,
       child: ListView.builder(
         controller: scrollController,

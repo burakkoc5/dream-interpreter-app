@@ -45,8 +45,8 @@ class MoodRatingWidget extends StatelessWidget {
             color: isSelected
                 ? (index == rating - 1
                     ? theme.colorScheme.primary
-                    : theme.colorScheme.primary.withOpacity(0.3))
-                : theme.colorScheme.onSurface.withOpacity(0.15),
+                    : theme.colorScheme.primary.withValues(alpha: 0.3))
+                : theme.colorScheme.onSurface.withValues(alpha: 0.15),
             size: isSelected && index == rating - 1 ? size * 1.1 : size,
           );
 

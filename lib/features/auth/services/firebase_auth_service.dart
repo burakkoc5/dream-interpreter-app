@@ -60,6 +60,7 @@ class FirebaseAuthService {
       return UserModel(
         id: currentUser.uid,
         email: currentUser.email ?? email,
+        emailVerified: currentUser.emailVerified,
       );
     } on FirebaseAuthException catch (e) {
       throw _handleFirebaseAuthError(e);
@@ -80,7 +81,10 @@ class FirebaseAuthService {
         password: password,
       );
 
-      print('User created: ${userCredential.user!.uid}');
+      // Send email verification
+      await userCredential.user!.sendEmailVerification();
+
+      debugPrint('User created: ${userCredential.user!.uid}');
 
       final now = DateTime.now();
       // Get the username part from email (everything before @)
@@ -96,9 +100,10 @@ class FirebaseAuthService {
         'lastActive': Timestamp.fromDate(now),
         'notificationsEnabled': true,
         'preferences': {},
+        'emailVerified': false,
       });
 
-      print('User created: ${userCredential.user!.uid}');
+      debugPrint('User created: ${userCredential.user!.uid}');
 
       return userCredential;
     } on FirebaseAuthException catch (e) {
@@ -150,4 +155,62 @@ class FirebaseAuthService {
 
   /// Get the current user
   User? get currentUser => _firebaseAuth.currentUser;
+
+  /// Check if the current user's email is verified
+  bool get isEmailVerified => _firebaseAuth.currentUser?.emailVerified ?? false;
+
+  /// Send email verification to current user
+  Future<void> sendEmailVerification() async {
+    final user = _firebaseAuth.currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+    }
+  }
+
+  /// Reload the current user to get the latest email verification status
+  Future<void> reloadUser() async {
+    await _firebaseAuth.currentUser?.reload();
+  }
+
+  /// Update user's email verification status in Firestore
+  Future<void> updateEmailVerificationStatus() async {
+    final user = _firebaseAuth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).update({
+        'emailVerified': user.emailVerified,
+      });
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    final user = _firebaseAuth.currentUser;
+    if (user == null) throw Exception('No user signed in');
+
+    final userId = user.uid;
+    final batch = _firestore.batch();
+
+    // Delete user profile
+    batch.delete(_firestore.collection('users').doc(userId));
+
+    // Delete user's dreams
+    final dreams = await _firestore
+        .collection('dreams')
+        .where('userId', isEqualTo: userId)
+        .get();
+    for (var dream in dreams.docs) {
+      batch.delete(dream.reference);
+    }
+
+    // Delete user's streak data
+    batch.delete(_firestore.collection('streaks').doc(userId));
+
+    // Delete user's stats
+    batch.delete(_firestore.collection('stats').doc(userId));
+
+    // Execute batch delete
+    await batch.commit();
+
+    // Delete Firebase Auth account
+    await user.delete();
+  }
 }

@@ -9,6 +9,7 @@ class UserModel with _$UserModel {
   const factory UserModel({
     required String id,
     required String email,
+    @Default(false) bool emailVerified,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -17,5 +18,6 @@ class UserModel with _$UserModel {
   factory UserModel.fromFirebaseUser(User user) => UserModel(
         id: user.uid,
         email: user.email!,
+        emailVerified: user.emailVerified,
       );
 }

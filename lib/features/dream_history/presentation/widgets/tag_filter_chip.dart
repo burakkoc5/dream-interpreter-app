@@ -55,7 +55,7 @@ class TagFilterChip extends StatelessWidget {
       selected: state.selectedTags.isNotEmpty,
       onSelected: (_) => onSelected(),
       selectedColor: theme.colorScheme.secondaryContainer,
-      backgroundColor: theme.colorScheme.surface.withOpacity(0.2),
+      backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.2),
       showCheckmark: false,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       visualDensity: VisualDensity.compact,
@@ -65,7 +65,7 @@ class TagFilterChip extends StatelessWidget {
         side: BorderSide(
           color: state.selectedTags.isNotEmpty
               ? theme.colorScheme.primary
-              : theme.colorScheme.primary.withOpacity(0.1),
+              : theme.colorScheme.primary.withValues(alpha: 0.1),
           width: 0.5,
         ),
       ),

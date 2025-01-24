@@ -15,12 +15,12 @@ class DeleteDreamAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: theme.colorScheme.surface.withOpacity(0.95),
+      backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.95),
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(
-          color: theme.colorScheme.outline.withOpacity(0.1),
+          color: theme.colorScheme.outline.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -29,7 +29,7 @@ class DeleteDreamAlertDialog extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: theme.colorScheme.errorContainer.withOpacity(0.2),
+              color: theme.colorScheme.errorContainer.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -64,7 +64,7 @@ class DeleteDreamAlertDialog extends StatelessWidget {
             'This action cannot be undone.',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
               fontSize: 11,
             ),
           ),

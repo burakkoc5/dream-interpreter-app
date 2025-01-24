@@ -27,7 +27,7 @@ class SettingsScreen extends StatelessWidget {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Container(
-              color: theme.colorScheme.surface.withOpacity(0.5),
+              color: theme.colorScheme.surface.withValues(alpha: 0.5),
             ),
           ),
         ),

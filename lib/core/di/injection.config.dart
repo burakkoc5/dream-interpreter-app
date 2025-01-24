@@ -127,12 +127,13 @@ Future<_i174.GetIt> init(
         gh<_i567.LocalStorageService>(),
         gh<_i877.AuthCubit>(),
       ));
-  gh.factory<_i127.DreamHistoryCubit>(() => _i127.DreamHistoryCubit(
-        gh<_i386.DreamHistoryRepository>(),
-        gh<_i877.AuthCubit>(),
-      ));
   gh.factory<_i402.ProfileCubit>(() => _i402.ProfileCubit(
         gh<_i155.ProfileRepository>(),
+        gh<_i877.AuthCubit>(),
+        gh<_i517.NotificationRepository>(),
+      ));
+  gh.factory<_i127.DreamHistoryCubit>(() => _i127.DreamHistoryCubit(
+        gh<_i386.DreamHistoryRepository>(),
         gh<_i877.AuthCubit>(),
       ));
   return getIt;

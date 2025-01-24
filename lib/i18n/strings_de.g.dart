@@ -41,6 +41,7 @@ class TranslationsDe implements Translations {
 	@override late final _TranslationsSearchDreamsDe searchDreams = _TranslationsSearchDreamsDe._(_root);
 	@override late final _TranslationsDreamHistoryDe dreamHistory = _TranslationsDreamHistoryDe._(_root);
 	@override late final _TranslationsProfileDe profile = _TranslationsProfileDe._(_root);
+	@override late final _TranslationsCommonDe common = _TranslationsCommonDe._(_root);
 }
 
 // Path: core
@@ -54,6 +55,8 @@ class _TranslationsCoreDe implements TranslationsCoreEn {
 	@override late final _TranslationsCoreModeDe mode = _TranslationsCoreModeDe._(_root);
 	@override late final _TranslationsCoreErrorsDe errors = _TranslationsCoreErrorsDe._(_root);
 	@override String get success => 'Erfolgreich';
+	@override late final _TranslationsCoreEmailVerificationDe emailVerification = _TranslationsCoreEmailVerificationDe._(_root);
+	@override late final _TranslationsCoreEmailVerificationDialogDe emailVerificationDialog = _TranslationsCoreEmailVerificationDialogDe._(_root);
 }
 
 // Path: registration
@@ -164,6 +167,21 @@ class _TranslationsProfileDe implements TranslationsProfileEn {
 	@override String get turkish => 'Türkisch';
 	@override String get german => 'Deutsch';
 	@override late final _TranslationsProfileReminderDe reminder = _TranslationsProfileReminderDe._(_root);
+	@override late final _TranslationsProfileDeleteAccountDe deleteAccount = _TranslationsProfileDeleteAccountDe._(_root);
+}
+
+// Path: common
+class _TranslationsCommonDe implements TranslationsCommonEn {
+	_TranslationsCommonDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => 'Abbrechen';
+	@override String get confirm => 'Bestätigen';
+	@override String get success => 'Erfolgreich';
+	@override String get error => 'Fehler';
+	@override String get loading => 'Lädt...';
 }
 
 // Path: core.mode
@@ -194,6 +212,38 @@ class _TranslationsCoreErrorsDe implements TranslationsCoreErrorsEn {
 	@override String get unknown => 'E-Mail oder Passwort falsch';
 	@override String get tryAgain => 'Bitte versuchen Sie es erneut';
 	@override String get userNotAuthenticated => 'Benutzer konnte nicht authentifiziert werden';
+}
+
+// Path: core.emailVerification
+class _TranslationsCoreEmailVerificationDe implements TranslationsCoreEmailVerificationEn {
+	_TranslationsCoreEmailVerificationDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'E-Mail bestätigen';
+	@override String get message => 'Eine Bestätigungs-E-Mail wurde an Ihre E-Mail-Adresse gesendet. Bitte bestätigen Sie Ihre E-Mail, um fortzufahren.';
+	@override String get continue_ => 'Trotzdem fortfahren';
+	@override String get resend => 'E-Mail erneut senden';
+	@override String get resent => 'Bestätigungs-E-Mail wurde erneut gesendet';
+}
+
+// Path: core.emailVerificationDialog
+class _TranslationsCoreEmailVerificationDialogDe implements TranslationsCoreEmailVerificationDialogEn {
+	_TranslationsCoreEmailVerificationDialogDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get notVerifiedTitle => 'E-Mail nicht verifiziert';
+	@override String get verifyTitle => 'E-Mail bestätigen';
+	@override String get notVerifiedMessage => 'Bitte bestätigen Sie Ihre E-Mail, bevor Sie sich anmelden. Überprüfen Sie Ihren Posteingang auf den Bestätigungslink.';
+	@override String verifyMessage({required Object email}) => 'Eine Bestätigungs-E-Mail wurde an ${email} gesendet. Bitte bestätigen Sie Ihre E-Mail, um fortzufahren.';
+	@override String get needVerification => 'Benötigen Sie eine neue Bestätigungs-E-Mail?';
+	@override String get checkInbox => 'Überprüfen Sie Ihren Posteingang und Spam-Ordner auf den Bestätigungslink.';
+	@override String get cancel => 'Abbrechen';
+	@override String get resend => 'Erneut senden';
+	@override String get goToLogin => 'Zur Anmeldung';
 }
 
 // Path: registration.email
@@ -310,13 +360,14 @@ class _TranslationsDreamEntryDreamFormDe implements TranslationsDreamEntryDreamF
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
-	@override String get record => 'Ihren Traum aufnehmen';
+	@override String get record => 'Traum aufzeichnen';
 	@override String get content => 'Trauminhalt';
-	@override String get contentHint => 'Bitte geben Sie den Inhalt Ihres Traums ein';
+	@override String get contentHint => 'Bitte geben Sie Ihren Traum ein';
 	@override String get getInterpretation => 'Interpretation erhalten';
-	@override String get noAttemptsLeft => 'Keine Versuche mehr für heute. Schauen Sie sich ein Video an, um mehr Träume zu interpretieren.';
-	@override String get watchAdError => 'Bitte schauen Sie sich das Video an, um mehr Träume zu interpretieren.';
+	@override String get noAttemptsLeft => 'Keine Versuche mehr für heute. Sehen Sie sich eine Werbung an, um mehr Träume zu interpretieren.';
+	@override String get watchAdError => 'Bitte sehen Sie sich die Werbung an, um heute mehr Träume zu interpretieren.';
 	@override String get dreamSaved => 'Traum erfolgreich gespeichert';
+	@override String get remainingAttempts => 'Verbleibende Versuche heute';
 }
 
 // Path: dreamEntry.interpretation
@@ -377,6 +428,18 @@ class _TranslationsProfileReminderDe implements TranslationsProfileReminderEn {
 	@override String get saveButton => 'Erinnerung speichern';
 	@override String get skipButton => 'Jetzt überspringen';
 	@override String get savedSuccess => 'Erinnerungseinstellungen erfolgreich gespeichert';
+}
+
+// Path: profile.deleteAccount
+class _TranslationsProfileDeleteAccountDe implements TranslationsProfileDeleteAccountEn {
+	_TranslationsProfileDeleteAccountDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Konto löschen';
+	@override String get message => 'Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden und wird alle Ihre Daten einschließlich Träume, Deutungen und Einstellungen permanent löschen.';
+	@override String get confirm => 'Ja, löschen';
 }
 
 // Path: registration.password.changePassword
@@ -519,6 +582,20 @@ extension on TranslationsDe {
 			case 'core.errors.tryAgain': return 'Bitte versuchen Sie es erneut';
 			case 'core.errors.userNotAuthenticated': return 'Benutzer konnte nicht authentifiziert werden';
 			case 'core.success': return 'Erfolgreich';
+			case 'core.emailVerification.title': return 'E-Mail bestätigen';
+			case 'core.emailVerification.message': return 'Eine Bestätigungs-E-Mail wurde an Ihre E-Mail-Adresse gesendet. Bitte bestätigen Sie Ihre E-Mail, um fortzufahren.';
+			case 'core.emailVerification.continue_': return 'Trotzdem fortfahren';
+			case 'core.emailVerification.resend': return 'E-Mail erneut senden';
+			case 'core.emailVerification.resent': return 'Bestätigungs-E-Mail wurde erneut gesendet';
+			case 'core.emailVerificationDialog.notVerifiedTitle': return 'E-Mail nicht verifiziert';
+			case 'core.emailVerificationDialog.verifyTitle': return 'E-Mail bestätigen';
+			case 'core.emailVerificationDialog.notVerifiedMessage': return 'Bitte bestätigen Sie Ihre E-Mail, bevor Sie sich anmelden. Überprüfen Sie Ihren Posteingang auf den Bestätigungslink.';
+			case 'core.emailVerificationDialog.verifyMessage': return ({required Object email}) => 'Eine Bestätigungs-E-Mail wurde an ${email} gesendet. Bitte bestätigen Sie Ihre E-Mail, um fortzufahren.';
+			case 'core.emailVerificationDialog.needVerification': return 'Benötigen Sie eine neue Bestätigungs-E-Mail?';
+			case 'core.emailVerificationDialog.checkInbox': return 'Überprüfen Sie Ihren Posteingang und Spam-Ordner auf den Bestätigungslink.';
+			case 'core.emailVerificationDialog.cancel': return 'Abbrechen';
+			case 'core.emailVerificationDialog.resend': return 'Erneut senden';
+			case 'core.emailVerificationDialog.goToLogin': return 'Zur Anmeldung';
 			case 'registration.welcomeText': return 'Willkommen zurück';
 			case 'registration.email.emailText': return 'E-Mail';
 			case 'registration.email.emailHint': return 'Bitte geben Sie Ihre E-Mail ein';
@@ -576,13 +653,14 @@ extension on TranslationsDe {
 			case 'dreamEntry.dreamDetails.addTags': return 'Tags hinzufügen';
 			case 'dreamEntry.dreamDetails.moodRating': return 'Stimmungsbewertung';
 			case 'dreamEntry.dreamDetails.confirmButton': return 'Bestätigen';
-			case 'dreamEntry.dreamForm.record': return 'Ihren Traum aufnehmen';
+			case 'dreamEntry.dreamForm.record': return 'Traum aufzeichnen';
 			case 'dreamEntry.dreamForm.content': return 'Trauminhalt';
-			case 'dreamEntry.dreamForm.contentHint': return 'Bitte geben Sie den Inhalt Ihres Traums ein';
+			case 'dreamEntry.dreamForm.contentHint': return 'Bitte geben Sie Ihren Traum ein';
 			case 'dreamEntry.dreamForm.getInterpretation': return 'Interpretation erhalten';
-			case 'dreamEntry.dreamForm.noAttemptsLeft': return 'Keine Versuche mehr für heute. Schauen Sie sich ein Video an, um mehr Träume zu interpretieren.';
-			case 'dreamEntry.dreamForm.watchAdError': return 'Bitte schauen Sie sich das Video an, um mehr Träume zu interpretieren.';
+			case 'dreamEntry.dreamForm.noAttemptsLeft': return 'Keine Versuche mehr für heute. Sehen Sie sich eine Werbung an, um mehr Träume zu interpretieren.';
+			case 'dreamEntry.dreamForm.watchAdError': return 'Bitte sehen Sie sich die Werbung an, um heute mehr Träume zu interpretieren.';
 			case 'dreamEntry.dreamForm.dreamSaved': return 'Traum erfolgreich gespeichert';
+			case 'dreamEntry.dreamForm.remainingAttempts': return 'Verbleibende Versuche heute';
 			case 'dreamEntry.interpretation.title': return 'Traumdeutung';
 			case 'dreamEntry.interpretation.interpretationText': return 'Deutung';
 			case 'dreamEntry.interpretation.saveButton': return 'Deutung speichern';
@@ -690,6 +768,14 @@ extension on TranslationsDe {
 			case 'profile.reminder.saveButton': return 'Erinnerung speichern';
 			case 'profile.reminder.skipButton': return 'Jetzt überspringen';
 			case 'profile.reminder.savedSuccess': return 'Erinnerungseinstellungen erfolgreich gespeichert';
+			case 'profile.deleteAccount.title': return 'Konto löschen';
+			case 'profile.deleteAccount.message': return 'Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden und wird alle Ihre Daten einschließlich Träume, Deutungen und Einstellungen permanent löschen.';
+			case 'profile.deleteAccount.confirm': return 'Ja, löschen';
+			case 'common.cancel': return 'Abbrechen';
+			case 'common.confirm': return 'Bestätigen';
+			case 'common.success': return 'Erfolgreich';
+			case 'common.error': return 'Fehler';
+			case 'common.loading': return 'Lädt...';
 			default: return null;
 		}
 	}

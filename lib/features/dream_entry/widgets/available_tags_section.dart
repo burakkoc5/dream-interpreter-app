@@ -20,14 +20,14 @@ class AvailableTagsSection extends StatelessWidget {
 
     if (state.availableTags.isEmpty) return const SizedBox.shrink();
 
-    print(state.tagCounts);
+    debugPrint(state.tagCounts.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Previously used tags',
           style: theme.textTheme.titleSmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
         const SizedBox(height: 8),

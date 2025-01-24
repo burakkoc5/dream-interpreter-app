@@ -1,20 +1,45 @@
 import 'dart:async';
 import 'package:dream/features/profile/models/reminder_settings_model.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import '../repositories/profile_repository.dart';
 import '../models/profile_model.dart';
 import 'profile_state.dart';
+import 'package:dream/features/auth/application/auth_cubit.dart';
+import 'package:dream/shared/repositories/notification_repository.dart';
 
 @injectable
 class ProfileCubit extends Cubit<ProfileState> {
   final ProfileRepository _repository;
+  final AuthCubit _authCubit;
+  final NotificationRepository _notificationRepository;
   StreamSubscription<Profile>? _profileSubscription;
+  StreamSubscription? _authSubscription;
 
-  ProfileCubit(this._repository) : super(const ProfileState());
+  ProfileCubit(this._repository, this._authCubit, this._notificationRepository)
+      : super(const ProfileState()) {
+    // Listen to auth state changes
+    _authSubscription = _authCubit.stream.listen((authState) {
+      if (authState.user != null && authState.user!.emailVerified) {
+        _loadProfile(authState.user!.id);
+      } else {
+        // Cancel existing subscription and clear state when user is not authenticated
+        // or email is not verified
+        _profileSubscription?.cancel();
+        _profileSubscription = null;
+        emit(const ProfileState());
+      }
+    });
 
-  Future<void> loadProfile(String userId) async {
-    print('ProfileCubit: Loading profile for user $userId');
+    // Load initial profile if user is already logged in and verified
+    if (_authCubit.state.user != null && _authCubit.state.user!.emailVerified) {
+      _loadProfile(_authCubit.state.user!.id);
+    }
+  }
+
+  Future<void> _loadProfile(String userId) async {
+    debugPrint('ProfileCubit: Loading profile for user $userId');
     if (!isClosed) {
       emit(state.copyWith(isLoading: true, error: null));
     }
@@ -23,6 +48,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       await _profileSubscription?.cancel();
       _profileSubscription = _repository.getProfile(userId).listen(
         (profile) {
+          debugPrint(
+              'ProfileCubit: Profile loaded successfully: ${profile.toJson()}');
           if (!isClosed) {
             emit(state.copyWith(
               isLoading: false,
@@ -32,57 +59,79 @@ class ProfileCubit extends Cubit<ProfileState> {
           }
         },
         onError: (error) {
-          print('ProfileCubit: Error loading profile: $error');
-          // Only emit error if we don't have a profile yet
-          if (!isClosed && state.profile == null) {
-            emit(state.copyWith(
-              isLoading: false,
-              error: 'Failed to load profile',
-            ));
+          debugPrint('ProfileCubit: Error loading profile: $error');
+          if (!isClosed) {
+            if (error.toString().contains('Profile not found')) {
+              // Create initial profile if not found
+              debugPrint(
+                  'ProfileCubit: Profile not found, creating initial profile');
+              final user = _authCubit.state.user;
+              if (user != null) {
+                _repository.createInitialProfile(
+                  userId: user.id,
+                  email: user.email,
+                );
+              }
+            } else if (_authCubit.state.user == null ||
+                !_authCubit.state.user!.emailVerified) {
+              emit(const ProfileState());
+            } else {
+              emit(state.copyWith(
+                isLoading: false,
+                error: 'Failed to load profile',
+              ));
+            }
           }
         },
       );
     } catch (e) {
-      print('ProfileCubit: Exception in loadProfile: $e');
-      // Only emit error if we don't have a profile yet
-      if (!isClosed && state.profile == null) {
-        emit(state.copyWith(
-          isLoading: false,
-          error: 'Failed to load profile',
-        ));
+      debugPrint('ProfileCubit: Exception in loadProfile: $e');
+      if (!isClosed) {
+        if (_authCubit.state.user == null ||
+            !_authCubit.state.user!.emailVerified) {
+          emit(const ProfileState());
+        } else {
+          emit(state.copyWith(
+            isLoading: false,
+            error: 'Failed to load profile',
+          ));
+        }
       }
+    }
+  }
+
+  void _reset() async {
+    await _profileSubscription?.cancel();
+    _profileSubscription = null;
+    if (!isClosed) {
+      emit(const ProfileState());
     }
   }
 
   @override
   Future<void> close() async {
+    await _authSubscription?.cancel();
     await _profileSubscription?.cancel();
     return super.close();
   }
 
-  Future<void> updateDisplayName(String newName, String userId) async {
-    // Check if the cubit is still open before emitting state
+  Future<void> updateDisplayName(String newName) async {
     if (!isClosed) {
       emit(state.copyWith(isLoading: true, error: null));
     }
 
     try {
-      print('Right before updateDisplayName');
       await _repository.updateDisplayName(newName);
-      print('ProfileCubit: Display name updated successfully');
+      debugPrint('ProfileCubit: Display name updated successfully');
       if (state.profile != null) {
-        // Check if the cubit is still open before emitting state
         if (!isClosed) {
           emit(state.copyWith(
             isLoading: false,
             profile: state.profile!.copyWith(displayName: newName),
           ));
         }
-        loadProfile(
-            userId); // This will again emit a new state, check isClosed before calling
       }
     } catch (e) {
-      // Check if the cubit is still open before emitting state
       if (!isClosed) {
         emit(state.copyWith(
           isLoading: false,
@@ -96,11 +145,28 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (state.profile == null) return;
 
     try {
+      if (!enabled) {
+        // If notifications are being disabled, cancel all reminders
+        await _notificationRepository.cancelAllReminders();
+      }
+
       final updatedProfile = state.profile!.copyWith(
         notificationsEnabled: enabled,
       );
       await _repository.updateProfile(updatedProfile);
       emit(state.copyWith(profile: updatedProfile));
+
+      // If notifications are being enabled and there are reminder settings, reschedule them
+      if (enabled) {
+        final reminderSettings = state.profile?.preferences['reminderSettings'];
+        if (reminderSettings != null) {
+          final settings = ReminderSettings.fromJson(
+              reminderSettings as Map<String, dynamic>);
+          await _notificationRepository.scheduleDreamReminder(
+            time: settings.time,
+          );
+        }
+      }
     } catch (e) {
       emit(state.copyWith(
         error: 'Failed to update notifications',
@@ -109,16 +175,30 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> updateReminders(ReminderSettings settings) async {
-    print('ProfileCubit: Updating reminder settings');
-    print(state.profile);
+    debugPrint('ProfileCubit: Updating reminder settings');
     if (state.profile == null) return;
 
     try {
+      // Check if system notifications are enabled
+      final systemNotificationsEnabled =
+          await _notificationRepository.isSystemNotificationsEnabled();
+
+      if (!systemNotificationsEnabled) {
+        // If system notifications are disabled, update the profile to reflect this
+        final updatedProfile = state.profile!.copyWith(
+          notificationsEnabled: false,
+        );
+        await _repository.updateProfile(updatedProfile);
+        emit(state.copyWith(
+          profile: updatedProfile,
+          error: 'Please enable notifications in system settings',
+        ));
+        return;
+      }
+
       final updatedPreferences =
           Map<String, dynamic>.from(state.profile!.preferences);
       updatedPreferences['reminderSettings'] = settings.toJson();
-
-      print(updatedPreferences);
 
       await _repository.updateProfilePreferences({
         'preferences': updatedPreferences,
@@ -131,6 +211,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       emit(state.copyWith(profile: updatedProfile));
+
+      // Schedule the notification
+      await _notificationRepository.scheduleDreamReminder(
+        time: settings.time,
+      );
     } catch (e) {
       emit(state.copyWith(
         error: 'Failed to update reminder settings',
@@ -153,18 +238,38 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> updateProfilePreferences(Map<String, dynamic> data) async {
-    if (state.profile == null) return;
+    debugPrint('ProfileCubit: Updating profile preferences with data: $data');
+
+    if (state.profile == null) {
+      debugPrint('ProfileCubit: Profile is null, attempting to load profile');
+      final user = _authCubit.state.user;
+      if (user != null) {
+        await _loadProfile(user.id);
+        // Wait for profile to load
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
+      if (state.profile == null) {
+        debugPrint('ProfileCubit: Failed to load profile');
+        emit(state.copyWith(
+            error: 'Failed to update preferences: Profile not loaded'));
+        return;
+      }
+    }
 
     try {
+      debugPrint('ProfileCubit: Updating preferences in repository');
       await _repository.updateProfilePreferences(data);
+
       final updatedProfile = state.profile!.copyWith(
         preferences: (data['preferences'] as Map<String, dynamic>?) ??
             state.profile!.preferences,
       );
-      emit(state.copyWith(profile: updatedProfile));
+      debugPrint('ProfileCubit: Preferences updated successfully');
+      emit(state.copyWith(profile: updatedProfile, error: null));
     } catch (e) {
+      debugPrint('ProfileCubit: Error updating preferences: $e');
       emit(state.copyWith(
-        error: 'Failed to update preferences',
+        error: 'Failed to update preferences: ${e.toString()}',
       ));
     }
   }
@@ -178,10 +283,34 @@ class ProfileCubit extends Cubit<ProfileState> {
     List<String>? interests,
     bool? hasCompletedPersonalization,
   }) async {
-    print('ProfileCubit: Updating personal information');
+    debugPrint('ProfileCubit: Updating personal information');
 
-    if (state.profile == null) return;
     try {
+      if (state.profile == null) {
+        final user = _authCubit.state.user;
+        if (user == null) throw Exception('User not authenticated');
+
+        final now = DateTime.now();
+        final newProfile = Profile(
+          userId: user.id,
+          email: user.email,
+          createdAt: now,
+          lastActive: now,
+          gender: gender,
+          horoscope: horoscope,
+          occupation: occupation,
+          relationshipStatus: relationshipStatus,
+          birthDate: birthDate,
+          interests: interests ?? [],
+          hasCompletedPersonalization: hasCompletedPersonalization ?? false,
+        );
+
+        await _repository.updateProfile(newProfile);
+        debugPrint('ProfileCubit: Created new profile: ${newProfile.toJson()}');
+        emit(state.copyWith(profile: newProfile));
+        return;
+      }
+
       final updatedProfile = state.profile!.copyWith(
         gender: gender,
         horoscope: horoscope,
@@ -193,12 +322,16 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await _repository.updateProfile(updatedProfile);
-      print('ProfileCubit: Updated profile: ${updatedProfile.toJson()}');
+      debugPrint('ProfileCubit: Updated profile: ${updatedProfile.toJson()}');
       emit(state.copyWith(profile: updatedProfile));
     } catch (e) {
       emit(state.copyWith(
         error: 'Failed to update personal information',
       ));
     }
+  }
+
+  void reset() {
+    _reset();
   }
 }

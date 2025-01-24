@@ -56,21 +56,21 @@ class AppModalSheet extends StatelessWidget {
               end: Alignment.bottomRight,
               colors: [
                 theme.colorScheme.surface
-                    .withOpacity(useGlassmorphism ? 0.8 : 1.0),
+                    .withValues(alpha: useGlassmorphism ? 0.8 : 1.0),
                 theme.colorScheme.surface
-                    .withOpacity(useGlassmorphism ? 0.7 : 1.0),
+                    .withValues(alpha: useGlassmorphism ? 0.7 : 1.0),
               ],
             ),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
             boxShadow: [
               BoxShadow(
-                color: theme.colorScheme.primary.withOpacity(0.1),
+                color: theme.colorScheme.primary.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, -2),
               ),
             ],
             border: Border.all(
-              color: theme.colorScheme.primary.withOpacity(0.1),
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
               width: 1,
             ),
           ),
@@ -90,7 +90,7 @@ class AppModalSheet extends StatelessWidget {
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withOpacity(0.2),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),

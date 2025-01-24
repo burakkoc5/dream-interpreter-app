@@ -17,7 +17,25 @@
       "tryAgain": "Please try again",
       "userNotAuthenticated": "User not authenticated"
     },
-    "success": "Success"
+    "success": "Success",
+    "emailVerification": {
+      "title": "Verify Your Email",
+      "message": "A verification email has been sent to your email address. Please verify your email to continue.",
+      "continue_": "Continue Anyway",
+      "resend": "Resend Email",
+      "resent": "Verification email has been resent"
+    },
+    "emailVerificationDialog": {
+      "notVerifiedTitle": "Email Not Verified",
+      "verifyTitle": "Verify Your Email",
+      "notVerifiedMessage": "Please verify your email before signing in. Check your inbox for the verification link.",
+      "verifyMessage": "A verification email has been sent to $email. Please verify your email to continue.",
+      "needVerification": "Need a new verification email?",
+      "checkInbox": "Check your inbox and spam folder for the verification link.",
+      "cancel": "Cancel",
+      "resend": "Resend",
+      "goToLogin": "Go to Login"
+    }
   },
   "registration": {
     "welcomeText": "Welcome Back",
@@ -106,7 +124,8 @@
       "getInterpretation": "Get Interpretation",
       "noAttemptsLeft": "No attempts left for today. Watch an ad to interpret more dreams.",
       "watchAdError": "Please watch the ad to interpret more dreams today.",
-      "dreamSaved": "Dream saved successfully"
+      "dreamSaved": "Dream saved successfully",
+      "remainingAttempts": "Remaining attempts today"
     },
     "interpretation": {
       "title": "Dream Interpretation",
@@ -238,6 +257,18 @@
       "saveButton": "Save Reminder",
       "skipButton": "Skip for now",
       "savedSuccess": "Reminder settings saved successfully"
+    },
+    "deleteAccount": {
+      "title": "Delete Account",
+      "message": "Are you sure you want to delete your account? This action cannot be undone and will permanently delete all your data including dreams, interpretations, and settings.",
+      "confirm": "Yes, Delete"
     }
+  },
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "success": "Success",
+    "error": "Error",
+    "loading": "Loading..."
   }
 }

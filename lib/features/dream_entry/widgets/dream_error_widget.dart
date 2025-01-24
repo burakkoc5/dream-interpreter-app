@@ -36,7 +36,7 @@ class DreamErrorWidget extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              color: theme.colorScheme.error.withOpacity(0.1),
+              color: theme.colorScheme.error.withValues(alpha: 0.1),
             ),
             child: IconButton(
               icon: Icon(

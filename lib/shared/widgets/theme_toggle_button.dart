@@ -33,10 +33,10 @@ class ThemeToggleButton extends StatelessWidget {
             ? Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surface.withOpacity(0.8),
+                  color: theme.colorScheme.surface.withValues(alpha: 0.8),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                   ),
                 ),
                 child: Icon(
@@ -57,7 +57,7 @@ class ThemeToggleButton extends StatelessWidget {
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary
-                        .withOpacity(isDarkMode ? 0.2 : 0.1),
+                        .withValues(alpha: isDarkMode ? 0.2 : 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(

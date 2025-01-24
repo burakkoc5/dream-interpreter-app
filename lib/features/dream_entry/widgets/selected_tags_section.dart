@@ -15,8 +15,6 @@ class SelectedTagsSection extends StatelessWidget {
     if (tags.isEmpty) return const SizedBox.shrink();
 
     final theme = Theme.of(context);
-    final brightness = MediaQuery.platformBrightnessOf(context);
-    final isDarkMode = brightness == Brightness.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +22,7 @@ class SelectedTagsSection extends StatelessWidget {
         Text(
           'Selected tags',
           style: theme.textTheme.titleSmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
         const SizedBox(height: 8),
@@ -60,7 +58,7 @@ class SelectedTagsSection extends StatelessWidget {
                           Icons.close,
                           size: 18,
                           color: theme.colorScheme.onSecondaryContainer
-                              .withOpacity(0.8),
+                              .withValues(alpha: 0.8),
                         ),
                       ],
                     ),
