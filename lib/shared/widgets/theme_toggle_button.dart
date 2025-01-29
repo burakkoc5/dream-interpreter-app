@@ -72,7 +72,7 @@ class ThemeToggleButton extends StatelessWidget {
                 ),
                 title: Text(
                   themeCubit.state == ThemeMode.system
-                      ? 'System'
+                      ? t.core.mode.systemMode
                       : themeCubit.state == ThemeMode.light
                           ? t.core.mode.lightMode
                           : t.core.mode.darkMode,
@@ -96,7 +96,7 @@ class ThemeToggleButton extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'System',
+                  t.core.mode.systemMode,
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: theme.colorScheme.onSurface,
                     fontSize: 15,

@@ -1,4 +1,5 @@
 import 'package:dream/core/routing/app_route_names.dart';
+import 'package:dream/core/services/logging_service.dart';
 import 'package:dream/features/auth/models/auth_error.dart';
 import 'package:dream/features/auth/models/user_model.dart';
 import 'package:dream/features/auth/repositories/auth_repository.dart';
@@ -16,26 +17,30 @@ import 'package:dream/features/dream_history/application/dream_history_cubit.dar
 import 'package:dream/features/profile/application/stats_cubit.dart';
 import 'package:dream/features/profile/application/streak_cubit.dart';
 import 'package:dream/features/auth/presentation/widgets/email_verification_dialog.dart';
+import 'package:dream/shared/widgets/app_toast.dart';
 
 @injectable
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _authRepository;
   final FirebaseAuth _auth;
   final ProfileRepository _profileRepository;
+  final LoggingService _loggingService;
 
-  AuthCubit(this._authRepository, this._auth, this._profileRepository)
-      : super(const AuthState(isInitializing: true)) {
+  AuthCubit(
+    this._authRepository,
+    this._auth,
+    this._profileRepository,
+    LoggingService loggingService,
+  )   : _loggingService = loggingService,
+        super(const AuthState(isInitializing: true)) {
     _auth.authStateChanges().listen((User? user) {
-      debugPrint('AuthCubit - Auth state changed: ${user?.uid}');
       if (user != null) {
         final userModel = UserModel.fromFirebaseUser(user);
-        debugPrint('AuthCubit - Created UserModel: ${userModel.id}');
         emit(AuthState(
           isInitializing: false,
           user: userModel,
         ));
       } else {
-        debugPrint('AuthCubit - User is null, emitting unauthenticated state');
         emit(const AuthState(isInitializing: false));
       }
     });
@@ -47,9 +52,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     try {
       final user = await _authRepository.signIn(email, password);
-      debugPrint('AuthCubit: User signed in: ${user.id}');
-      debugPrint('AuthCubit: User signed in: ${user.email}');
-      debugPrint('AuthCubit: User signed in: ${user.emailVerified}');
+
       if (!context.mounted) return;
 
       // Wait for Firebase Auth state to be updated
@@ -61,7 +64,6 @@ class AuthCubit extends Cubit<AuthState> {
 
       final currentUser = _auth.currentUser;
       if (currentUser == null) {
-        debugPrint('AuthCubit - User still null after waiting');
         throw FirebaseAuthException(
           code: 'user-not-found',
           message: t.core.errors.userNotAuthenticated,
@@ -109,20 +111,15 @@ class AuthCubit extends Cubit<AuthState> {
       // Check if personalization is completed
       final profile = await _profileRepository.getProfile(user.id).first;
       if (!profile.hasCompletedPersonalization) {
-        debugPrint(
-            'AuthCubit: Personalization not completed, navigating to personalization');
         if (!context.mounted) return;
 
         context.go(AppRoute.personalization);
       } else {
-        debugPrint(
-            'AuthCubit: Personalization completed, navigating to dream entry');
         if (!context.mounted) return;
 
         context.go(AppRoute.dreamEntry);
       }
     } catch (e) {
-      debugPrint('AuthCubit - Sign in error: $e');
       String errorMessage = t.core.errors.unknown;
 
       if (e is FirebaseAuthException) {
@@ -232,8 +229,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> signOut(BuildContext context) async {
     try {
-      debugPrint('AuthCubit: Signing out');
-
       // First emit unauthenticated state to prevent any subscriptions from trying to access data
       emit(const AuthState(isInitializing: false));
 
@@ -247,37 +242,34 @@ class AuthCubit extends Cubit<AuthState> {
           context.read<ProfileCubit>().reset();
 
           // Reset other cubits
-          debugPrint('DreamEntryCubit: Resetting dream entry');
           context.read<DreamEntryCubit>().reset();
-          debugPrint('DreamHistoryCubit: Resetting dream history');
           context.read<DreamHistoryCubit>().reset();
 
-          debugPrint('StatsCubit: Resetting stats');
           try {
             context.read<StatsCubit>().reset();
           } catch (e) {
-            debugPrint('Failed to reset StatsCubit: $e');
+            _loggingService.log('Error resetting StatsCubit',
+                level: LogLevel.error, error: e);
           }
 
-          debugPrint('StreakCubit: Resetting streak');
           try {
             context.read<StreakCubit>().reset();
           } catch (e) {
-            debugPrint('Failed to reset StreakCubit: $e');
+            _loggingService.log('Error resetting StreakCubit',
+                level: LogLevel.error, error: e);
           }
         } catch (e) {
-          debugPrint('Error resetting states: $e');
+          _loggingService.log('Error resetting cubits',
+              level: LogLevel.error, error: e);
           // Don't rethrow as we want to continue with navigation
         }
       }
 
       // Finally navigate to login
       if (context.mounted) {
-        debugPrint('Navigating to login');
         context.go(AppRoute.login);
       }
     } catch (e) {
-      debugPrint('AuthCubit - Sign out error: $e');
       // Even if there's an error, try to navigate to login
       if (context.mounted) {
         context.go(AppRoute.login);
@@ -381,20 +373,18 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void showErrorSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      ),
+    AppToast.showError(
+      context,
+      title: t.core.errors.error,
+      description: message,
     );
   }
 
   void showSuccessSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
+    AppToast.showSuccess(
+      context,
+      title: t.core.success,
+      description: message,
     );
   }
 }

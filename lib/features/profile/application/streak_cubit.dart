@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:dream/features/profile/application/streak_state.dart';
-import 'package:dream/features/profile/repository/streak_repository.dart';
+import 'package:dream/features/profile/repositories/streak_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

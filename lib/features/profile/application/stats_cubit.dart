@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import '../repositories/stats_repository.dart';
@@ -19,7 +18,6 @@ class StatsCubit extends Cubit<StatsState> {
       await _statsSubscription?.cancel();
       _statsSubscription = _repository.getUserStats(userId).listen(
         (stats) {
-          debugPrint(stats.toString());
           emit(state.copyWith(
             isLoading: false,
             stats: stats,

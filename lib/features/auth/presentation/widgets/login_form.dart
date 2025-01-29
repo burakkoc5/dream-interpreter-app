@@ -3,13 +3,12 @@ import 'package:dream/core/routing/app_route_names.dart';
 import 'package:dream/features/auth/application/auth_cubit.dart';
 import 'package:dream/features/auth/application/auth_state.dart';
 import 'package:dream/i18n/strings.g.dart';
-import 'package:dream/shared/widgets/app_button.dart';
+import 'package:dream/shared/widgets/app_button.dart' as app;
 import 'package:dream/shared/widgets/app_text_field.dart';
+import 'package:dream/shared/widgets/app_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:toastification/toastification.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -34,25 +33,6 @@ class _LoginFormState extends State<LoginForm> {
   void _clearForm() {
     _formKey.currentState?.reset();
     setState(() {});
-  }
-
-  void _showErrorToast(String message) {
-    if (!mounted) return;
-
-    toastification.show(
-      context: context,
-      type: ToastificationType.error,
-      style: ToastificationStyle.flat,
-      title: Text(t.core.errors.error),
-      description: Text(message),
-      alignment: Alignment.topCenter,
-      autoCloseDuration: const Duration(seconds: 3),
-      borderRadius: BorderRadius.circular(12.0),
-      icon: const Icon(
-        Iconsax.warning_2,
-        color: Colors.white,
-      ),
-    );
   }
 
   Future<void> _handleLogin() async {
@@ -87,7 +67,11 @@ class _LoginFormState extends State<LoginForm> {
             if (state.error != null && state.error != _lastError) {
               _lastError = state.error;
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                _showErrorToast(state.error!);
+                AppToast.showError(
+                  context,
+                  title: t.core.errors.error,
+                  description: state.error!,
+                );
               });
             }
             return Column(
@@ -113,7 +97,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Explore your dreams with AI',
+                  t.registration.signIn.subtitle,
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
@@ -123,7 +107,7 @@ class _LoginFormState extends State<LoginForm> {
                 AppTextField(
                   controller: _emailController,
                   label: t.registration.email.emailText,
-                  prefixIcon: Icons.email_outlined,
+                  prefix: Icon(Icons.email_outlined),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
@@ -139,11 +123,13 @@ class _LoginFormState extends State<LoginForm> {
                 AppTextField(
                   controller: _passwordController,
                   label: t.registration.password.passwordText,
-                  prefixIcon: Icons.lock_outline,
-                  suffixIcon: _isPasswordVisible
-                      ? Icons.visibility_off
-                      : Icons.visibility,
-                  onSuffixIconTap: _togglePasswordVisibility,
+                  prefix: Icon(Icons.lock_outline),
+                  suffix: IconButton(
+                    icon: Icon(_isPasswordVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility),
+                    onPressed: _togglePasswordVisibility,
+                  ),
                   obscureText: !_isPasswordVisible,
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
@@ -153,7 +139,7 @@ class _LoginFormState extends State<LoginForm> {
                   },
                 ),
                 const SizedBox(height: 24),
-                AppButton(
+                app.AppButton(
                   text: t.registration.signIn.signInText,
                   onPressed: _handleLogin,
                   isLoading: state.isLoading,
@@ -170,7 +156,7 @@ class _LoginFormState extends State<LoginForm> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
-                        'OR',
+                        t.registration.signIn.or,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurface
                               .withValues(alpha: 0.5),
@@ -185,26 +171,23 @@ class _LoginFormState extends State<LoginForm> {
                   ],
                 ),
                 const SizedBox(height: 24),
-                AppButton(
+                app.AppButton(
                   text: t.registration.signUp.signUpText,
                   onPressed: () {
                     _clearForm();
                     context.push(AppRoute.register);
                   },
-                  variant: AppButtonVariant.ghost,
+                  style: app.ButtonStyle.text,
                   icon: Icons.person_add_outlined,
                 ),
-                TextButton(
+                app.AppButton(
                   onPressed: () {
                     _clearForm();
                     context.push(AppRoute.passwordReset);
                   },
-                  child: Text(
-                    t.registration.signIn.forgotPassword,
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
+                  text: t.registration.signIn.forgotPassword,
+                  style: app.ButtonStyle.text,
+                  icon: Icons.lock_outline,
                 ),
               ],
             );

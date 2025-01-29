@@ -1,6 +1,7 @@
 import 'package:dream/features/dream_history/models/dream_history_model.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
+import 'package:dream/shared/widgets/app_button.dart' as app;
 
 class DeleteDreamAlertDialog extends StatelessWidget {
   const DeleteDreamAlertDialog({
@@ -52,7 +53,8 @@ class DeleteDreamAlertDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Are you sure you want to delete "${dream.title.isEmpty ? 'Untitled' : dream.title}"?',
+            t.searchDreams.deleteConfirmation.replaceAll(
+                '{title}', dream.title.isEmpty ? 'Untitled' : dream.title),
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
@@ -61,7 +63,7 @@ class DeleteDreamAlertDialog extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'This action cannot be undone.',
+            t.searchDreams.deleteWarning,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
@@ -75,44 +77,20 @@ class DeleteDreamAlertDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              child: TextButton(
+              child: app.AppButton(
+                text: t.common.cancel,
                 onPressed: () => Navigator.of(context).pop(false),
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Cancel',
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13,
-                  ),
-                ),
+                style: app.ButtonStyle.text,
+                size: app.ButtonSize.small,
               ),
             ),
             const SizedBox(width: 8),
             Expanded(
-              child: FilledButton(
+              child: app.AppButton(
+                text: t.searchDreams.delete,
                 onPressed: () => Navigator.of(context).pop(true),
-                style: FilledButton.styleFrom(
-                  backgroundColor: theme.colorScheme.error,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  t.searchDreams.delete,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: theme.colorScheme.onError,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13,
-                  ),
-                ),
+                style: app.ButtonStyle.danger,
+                size: app.ButtonSize.small,
               ),
             ),
           ],

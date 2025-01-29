@@ -10,6 +10,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
+import 'package:firebase_crashlytics/firebase_crashlytics.dart' as _i141;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as _i163;
 import 'package:get_it/get_it.dart' as _i174;
@@ -41,13 +42,14 @@ import '../../features/profile/application/stats_cubit.dart' as _i382;
 import '../../features/profile/application/streak_cubit.dart' as _i1050;
 import '../../features/profile/repositories/profile_repository.dart' as _i155;
 import '../../features/profile/repositories/stats_repository.dart' as _i733;
-import '../../features/profile/repository/streak_repository.dart' as _i122;
+import '../../features/profile/repositories/streak_repository.dart' as _i335;
 import '../../shared/repositories/notification_repository.dart' as _i517;
 import '../../shared/repositories/time_zone_repository.dart' as _i246;
 import '../../shared/services/android_notification_settings.dart' as _i368;
 import '../../shared/services/ios_notification_settings.dart' as _i558;
 import '../../shared/services/platform_notification_settings.dart' as _i411;
 import '../../shared/services/time_zone_service.dart' as _i604;
+import '../services/logging_service.dart' as _i520;
 import 'injection.dart' as _i464;
 
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -72,6 +74,7 @@ Future<_i174.GetIt> init(
     () => registerModule.sharedPreferences,
     preResolve: true,
   );
+  gh.singleton<_i141.FirebaseCrashlytics>(() => registerModule.crashlytics);
   gh.singleton<_i59.FirebaseAuth>(() => registerModule.firebaseAuth);
   gh.singleton<_i974.FirebaseFirestore>(() => registerModule.firebaseFirestore);
   gh.singleton<_i163.FlutterLocalNotificationsPlugin>(
@@ -87,45 +90,53 @@ Future<_i174.GetIt> init(
       () => _i223.ThemeCubit(gh<_i460.SharedPreferences>()));
   gh.factory<_i547.OnboardingCubit>(
       () => _i547.OnboardingCubit(gh<_i460.SharedPreferences>()));
-  gh.factory<_i386.DreamHistoryRepository>(() => _i386.DreamHistoryRepository(
+  gh.singleton<_i520.LoggingService>(
+      () => _i520.LoggingService(gh<_i141.FirebaseCrashlytics>()));
+  gh.factory<_i155.ProfileRepository>(
+      () => _i155.ProfileRepository(gh<_i974.FirebaseFirestore>()));
+  gh.factory<_i1046.DreamRepository>(() => _i235.FirebaseDreamRepository(
         gh<_i974.FirebaseFirestore>(),
-        gh<_i567.LocalStorageService>(),
+        gh<_i520.LoggingService>(),
       ));
   gh.singleton<_i517.NotificationRepository>(() => _i517.NotificationRepository(
         gh<_i163.FlutterLocalNotificationsPlugin>(),
         gh<_i411.IPlatformNotificationSettings>(),
         gh<_i604.ITimeZoneService>(),
         gh<_i460.SharedPreferences>(),
+        gh<_i520.LoggingService>(),
       ));
-  gh.factory<_i122.StreakRepository>(
-      () => _i122.StreakRepository(gh<_i974.FirebaseFirestore>()));
-  gh.factory<_i733.StatsRepository>(
-      () => _i733.StatsRepository(gh<_i974.FirebaseFirestore>()));
-  gh.factory<_i155.ProfileRepository>(
-      () => _i155.ProfileRepository(gh<_i974.FirebaseFirestore>()));
-  gh.factory<_i1050.StreakCubit>(
-      () => _i1050.StreakCubit(gh<_i122.StreakRepository>()));
   gh.factory<_i38.FirebaseAuthService>(() => _i38.FirebaseAuthService(
         gh<_i59.FirebaseAuth>(),
         gh<_i974.FirebaseFirestore>(),
       ));
   gh.singleton<_i947.InterpretationService>(
       () => _i947.InterpretationService(gh<_i342.OpenAIService>()));
-  gh.factory<_i1046.DreamRepository>(
-      () => _i235.FirebaseDreamRepository(gh<_i974.FirebaseFirestore>()));
+  gh.factory<_i733.StatsRepository>(() => _i733.StatsRepository(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i520.LoggingService>(),
+      ));
+  gh.factory<_i335.StreakRepository>(() => _i335.StreakRepository(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i520.LoggingService>(),
+      ));
+  gh.factory<_i386.DreamHistoryRepository>(() => _i386.DreamHistoryRepository(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i567.LocalStorageService>(),
+        gh<_i520.LoggingService>(),
+      ));
   gh.factory<_i382.StatsCubit>(
       () => _i382.StatsCubit(gh<_i733.StatsRepository>()));
-  gh.factory<_i1041.AuthRepository>(
-      () => _i1041.AuthRepository(gh<_i38.FirebaseAuthService>()));
+  gh.factory<_i1041.AuthRepository>(() => _i1041.AuthRepository(
+        gh<_i38.FirebaseAuthService>(),
+        gh<_i520.LoggingService>(),
+      ));
+  gh.factory<_i1050.StreakCubit>(
+      () => _i1050.StreakCubit(gh<_i335.StreakRepository>()));
   gh.factory<_i877.AuthCubit>(() => _i877.AuthCubit(
         gh<_i1041.AuthRepository>(),
         gh<_i59.FirebaseAuth>(),
         gh<_i155.ProfileRepository>(),
-      ));
-  gh.factory<_i234.DreamEntryCubit>(() => _i234.DreamEntryCubit(
-        gh<_i947.InterpretationService>(),
-        gh<_i567.LocalStorageService>(),
-        gh<_i877.AuthCubit>(),
+        gh<_i520.LoggingService>(),
       ));
   gh.factory<_i402.ProfileCubit>(() => _i402.ProfileCubit(
         gh<_i155.ProfileRepository>(),
@@ -134,6 +145,11 @@ Future<_i174.GetIt> init(
       ));
   gh.factory<_i127.DreamHistoryCubit>(() => _i127.DreamHistoryCubit(
         gh<_i386.DreamHistoryRepository>(),
+        gh<_i877.AuthCubit>(),
+      ));
+  gh.factory<_i234.DreamEntryCubit>(() => _i234.DreamEntryCubit(
+        gh<_i947.InterpretationService>(),
+        gh<_i567.LocalStorageService>(),
         gh<_i877.AuthCubit>(),
       ));
   return getIt;

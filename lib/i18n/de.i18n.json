@@ -1,6 +1,6 @@
 {
   "core": {
-    "appName": "Traumtagebuch",
+    "appName": "Dreamalyze",
     "mode": {
       "systemMode": "System",
       "darkMode": "Dunkler Modus",
@@ -78,11 +78,14 @@
     "signUp": {
       "signUpText": "Konto erstellen",
       "signUpCaption": "Treten Sie noch heute dem Traumtagebuch bei",
+      "subtitle": "Begleiten Sie uns auf der Reise durch Ihre Träume",
       "alreadyHaveAccount": "Haben Sie bereits ein Konto?"
     },
     "signIn": {
       "signInText": "Anmelden",
-      "forgotPassword": "Passwort vergessen?"
+      "forgotPassword": "Passwort vergessen?",
+      "subtitle": "Erforschen Sie Ihre Träume mit KI",
+      "or": "ODER"
     },
     "signOut": {
       "signOutText": "Abmelden"
@@ -125,6 +128,7 @@
       "noAttemptsLeft": "Keine Versuche mehr für heute. Sehen Sie sich eine Werbung an, um mehr Träume zu interpretieren.",
       "watchAdError": "Bitte sehen Sie sich die Werbung an, um heute mehr Träume zu interpretieren.",
       "dreamSaved": "Traum erfolgreich gespeichert",
+      "watchAdForInterpretation": "Werbung ansehen, um yorum zu erhalten",
       "remainingAttempts": "Verbleibende Versuche heute"
     },
     "interpretation": {
@@ -149,7 +153,9 @@
     "noResults": "Kein Traum gefunden",
     "delete": "Löschen",
     "undoButton": "Rückgängig",
-    "dreamDeleted": "Traum gelöscht"
+    "dreamDeleted": "Traum gelöscht",
+    "deleteConfirmation": "Sind Sie sicher, dass Sie \"{title}\" löschen möchten?",
+    "deleteWarning": "Diese Aktion kann nicht rückgängig gemacht werden."
   },
   "dreamHistory": {
     "dreamHistory": "Traumhistorie",
@@ -166,6 +172,7 @@
     "changePassword": "Passwort ändern",
     "profileNotFound": "Profil nicht gefunden",
     "closeBackgroundAnimation": "Hintergrundanimation schließen",
+    "displayNameUpdated": "Benutzername erfolgreich aktualisiert",
     "personalization": {
       "title": "Personalisieren Sie Ihr Profil",
       "description": "Helfen Sie uns, Sie besser zu verstehen, um personalisierte Traumdeutungen anzubieten.",
@@ -243,7 +250,7 @@
     "turkish": "Türkisch",
     "german": "Deutsch",
     "reminder": {
-      "setTime": "Traum-Erinnerungszeit einstellen",
+      "setTime": "Erinnerung setzen",
       "chooseTime": "Wählen Sie aus, wann Sie erinnert werden möchten",
       "description": "Wir senden Ihnen eine Benachrichtigung, um Ihnen zu helfen, sich an Ihre Träume zu erinnern",
       "earlyMorning": "Früher Morgen",
@@ -261,6 +268,7 @@
     "deleteAccount": {
       "title": "Konto löschen",
       "message": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden und wird alle Ihre Daten einschließlich Träume, Deutungen und Einstellungen permanent löschen.",
+      "warning": "Diese Aktion kann nicht rückgängig gemacht werden und wird alle Ihre Daten einschließlich Träume, Deutungen und Einstellungen permanent löschen.",
       "confirm": "Ja, löschen"
     }
   },

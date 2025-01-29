@@ -1,7 +1,7 @@
 import 'package:dream/features/profile/application/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../models/profile_model.dart';
+import '../../models/profile_model.dart';
 import 'profile_photo_picker_widget.dart';
 import 'editable_name_section.dart';
 
@@ -32,12 +32,17 @@ class ProfileHeaderWidget extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           profile.displayName!,
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge
+              ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         ),
         const SizedBox(height: 8),
         Text(
           profile.email,
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
         ),
       ],
     );

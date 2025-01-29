@@ -8,7 +8,7 @@ import 'package:dream/shared/widgets/theme_toggle_button.dart';
 import 'package:dream/shared/widgets/language_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../application/profile_cubit.dart';
+import '../../application/profile_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dream/config/theme/theme_cubit.dart';
 
@@ -116,7 +116,7 @@ class SettingsItemWidget extends StatelessWidget {
               _buildSettingItem(
                 context,
                 icon: Icons.notification_add,
-                title: t.dreamEntry.dreamForm.record,
+                title: t.profile.reminder.setTime,
                 onTap: profile.notificationsEnabled
                     ? () => context.push(AppRoute.reminderSettings)
                     : null,
@@ -196,13 +196,9 @@ class SettingsItemWidget extends StatelessWidget {
                 title: t.profile.logout,
                 onTap: () async {
                   await context.read<AuthCubit>().signOut(context);
-                  debugPrint('AuthCubit: Signing out');
                   if (context.mounted) {
-                    debugPrint('DreamEntryCubit: Resetting dream entry');
                     context.read<DreamEntryCubit>().reset();
-                    debugPrint('DreamHistoryCubit: Resetting dream history');
                     context.read<DreamHistoryCubit>().reset();
-                    debugPrint('Navigating to login');
                     context.go(AppRoute.login);
                   }
                 },
@@ -257,7 +253,7 @@ class SettingsItemWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                'This action cannot be undone.',
+                t.profile.deleteAccount.warning,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.error,
                   fontWeight: FontWeight.w500,

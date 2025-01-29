@@ -13,14 +13,6 @@ class RouteGuard {
     final hasCompletedOnboarding =
         context.read<OnboardingCubit>().isOnboardingComplete;
 
-    debugPrint('RouteGuard - state.matchedLocation: ${state.matchedLocation}');
-    debugPrint('RouteGuard - hasCompletedOnboarding: $hasCompletedOnboarding');
-    debugPrint(
-        'RouteGuard - authState.isInitializing: ${authState.isInitializing}');
-    debugPrint(
-        'RouteGuard - profileState.isLoading: ${profileState.isLoading}');
-    debugPrint('RouteGuard - profileState.profile: ${profileState.profile}');
-
     // Allow access to splash screen
     if (state.matchedLocation == AppRoute.splash) {
       return null;
@@ -50,7 +42,6 @@ class RouteGuard {
       if (isAuthRoute) {
         return null;
       }
-      debugPrint('RouteGuard - redirecting to login');
       return AppRoute.login;
     }
 
@@ -63,7 +54,6 @@ class RouteGuard {
     if (profileState.profile != null) {
       if (!profileState.profile!.hasCompletedPersonalization &&
           state.matchedLocation != AppRoute.personalization) {
-        debugPrint('RouteGuard - redirecting to personalization');
         return AppRoute.personalization;
       }
     }

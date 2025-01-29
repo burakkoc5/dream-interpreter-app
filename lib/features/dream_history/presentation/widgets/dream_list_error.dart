@@ -34,7 +34,6 @@ class DreamListError extends StatelessWidget {
           const SizedBox(height: 24),
           FilledButton.icon(
             onPressed: () {
-              debugPrint('DreamHistoryMixin - Manual refresh of dreams');
               context.read<DreamHistoryCubit>().loadDreams(refresh: true);
             },
             icon: const Icon(Icons.refresh),

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dream/features/auth/application/auth_cubit.dart';
 import 'package:dream/features/dream_history/models/dream_history_model.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../repositories/dream_history_repository.dart';
 import 'dream_history_state.dart';
@@ -33,13 +32,10 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
       }
 
       String? userId = _authCubit.state.user?.id;
-      debugPrint('DreamHistoryCubit - Loading dreams for user: $userId');
 
       // If userId is null, wait a bit longer and retry multiple times
       int retryCount = 0;
       while (userId == null && retryCount < 3) {
-        debugPrint(
-            'DreamHistoryCubit - User not authenticated, retry ${retryCount + 1}/3');
         await Future.delayed(const Duration(milliseconds: 300));
         userId = _authCubit.state.user?.id;
         retryCount++;
@@ -55,8 +51,6 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
         return;
       }
 
-      debugPrint('DreamHistoryCubit - Using user ID: $userId');
-
       final result = await _repository.getDreamHistory(
         userId,
         lastDocument: state.lastDocument,
@@ -65,11 +59,9 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
       final dreamsData = result['dreams'];
       List<DreamHistoryModel> dreams;
       if (dreamsData == null || (dreamsData is! List) || dreamsData.isEmpty) {
-        debugPrint("Dreams data is empty or invalid");
         dreams = [];
       } else {
         dreams = (dreamsData as List<DreamHistoryModel>).toList();
-        debugPrint('Loaded ${dreams.length} dreams');
       }
 
       final lastDocument = result['lastDocument'] as DocumentSnapshot?;
@@ -77,7 +69,6 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
 
       if (isNewData) {
         final updatedDreams = refresh ? dreams : [...state.dreams, ...dreams];
-        debugPrint('Total dreams after update: ${updatedDreams.length}');
 
         emit(state.copyWith(
           dreams: updatedDreams,
@@ -97,9 +88,7 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
           error: null,
         ));
       }
-    } catch (e, stackTrace) {
-      debugPrint('Error loading dreams: $e');
-      debugPrint('Stack trace: $stackTrace');
+    } catch (e) {
       emit(state.copyWith(
         error: 'Failed to load dreams: $e',
         isLoading: false,
@@ -123,7 +112,6 @@ class DreamHistoryCubit extends Cubit<DreamHistoryState> {
 
       final moreDreams = result['dreams'] as List<DreamHistoryModel>;
       final lastDocument = result['lastDocument'] as DocumentSnapshot?;
-      debugPrint('Loaded ${moreDreams.length} more dreams');
 
       // Check if we actually have new dreams
       final currentDreamsIds = state.dreams.map((d) => d.id).toSet();

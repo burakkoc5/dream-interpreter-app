@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:dream/features/auth/application/auth_cubit.dart';
+import 'package:dream/shared/widgets/app_button.dart' as app;
 
 class PersonalizationScreen extends StatefulWidget {
   const PersonalizationScreen({super.key});
@@ -30,6 +31,63 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
     'preferNotToSay': t.profile.personalization.genderOptions.preferNotToSay,
   };
 
+  final Map<String, String> _horoscopeMap = {
+    'Aries': t.profile.personalization.horoscopeOptions.aries,
+    'Taurus': t.profile.personalization.horoscopeOptions.taurus,
+    'Gemini': t.profile.personalization.horoscopeOptions.gemini,
+    'Cancer': t.profile.personalization.horoscopeOptions.cancer,
+    'Leo': t.profile.personalization.horoscopeOptions.leo,
+    'Virgo': t.profile.personalization.horoscopeOptions.virgo,
+    'Libra': t.profile.personalization.horoscopeOptions.libra,
+    'Scorpio': t.profile.personalization.horoscopeOptions.scorpio,
+    'Sagittarius': t.profile.personalization.horoscopeOptions.sagittarius,
+    'Capricorn': t.profile.personalization.horoscopeOptions.capricorn,
+    'Aquarius': t.profile.personalization.horoscopeOptions.aquarius,
+    'Pisces': t.profile.personalization.horoscopeOptions.pisces,
+  };
+
+  final Map<String, String> _relationshipMap = {
+    'Single': t.profile.personalization.relationshipOptions.single,
+    'In Relationship':
+        t.profile.personalization.relationshipOptions.inRelationship,
+    'Married': t.profile.personalization.relationshipOptions.married,
+    'Prefer Not To Say':
+        t.profile.personalization.relationshipOptions.preferNotToSay,
+  };
+
+  //Occupations
+  final Map<String, String> _occupationMap = {
+    'Homemaker': t.profile.personalization.occupationOptions.homemaker,
+    'Unemployed': t.profile.personalization.occupationOptions.unemployed,
+    'Job Seeker': t.profile.personalization.occupationOptions.jobSeeker,
+    'Student': t.profile.personalization.occupationOptions.student,
+    'Academic': t.profile.personalization.occupationOptions.academic,
+    'Self Employed': t.profile.personalization.occupationOptions.selfEmployed,
+    'Public Sector': t.profile.personalization.occupationOptions.publicSector,
+    'Private Sector': t.profile.personalization.occupationOptions.privateSector,
+    'Retired': t.profile.personalization.occupationOptions.retired,
+  };
+
+  //Interests
+  final Map<String, String> _interestMap = {
+    'Spirituality': t.profile.personalization.interestOptions.spirituality,
+    'Meditation': t.profile.personalization.interestOptions.meditation,
+    'Psychology': t.profile.personalization.interestOptions.psychology,
+    'Self Improvement':
+        t.profile.personalization.interestOptions.selfImprovement,
+    'Art': t.profile.personalization.interestOptions.art,
+    'Music': t.profile.personalization.interestOptions.music,
+    'Travel': t.profile.personalization.interestOptions.travel,
+    'Nature': t.profile.personalization.interestOptions.nature,
+    'Technology': t.profile.personalization.interestOptions.technology,
+    'Science': t.profile.personalization.interestOptions.science,
+    'Sports': t.profile.personalization.interestOptions.sports,
+    'Cooking': t.profile.personalization.interestOptions.cooking,
+    'Reading': t.profile.personalization.interestOptions.reading,
+    'Writing': t.profile.personalization.interestOptions.writing,
+    'Photography': t.profile.personalization.interestOptions.photography,
+  };
+
   @override
   void initState() {
     super.initState();
@@ -50,57 +108,9 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
 
   String _getGenderDisplay(String key) => _genderMap[key] ?? key;
 
-  List<String> get _horoscopeOptions => [
-        t.profile.personalization.horoscopeOptions.aries,
-        t.profile.personalization.horoscopeOptions.taurus,
-        t.profile.personalization.horoscopeOptions.gemini,
-        t.profile.personalization.horoscopeOptions.cancer,
-        t.profile.personalization.horoscopeOptions.leo,
-        t.profile.personalization.horoscopeOptions.virgo,
-        t.profile.personalization.horoscopeOptions.libra,
-        t.profile.personalization.horoscopeOptions.scorpio,
-        t.profile.personalization.horoscopeOptions.sagittarius,
-        t.profile.personalization.horoscopeOptions.capricorn,
-        t.profile.personalization.horoscopeOptions.aquarius,
-        t.profile.personalization.horoscopeOptions.pisces,
-      ];
+  List<String> get _horoscopeOptions => _horoscopeMap.keys.toList();
 
-  List<String> get _relationshipOptions => [
-        t.profile.personalization.relationshipOptions.single,
-        t.profile.personalization.relationshipOptions.inRelationship,
-        t.profile.personalization.relationshipOptions.married,
-        t.profile.personalization.relationshipOptions.preferNotToSay,
-      ];
-
-  List<String> get _interestOptions => [
-        t.profile.personalization.interestOptions.spirituality,
-        t.profile.personalization.interestOptions.meditation,
-        t.profile.personalization.interestOptions.psychology,
-        t.profile.personalization.interestOptions.selfImprovement,
-        t.profile.personalization.interestOptions.art,
-        t.profile.personalization.interestOptions.music,
-        t.profile.personalization.interestOptions.travel,
-        t.profile.personalization.interestOptions.nature,
-        t.profile.personalization.interestOptions.technology,
-        t.profile.personalization.interestOptions.science,
-        t.profile.personalization.interestOptions.sports,
-        t.profile.personalization.interestOptions.cooking,
-        t.profile.personalization.interestOptions.reading,
-        t.profile.personalization.interestOptions.writing,
-        t.profile.personalization.interestOptions.photography,
-      ];
-
-  List<String> get _occupationOptions => [
-        t.profile.personalization.occupationOptions.homemaker,
-        t.profile.personalization.occupationOptions.unemployed,
-        t.profile.personalization.occupationOptions.jobSeeker,
-        t.profile.personalization.occupationOptions.student,
-        t.profile.personalization.occupationOptions.academic,
-        t.profile.personalization.occupationOptions.selfEmployed,
-        t.profile.personalization.occupationOptions.publicSector,
-        t.profile.personalization.occupationOptions.privateSector,
-        t.profile.personalization.occupationOptions.retired,
-      ];
+  String _getHoroscopeDisplay(String key) => _horoscopeMap[key] ?? key;
 
   Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(
@@ -118,19 +128,10 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      debugPrint('gender: $_gender');
-      debugPrint('horoscope: $_horoscope');
-      debugPrint('occupation: $_occupation');
-      debugPrint('relationshipStatus: $_relationshipStatus');
-      debugPrint('birthDate: $_birthDate');
-      debugPrint('interests: $_selectedInterests');
-
       final profileCubit = context.read<ProfileCubit>();
       final userId = context.read<AuthCubit>().state.user?.id;
-      debugPrint('userId: $userId');
 
       if (userId == null) {
-        debugPrint('PersonalizationScreen: User ID is null, showing error');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(t.core.errors.tryAgain),
@@ -142,15 +143,13 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
         );
         return;
       }
-      debugPrint(
-          'PersonalizationScreen: User ID is not null, updating profile');
+
       _updateProfileAndNavigate(profileCubit, userId);
     }
   }
 
   Future<void> _updateProfileAndNavigate(
       ProfileCubit profileCubit, String userId) async {
-    debugPrint('PersonalizationScreen: Updating profile with new information');
     try {
       await profileCubit.updatePersonalInfo(
         gender: _gender,
@@ -165,12 +164,10 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
       // Wait for a short duration to ensure Firestore has updated
       await Future.delayed(const Duration(milliseconds: 500));
 
-      debugPrint('PersonalizationScreen: Profile update completed');
       if (mounted) {
         context.go(AppRoute.dreamEntry);
       }
     } catch (e) {
-      debugPrint('PersonalizationScreen: Error updating profile: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -424,7 +421,7 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(
-                        value,
+                        _getHoroscopeDisplay(value),
                         style: theme.textTheme.bodyMedium,
                       ),
                     );
@@ -492,11 +489,11 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
                     ),
                   ),
                   menuMaxHeight: 300,
-                  items: _occupationOptions.map((String value) {
+                  items: _occupationMap.entries.map((entry) {
                     return DropdownMenuItem<String>(
-                      value: value,
+                      value: entry.key,
                       child: Text(
-                        value,
+                        entry.value,
                         style: theme.textTheme.bodyMedium,
                       ),
                     );
@@ -564,11 +561,11 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
                     ),
                   ),
                   menuMaxHeight: 300,
-                  items: _relationshipOptions.map((String value) {
+                  items: _relationshipMap.entries.map((entry) {
                     return DropdownMenuItem<String>(
-                      value: value,
+                      value: entry.key,
                       child: Text(
-                        value,
+                        entry.value,
                         style: theme.textTheme.bodyMedium,
                       ),
                     );
@@ -599,11 +596,11 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
                 child: Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: _interestOptions.map((interest) {
-                    final isSelected = _selectedInterests.contains(interest);
+                  children: _interestMap.entries.map((entry) {
+                    final isSelected = _selectedInterests.contains(entry.key);
                     return FilterChip(
                       label: Text(
-                        interest,
+                        entry.value,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: isSelected ? colorScheme.onPrimary : null,
                         ),
@@ -615,9 +612,9 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
                       onSelected: (selected) {
                         setState(() {
                           if (selected) {
-                            _selectedInterests.add(interest);
+                            _selectedInterests.add(entry.key);
                           } else {
-                            _selectedInterests.remove(interest);
+                            _selectedInterests.remove(entry.key);
                           }
                         });
                       },
@@ -627,22 +624,11 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
               ),
               const SizedBox(height: 32),
 
-              FilledButton(
+              app.AppButton(
+                text: t.profile.personalization.submit,
                 onPressed: _submitForm,
-                style: FilledButton.styleFrom(
-                  backgroundColor: colorScheme.primary,
-                  foregroundColor: colorScheme.onPrimary,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  t.profile.personalization.submit,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: colorScheme.onPrimary,
-                  ),
-                ),
+                style: app.ButtonStyle.primary,
+                isFullWidth: true,
               ),
               const SizedBox(height: 16),
             ],

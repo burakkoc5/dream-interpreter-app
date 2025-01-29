@@ -7,6 +7,7 @@ import 'package:dream/shared/services/ios_notification_settings.dart';
 import 'package:dream/shared/services/platform_notification_settings.dart';
 import 'package:dream/shared/services/time_zone_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
@@ -30,6 +31,9 @@ abstract class RegisterModule {
   @singleton
   Future<SharedPreferences> get sharedPreferences =>
       SharedPreferences.getInstance();
+
+  @singleton
+  FirebaseCrashlytics get crashlytics => FirebaseCrashlytics.instance;
 
   @singleton
   FirebaseAuth get firebaseAuth => FirebaseAuth.instance;

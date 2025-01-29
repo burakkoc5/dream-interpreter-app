@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
-/// A customizable card widget that follows the app's ethereal theme guidelines.
+/// A customizable card widget that follows the app's design system.
+///
+/// This card provides a beautiful glassmorphic effect with hover animations
+/// and customizable styling options. It's perfect for creating modern,
+/// interactive card layouts.
+///
+/// Example usage:
+/// ```dart
+/// AppCard(
+///   onTap: () => handleTap(),
+///   isGlassmorphic: true,
+///   child: Text('Hello World'),
+/// )
+/// ```
 class AppCard extends StatefulWidget {
   /// Creates an AppCard with required child widget.
   const AppCard({
@@ -13,15 +26,76 @@ class AppCard extends StatefulWidget {
     this.elevation,
     this.isGlassmorphic = true,
     this.borderRadius,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.borderColor,
+    this.hoverScale = 1.02,
+    this.hoverElevation,
+    this.animationDuration = const Duration(milliseconds: 200),
+    this.animationCurve = Curves.easeOutCubic,
+    this.showGlowEffect = true,
+    this.glowColor,
+    this.glowIntensity = 0.2,
+    this.glowRadius = 16,
+    this.glowSpreadRadius = 4,
   });
 
+  /// The widget below this widget in the tree.
   final Widget child;
+
+  /// Called when the user taps this card.
   final VoidCallback? onTap;
+
+  /// The amount of space to inset the [child].
   final EdgeInsetsGeometry padding;
+
+  /// The amount of space to surround the card.
   final EdgeInsetsGeometry margin;
+
+  /// The z-coordinate at which to place this card.
   final double? elevation;
+
+  /// Whether to apply a glassmorphic effect to the card.
   final bool isGlassmorphic;
+
+  /// The radius of the card's corners.
   final double? borderRadius;
+
+  /// The card's background color.
+  final Color? backgroundColor;
+
+  /// The color to use for text and icons.
+  final Color? foregroundColor;
+
+  /// The color to use for the card's border.
+  final Color? borderColor;
+
+  /// The scale factor to apply when the card is hovered.
+  final double hoverScale;
+
+  /// The elevation to apply when the card is hovered.
+  final double? hoverElevation;
+
+  /// The duration of hover animations.
+  final Duration animationDuration;
+
+  /// The curve to use for hover animations.
+  final Curve animationCurve;
+
+  /// Whether to show a glow effect when the card is hovered.
+  final bool showGlowEffect;
+
+  /// The color of the glow effect.
+  final Color? glowColor;
+
+  /// The intensity of the glow effect (0.0 to 1.0).
+  final double glowIntensity;
+
+  /// The radius of the glow effect.
+  final double glowRadius;
+
+  /// The spread radius of the glow effect.
+  final double glowSpreadRadius;
 
   @override
   State<AppCard> createState() => _AppCardState();
@@ -37,16 +111,16 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _hoverController = AnimationController(
-      duration: const Duration(milliseconds: 200),
+      duration: widget.animationDuration,
       vsync: this,
     );
 
     _scaleAnimation = Tween<double>(
       begin: 1.0,
-      end: 1.02,
+      end: widget.hoverScale,
     ).animate(CurvedAnimation(
       parent: _hoverController,
-      curve: Curves.easeOutCubic,
+      curve: widget.animationCurve,
     ));
 
     _glowAnimation = Tween<double>(
@@ -54,7 +128,7 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
       end: 1.0,
     ).animate(CurvedAnimation(
       parent: _hoverController,
-      curve: Curves.easeInOut,
+      curve: widget.animationCurve,
     ));
   }
 
@@ -79,6 +153,7 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final radius = widget.borderRadius ?? 24.0;
+    final defaultGlowColor = widget.glowColor ?? theme.colorScheme.primary;
 
     return MouseRegion(
       onEnter: (_) => _onHoverChanged(true),
@@ -95,18 +170,19 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
                 boxShadow: [
                   // Ambient shadow
                   BoxShadow(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                    color: defaultGlowColor.withValues(alpha: 0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                     spreadRadius: 0,
                   ),
-                  // Glow effect
-                  if (_isHovered)
+                  // Hover glow effect
+                  if (_isHovered && widget.showGlowEffect)
                     BoxShadow(
-                      color: theme.colorScheme.primary
-                          .withValues(alpha: 0.2 * _glowAnimation.value),
-                      blurRadius: 16,
-                      spreadRadius: 4 * _glowAnimation.value,
+                      color: defaultGlowColor.withValues(
+                          alpha: widget.glowIntensity * _glowAnimation.value),
+                      blurRadius: widget.glowRadius,
+                      spreadRadius:
+                          widget.glowSpreadRadius * _glowAnimation.value,
                     ),
                 ],
               ),
@@ -124,19 +200,21 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          theme.cardTheme.color?.withValues(
-                                  alpha: widget.isGlassmorphic ? 0.7 : 0.95) ??
-                              Colors.white.withValues(
+                          (widget.backgroundColor ??
+                                  theme.cardTheme.color ??
+                                  Colors.white)
+                              .withValues(
                                   alpha: widget.isGlassmorphic ? 0.7 : 0.95),
-                          theme.cardTheme.color?.withValues(
-                                  alpha: widget.isGlassmorphic ? 0.5 : 0.85) ??
-                              Colors.white.withValues(
+                          (widget.backgroundColor ??
+                                  theme.cardTheme.color ??
+                                  Colors.white)
+                              .withValues(
                                   alpha: widget.isGlassmorphic ? 0.5 : 0.85),
                         ],
                         stops: const [0.0, 1.0],
                       ),
                       border: Border.all(
-                        color: theme.colorScheme.primary
+                        color: (widget.borderColor ?? defaultGlowColor)
                             .withValues(alpha: _isHovered ? 0.2 : 0.1),
                         width: 1,
                       ),
@@ -146,13 +224,26 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
                       child: InkWell(
                         onTap: widget.onTap,
                         borderRadius: BorderRadius.circular(radius),
-                        splashColor:
-                            theme.colorScheme.primary.withValues(alpha: 0.1),
+                        splashColor: defaultGlowColor.withValues(alpha: 0.1),
                         highlightColor:
-                            theme.colorScheme.primary.withValues(alpha: 0.05),
+                            defaultGlowColor.withValues(alpha: 0.05),
                         child: Padding(
                           padding: widget.padding,
-                          child: widget.child,
+                          child: DefaultTextStyle(
+                            style:
+                                (theme.textTheme.bodyLarge ?? const TextStyle())
+                                    .copyWith(
+                              color: widget.foregroundColor ??
+                                  theme.colorScheme.onSurface,
+                            ),
+                            child: IconTheme(
+                              data: IconThemeData(
+                                color: widget.foregroundColor ??
+                                    theme.colorScheme.onSurface,
+                              ),
+                              child: widget.child,
+                            ),
+                          ),
                         ),
                       ),
                     ),

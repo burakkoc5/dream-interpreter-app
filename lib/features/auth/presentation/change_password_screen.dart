@@ -1,10 +1,12 @@
 import 'package:dream/features/auth/application/auth_cubit.dart';
 import 'package:dream/features/auth/application/auth_state.dart';
 import 'package:dream/i18n/strings.g.dart';
+import 'package:dream/shared/widgets/app_text_field.dart';
+import 'package:dream/shared/widgets/app_button.dart' as app;
+import 'package:dream/shared/widgets/app_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:toastification/toastification.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -30,32 +32,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     super.dispose();
   }
 
-  void _showSuccessToast(String message) {
-    if (!mounted) return;
-
-    toastification.show(
-      context: context,
-      type: ToastificationType.success,
-      style: ToastificationStyle.flat,
-      autoCloseDuration: const Duration(seconds: 3),
-      title: Text(t.core.success),
-      description: Text(message),
-    );
-  }
-
-  void _showErrorToast(String message) {
-    if (!mounted) return;
-
-    toastification.show(
-      context: context,
-      type: ToastificationType.error,
-      style: ToastificationStyle.flat,
-      autoCloseDuration: const Duration(seconds: 3),
-      title: Text(t.core.errors.error),
-      description: Text(message),
-    );
-  }
-
   Future<void> _changePassword() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -66,67 +42,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           );
       if (mounted) {
         context.pop();
-        _showSuccessToast(t.registration.password.changePassword.success);
+        AppToast.showSuccess(
+          context,
+          title: t.core.success,
+          description: t.registration.password.changePassword.success,
+        );
       }
     } catch (e) {
-      _showErrorToast(e.toString());
+      if (mounted) {
+        AppToast.showError(
+          context,
+          title: t.core.errors.error,
+          description: e.toString(),
+        );
+      }
     }
-  }
-
-  InputDecoration _getInputDecoration({
-    required String label,
-    required bool obscureText,
-    required VoidCallback onToggle,
-  }) {
-    return InputDecoration(
-      labelText: label,
-      labelStyle: TextStyle(
-        fontSize: 13,
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
-      ),
-      floatingLabelBehavior: FloatingLabelBehavior.always,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
-          width: 0.5,
-        ),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
-          width: 0.5,
-        ),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Theme.of(context).colorScheme.primary,
-          width: 0.5,
-        ),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Theme.of(context).colorScheme.error,
-          width: 0.5,
-        ),
-      ),
-      suffixIcon: IconButton(
-        icon: Icon(
-          obscureText
-              ? Icons.visibility_outlined
-              : Icons.visibility_off_outlined,
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
-          size: 20,
-        ),
-        onPressed: onToggle,
-        visualDensity: VisualDensity.compact,
-      ),
-      isDense: true,
-    );
   }
 
   @override
@@ -152,17 +82,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  TextFormField(
+                  AppTextField(
                     controller: _currentPasswordController,
-                    style: TextStyle(fontSize: 14),
-                    decoration: _getInputDecoration(
-                      label: t
-                          .registration.password.changePassword.currentPassword,
-                      obscureText: _obscureCurrentPassword,
-                      onToggle: () => setState(() =>
+                    label:
+                        t.registration.password.changePassword.currentPassword,
+                    obscureText: _obscureCurrentPassword,
+                    suffix: IconButton(
+                      icon: Icon(
+                        _obscureCurrentPassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 20,
+                      ),
+                      onPressed: () => setState(() =>
                           _obscureCurrentPassword = !_obscureCurrentPassword),
                     ),
-                    obscureText: _obscureCurrentPassword,
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return t.registration.password.changePassword
@@ -172,16 +106,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
+                  AppTextField(
                     controller: _newPasswordController,
-                    style: TextStyle(fontSize: 14),
-                    decoration: _getInputDecoration(
-                      label: t.registration.password.changePassword.newPassword,
-                      obscureText: _obscureNewPassword,
-                      onToggle: () => setState(
+                    label: t.registration.password.changePassword.newPassword,
+                    obscureText: _obscureNewPassword,
+                    suffix: IconButton(
+                      icon: Icon(
+                        _obscureNewPassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 20,
+                      ),
+                      onPressed: () => setState(
                           () => _obscureNewPassword = !_obscureNewPassword),
                     ),
-                    obscureText: _obscureNewPassword,
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return t.registration.password.changePassword
@@ -195,17 +133,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
+                  AppTextField(
                     controller: _confirmPasswordController,
-                    style: TextStyle(fontSize: 14),
-                    decoration: _getInputDecoration(
-                      label: t.registration.password.changePassword
-                          .confirmNewPassword,
-                      obscureText: _obscureConfirmPassword,
-                      onToggle: () => setState(() =>
+                    label: t.registration.password.changePassword
+                        .confirmNewPassword,
+                    obscureText: _obscureConfirmPassword,
+                    suffix: IconButton(
+                      icon: Icon(
+                        _obscureConfirmPassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 20,
+                      ),
+                      onPressed: () => setState(() =>
                           _obscureConfirmPassword = !_obscureConfirmPassword),
                     ),
-                    obscureText: _obscureConfirmPassword,
                     validator: (value) {
                       if (value != _newPasswordController.text) {
                         return t.registration.confirmPassword
@@ -215,34 +157,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  FilledButton(
+                  app.AppButton(
+                    text: t.registration.password.changePassword
+                        .changePasswordText,
                     onPressed: state.isLoading ? null : _changePassword,
-                    style: FilledButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 0,
-                      visualDensity: VisualDensity.compact,
-                    ),
-                    child: state.isLoading
-                        ? SizedBox(
-                            height: 16,
-                            width: 16,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: theme.colorScheme.onPrimary,
-                            ),
-                          )
-                        : Text(
-                            t.registration.password.changePassword
-                                .changePasswordText,
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              color: theme.colorScheme.onPrimary,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                            ),
-                          ),
+                    isLoading: state.isLoading,
+                    style: app.ButtonStyle.primary,
+                    isFullWidth: true,
                   ),
                 ],
               ),

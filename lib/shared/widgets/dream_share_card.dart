@@ -9,6 +9,7 @@ class DreamShareCard extends StatelessWidget {
   final DateTime date;
   final Profile? profile;
   final int moodRating;
+  final int streak;
 
   const DreamShareCard({
     super.key,
@@ -17,6 +18,7 @@ class DreamShareCard extends StatelessWidget {
     required this.interpretation,
     required this.date,
     required this.moodRating,
+    required this.streak,
     this.profile,
   });
 
@@ -97,6 +99,23 @@ class DreamShareCard extends StatelessWidget {
                           color: theme.colorScheme.onSurface
                               .withValues(alpha: 0.6),
                         ),
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.local_fire_department,
+                            size: 14,
+                            color: theme.colorScheme.error,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '$streak day streak',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.error,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

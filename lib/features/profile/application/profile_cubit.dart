@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:dream/features/profile/models/reminder_settings_model.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import '../repositories/profile_repository.dart';
@@ -39,7 +38,6 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> _loadProfile(String userId) async {
-    debugPrint('ProfileCubit: Loading profile for user $userId');
     if (!isClosed) {
       emit(state.copyWith(isLoading: true, error: null));
     }
@@ -48,8 +46,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       await _profileSubscription?.cancel();
       _profileSubscription = _repository.getProfile(userId).listen(
         (profile) {
-          debugPrint(
-              'ProfileCubit: Profile loaded successfully: ${profile.toJson()}');
           if (!isClosed) {
             emit(state.copyWith(
               isLoading: false,
@@ -59,12 +55,8 @@ class ProfileCubit extends Cubit<ProfileState> {
           }
         },
         onError: (error) {
-          debugPrint('ProfileCubit: Error loading profile: $error');
           if (!isClosed) {
             if (error.toString().contains('Profile not found')) {
-              // Create initial profile if not found
-              debugPrint(
-                  'ProfileCubit: Profile not found, creating initial profile');
               final user = _authCubit.state.user;
               if (user != null) {
                 _repository.createInitialProfile(
@@ -85,7 +77,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         },
       );
     } catch (e) {
-      debugPrint('ProfileCubit: Exception in loadProfile: $e');
       if (!isClosed) {
         if (_authCubit.state.user == null ||
             !_authCubit.state.user!.emailVerified) {
@@ -122,7 +113,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     try {
       await _repository.updateDisplayName(newName);
-      debugPrint('ProfileCubit: Display name updated successfully');
       if (state.profile != null) {
         if (!isClosed) {
           emit(state.copyWith(
@@ -175,7 +165,6 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> updateReminders(ReminderSettings settings) async {
-    debugPrint('ProfileCubit: Updating reminder settings');
     if (state.profile == null) return;
 
     try {
@@ -238,18 +227,13 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> updateProfilePreferences(Map<String, dynamic> data) async {
-    debugPrint('ProfileCubit: Updating profile preferences with data: $data');
-
     if (state.profile == null) {
-      debugPrint('ProfileCubit: Profile is null, attempting to load profile');
       final user = _authCubit.state.user;
       if (user != null) {
         await _loadProfile(user.id);
-        // Wait for profile to load
         await Future.delayed(const Duration(milliseconds: 500));
       }
       if (state.profile == null) {
-        debugPrint('ProfileCubit: Failed to load profile');
         emit(state.copyWith(
             error: 'Failed to update preferences: Profile not loaded'));
         return;
@@ -257,17 +241,14 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
 
     try {
-      debugPrint('ProfileCubit: Updating preferences in repository');
       await _repository.updateProfilePreferences(data);
 
       final updatedProfile = state.profile!.copyWith(
         preferences: (data['preferences'] as Map<String, dynamic>?) ??
             state.profile!.preferences,
       );
-      debugPrint('ProfileCubit: Preferences updated successfully');
       emit(state.copyWith(profile: updatedProfile, error: null));
     } catch (e) {
-      debugPrint('ProfileCubit: Error updating preferences: $e');
       emit(state.copyWith(
         error: 'Failed to update preferences: ${e.toString()}',
       ));
@@ -283,8 +264,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     List<String>? interests,
     bool? hasCompletedPersonalization,
   }) async {
-    debugPrint('ProfileCubit: Updating personal information');
-
     try {
       if (state.profile == null) {
         final user = _authCubit.state.user;
@@ -306,7 +285,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         );
 
         await _repository.updateProfile(newProfile);
-        debugPrint('ProfileCubit: Created new profile: ${newProfile.toJson()}');
         emit(state.copyWith(profile: newProfile));
         return;
       }
@@ -322,7 +300,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       await _repository.updateProfile(updatedProfile);
-      debugPrint('ProfileCubit: Updated profile: ${updatedProfile.toJson()}');
       emit(state.copyWith(profile: updatedProfile));
     } catch (e) {
       emit(state.copyWith(

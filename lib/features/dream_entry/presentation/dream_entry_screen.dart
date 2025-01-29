@@ -4,17 +4,17 @@ import 'package:dream/core/presentation/animated_background.dart';
 import 'package:dream/features/dream_entry/application/dream_entry_cubit.dart';
 import 'package:dream/features/dream_entry/application/dream_entry_state.dart';
 import 'package:dream/features/dream_entry/models/dream_entry_model.dart';
-import 'package:dream/features/dream_entry/widgets/dream_details_modal_content.dart';
+import 'package:dream/features/dream_entry/presentation/widgets/dream_details_modal_content.dart';
 import 'package:dream/i18n/strings.g.dart';
+import 'package:dream/shared/utils/share_utils.dart';
 import 'package:dream/shared/widgets/app_modal_sheet.dart';
+import 'package:dream/shared/widgets/app_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:toastification/toastification.dart';
-import '../widgets/dream_form_widget.dart';
-import '../widgets/dream_loading_widget.dart';
-import '../widgets/dream_error_widget.dart';
+import 'widgets/dream_form_widget.dart';
+import 'widgets/dream_loading_widget.dart';
+import 'widgets/dream_error_widget.dart';
 import 'dart:ui';
 import 'package:dream/config/theme/theme_cubit.dart';
 
@@ -61,7 +61,6 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
           children: [
             const AnimatedBackground(),
             SafeArea(
-              bottom: false,
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -73,20 +72,6 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
                         isDarkMode,
                         theme,
                       ),
-                      //BlocBuilder<DreamEntryCubit, DreamEntryState>(
-                      // builder: (context, state) {
-                      //    return state.maybeWhen(
-                      //      initial: () => Column(
-                      //        children: const [
-                      //          SizedBox(height: 16),
-                      //          AdBannerWidget(),
-                      //          SizedBox(height: 16),
-                      //        ],
-                      //      ),
-                      //    orElse: () => const SizedBox(height: 16),
-                      //  );
-                      //},
-                      //),
                       const SizedBox(
                           height:
                               80), // Reduced bottom padding since we have spacing above
@@ -219,7 +204,13 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
                           ),
                           const SizedBox(width: 12),
                           IconButton(
-                            onPressed: () => _shareDream(dreamEntry),
+                            onPressed: () => ShareUtils.shareDreamAsImage(
+                                context: context,
+                                title: dreamEntry.title,
+                                content: dreamEntry.content,
+                                interpretation: dreamEntry.interpretation,
+                                date: dreamEntry.createdAt,
+                                moodRating: dreamEntry.moodRating),
                             icon: const Icon(Icons.share),
                           ),
                           IconButton(
@@ -260,7 +251,11 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
           try {
             await context.read<DreamEntryCubit>().saveDream(updatedDream);
             if (context.mounted) {
-              _showToast(context, t.dreamEntry.dreamForm.dreamSaved);
+              AppToast.showSuccess(
+                context,
+                title: t.core.success,
+                description: t.dreamEntry.dreamForm.dreamSaved,
+              );
               context.read<DreamEntryCubit>().reset();
               context.pop();
               context.go(AppRoute.dreamEntry);
@@ -279,28 +274,5 @@ class _DreamEntryScreenState extends State<DreamEntryScreen> {
         },
       ),
     );
-  }
-
-  void _showToast(BuildContext context, String message) {
-    toastification.show(
-      context: context,
-      type: ToastificationType.success,
-      style: ToastificationStyle.flat,
-      autoCloseDuration: const Duration(seconds: 3),
-      title: Text(t.core.success),
-      description: Text(message),
-    );
-  }
-
-  Future<void> _shareDream(DreamEntry dreamEntry) async {
-    final shareText = '''
-✨ ${t.dreamEntry.yourDream}:
-${dreamEntry.content}
-
-🌙 ${t.dreamEntry.interpretation.interpretationText}:
-${dreamEntry.interpretation}
-''';
-
-    await Share.share(shareText, subject: t.dreamEntry.interpretation.title);
   }
 }

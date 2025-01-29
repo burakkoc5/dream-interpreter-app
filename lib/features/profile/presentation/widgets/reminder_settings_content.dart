@@ -1,13 +1,11 @@
 import 'package:dream/core/utils/reminder_utils.dart';
 import 'package:dream/i18n/strings.g.dart';
+import 'package:dream/shared/widgets/app_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:toastification/toastification.dart';
-import '../models/reminder_settings_model.dart';
-import '../widgets/reminder_option_card.dart';
-import 'package:dream/config/theme/theme_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/foundation.dart';
+import '../../models/reminder_settings_model.dart';
+import 'reminder_option_card.dart';
+import 'package:dream/shared/widgets/app_button.dart' as app;
 
 class ReminderSettingsContent extends StatefulWidget {
   final ReminderSettings? initialSettings;
@@ -76,19 +74,6 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
     setState(() => selectedType = type);
   }
 
-  void _showSuccessToast(String message) {
-    if (!mounted) return;
-
-    toastification.show(
-      autoCloseDuration: const Duration(seconds: 3),
-      context: context,
-      type: ToastificationType.success,
-      style: ToastificationStyle.flat,
-      title: Text(t.core.success),
-      description: Text(message),
-    );
-  }
-
   Future<void> _handleCustomTimeSelection() async {
     final TimeOfDay? selectedTime = await showTimePicker(
       context: context,
@@ -98,7 +83,6 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
       setState(() {
         selectedType = ReminderType.custom;
         selectedCustomTime = selectedTime;
-        debugPrint(selectedCustomTime.toString());
       });
     }
   }
@@ -118,11 +102,6 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final brightness = MediaQuery.platformBrightnessOf(context);
-    final isDarkMode = context.watch<ThemeCubit>().state == ThemeMode.dark ||
-        (context.watch<ThemeCubit>().state == ThemeMode.system &&
-            brightness == Brightness.dark);
-
     return FadeTransition(
       opacity: _fadeAnimation,
       child: SlideTransition(
@@ -217,46 +196,27 @@ class _ReminderSettingsContentState extends State<ReminderSettingsContent>
               ),
             ),
             const SizedBox(height: 24),
-            FilledButton(
+            app.AppButton(
+              text: t.profile.reminder.saveButton,
               onPressed: () {
                 if (selectedType != null) {
                   _saveSettings();
-                  _showSuccessToast(t.profile.reminder.savedSuccess);
+                  AppToast.showSuccess(
+                    context,
+                    title: t.core.success,
+                    description: t.profile.reminder.savedSuccess,
+                  );
                 }
               },
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                backgroundColor: theme.colorScheme.primary
-                    .withValues(alpha: isDarkMode ? 0.8 : 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: Text(
-                t.profile.reminder.saveButton,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
-              ),
+              style: app.ButtonStyle.primary,
+              isFullWidth: true,
             ),
             const SizedBox(height: 12),
-            TextButton(
+            app.AppButton(
+              text: t.profile.reminder.skipButton,
               onPressed: () => context.pop(),
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: Text(
-                t.profile.reminder.skipButton,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.primary.withValues(alpha: 0.8),
-                  fontSize: 14,
-                ),
-              ),
+              style: app.ButtonStyle.text,
+              isFullWidth: true,
             ),
           ],
         ),

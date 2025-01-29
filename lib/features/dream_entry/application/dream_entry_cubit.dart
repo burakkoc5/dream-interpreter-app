@@ -1,6 +1,6 @@
 import 'package:dream/core/di/injection.dart';
 import 'package:dream/features/auth/application/auth_cubit.dart';
-import 'package:dream/features/profile/repository/streak_repository.dart';
+import 'package:dream/features/profile/repositories/streak_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';

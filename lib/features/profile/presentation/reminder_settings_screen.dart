@@ -1,6 +1,6 @@
 import 'package:dream/features/profile/application/profile_cubit.dart';
 import 'package:dream/features/profile/application/profile_state.dart';
-import 'package:dream/features/profile/widgets/reminder_settings_content.dart';
+import 'package:dream/features/profile/presentation/widgets/reminder_settings_content.dart';
 import 'package:dream/shared/repositories/notification_repository.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
@@ -49,15 +49,6 @@ class ReminderSettingsScreen extends StatelessWidget {
         return Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
-            title: Text(
-              t.profile.reminder.setTime,
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w600,
-                fontSize: 20,
-                letterSpacing: -0.5,
-              ),
-            ),
             centerTitle: true,
             backgroundColor: Colors.transparent,
             elevation: 0,

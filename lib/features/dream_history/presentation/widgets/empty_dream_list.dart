@@ -12,7 +12,6 @@ class EmptyDreamList extends StatelessWidget {
 
     return RefreshIndicator(
       onRefresh: () async {
-        debugPrint('DreamHistoryMixin - Pull-to-refresh of empty dreams list');
         await context.read<DreamHistoryCubit>().loadDreams(refresh: true);
       },
       child: ListView(

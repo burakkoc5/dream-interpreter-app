@@ -1,6 +1,7 @@
 import 'package:dream/core/routing/app_route_names.dart';
 import 'package:dream/features/auth/application/auth_cubit.dart';
 import 'package:dream/features/onboarding/cubit/onboarding_cubit.dart';
+import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -82,8 +83,8 @@ class _SplashScreenState extends State<SplashScreen>
                   height: 120,
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'Dream Interpreter',
+                Text(
+                  t.core.appName,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,

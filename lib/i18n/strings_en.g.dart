@@ -55,7 +55,7 @@ class TranslationsCoreEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get appName => 'Dream Journal';
+	String get appName => 'Dreamalyze';
 	late final TranslationsCoreModeEn mode = TranslationsCoreModeEn._(_root);
 	late final TranslationsCoreErrorsEn errors = TranslationsCoreErrorsEn._(_root);
 	String get success => 'Success';
@@ -86,7 +86,7 @@ class TranslationsDreamEntryEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get newDream => 'New Dream';
+	String get newDream => 'Dreamalyze';
 	String get saveDream => 'Save Dream';
 	String get discardDream => 'Discard';
 	String get shareDream => 'Share';
@@ -129,6 +129,8 @@ class TranslationsSearchDreamsEn {
 	String get delete => 'Delete';
 	String get undoButton => 'Undo';
 	String get dreamDeleted => 'Dream deleted';
+	String get deleteConfirmation => 'Are you sure you want to delete "{title}"?';
+	String get deleteWarning => 'This action cannot be undone.';
 }
 
 // Path: dreamHistory
@@ -159,6 +161,7 @@ class TranslationsProfileEn {
 	String get changePassword => 'Change Password';
 	String get profileNotFound => 'Profile not found';
 	String get closeBackgroundAnimation => 'Close Background Animation';
+	String get displayNameUpdated => 'Display name updated successfully';
 	late final TranslationsProfilePersonalizationEn personalization = TranslationsProfilePersonalizationEn._(_root);
 	String get dreamStats => 'Dream Statistics';
 	String get currentStreak => 'Current Streak';
@@ -300,6 +303,7 @@ class TranslationsRegistrationSignUpEn {
 	// Translations
 	String get signUpText => 'Create Account';
 	String get signUpCaption => 'Join Dream Journal today';
+	String get subtitle => 'Join us to explore your dreams';
 	String get alreadyHaveAccount => 'Already have an account?';
 }
 
@@ -312,6 +316,8 @@ class TranslationsRegistrationSignInEn {
 	// Translations
 	String get signInText => 'Sign In';
 	String get forgotPassword => 'Forgot Password?';
+	String get subtitle => 'Explore your dreams with AI';
+	String get or => 'OR';
 }
 
 // Path: registration.signOut
@@ -372,6 +378,7 @@ class TranslationsDreamEntryDreamFormEn {
 	String get watchAdError => 'Please watch the ad to interpret more dreams today.';
 	String get dreamSaved => 'Dream saved successfully';
 	String get remainingAttempts => 'Remaining attempts today';
+	String get watchAdForInterpretation => 'Watch Ad for Interpretation';
 }
 
 // Path: dreamEntry.interpretation
@@ -418,7 +425,7 @@ class TranslationsProfileReminderEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get setTime => 'Set dream reminder time';
+	String get setTime => 'Set reminder';
 	String get chooseTime => 'Choose when you want to be reminded';
 	String get description => 'We\'ll send you a notification to help you remember your dreams';
 	String get earlyMorning => 'Early morning';
@@ -443,6 +450,7 @@ class TranslationsProfileDeleteAccountEn {
 	// Translations
 	String get title => 'Delete Account';
 	String get message => 'Are you sure you want to delete your account? This action cannot be undone and will permanently delete all your data including dreams, interpretations, and settings.';
+	String get warning => 'This action cannot be undone and will permanently delete all your data including dreams, interpretations, and settings.';
 	String get confirm => 'Yes, Delete';
 }
 
@@ -572,7 +580,7 @@ class TranslationsProfilePersonalizationInterestOptionsEn {
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'core.appName': return 'Dream Journal';
+			case 'core.appName': return 'Dreamalyze';
 			case 'core.mode.systemMode': return 'System';
 			case 'core.mode.darkMode': return 'Dark Mode';
 			case 'core.mode.lightMode': return 'Light Mode';
@@ -629,11 +637,14 @@ extension on Translations {
 			case 'registration.confirmPassword.confirmPasswordMismatch': return 'Passwords do not match';
 			case 'registration.signUp.signUpText': return 'Create Account';
 			case 'registration.signUp.signUpCaption': return 'Join Dream Journal today';
+			case 'registration.signUp.subtitle': return 'Join us to explore your dreams';
 			case 'registration.signUp.alreadyHaveAccount': return 'Already have an account?';
 			case 'registration.signIn.signInText': return 'Sign In';
 			case 'registration.signIn.forgotPassword': return 'Forgot Password?';
+			case 'registration.signIn.subtitle': return 'Explore your dreams with AI';
+			case 'registration.signIn.or': return 'OR';
 			case 'registration.signOut.signOutText': return 'Sign Out';
-			case 'dreamEntry.newDream': return 'New Dream';
+			case 'dreamEntry.newDream': return 'Dreamalyze';
 			case 'dreamEntry.saveDream': return 'Save Dream';
 			case 'dreamEntry.discardDream': return 'Discard';
 			case 'dreamEntry.shareDream': return 'Share';
@@ -665,6 +676,7 @@ extension on Translations {
 			case 'dreamEntry.dreamForm.watchAdError': return 'Please watch the ad to interpret more dreams today.';
 			case 'dreamEntry.dreamForm.dreamSaved': return 'Dream saved successfully';
 			case 'dreamEntry.dreamForm.remainingAttempts': return 'Remaining attempts today';
+			case 'dreamEntry.dreamForm.watchAdForInterpretation': return 'Watch Ad for Interpretation';
 			case 'dreamEntry.interpretation.title': return 'Dream Interpretation';
 			case 'dreamEntry.interpretation.interpretationText': return 'Interpretation';
 			case 'dreamEntry.interpretation.saveButton': return 'Save Interpretation';
@@ -682,6 +694,8 @@ extension on Translations {
 			case 'searchDreams.delete': return 'Delete';
 			case 'searchDreams.undoButton': return 'Undo';
 			case 'searchDreams.dreamDeleted': return 'Dream deleted';
+			case 'searchDreams.deleteConfirmation': return 'Are you sure you want to delete "{title}"?';
+			case 'searchDreams.deleteWarning': return 'This action cannot be undone.';
 			case 'dreamHistory.dreamHistory': return 'Past Dreams';
 			case 'dreamHistory.noDreams': return 'No dreams recorded';
 			case 'dreamHistory.noDreamsCaption': return 'You haven\'t recorded any dreams yet. Start recording your dreams today.';
@@ -694,6 +708,7 @@ extension on Translations {
 			case 'profile.changePassword': return 'Change Password';
 			case 'profile.profileNotFound': return 'Profile not found';
 			case 'profile.closeBackgroundAnimation': return 'Close Background Animation';
+			case 'profile.displayNameUpdated': return 'Display name updated successfully';
 			case 'profile.personalization.title': return 'Personalize Your Profile';
 			case 'profile.personalization.description': return 'Help us understand you better to provide more personalized dream interpretations.';
 			case 'profile.personalization.gender': return 'Gender';
@@ -758,7 +773,7 @@ extension on Translations {
 			case 'profile.english': return 'English';
 			case 'profile.turkish': return 'Turkish';
 			case 'profile.german': return 'German';
-			case 'profile.reminder.setTime': return 'Set dream reminder time';
+			case 'profile.reminder.setTime': return 'Set reminder';
 			case 'profile.reminder.chooseTime': return 'Choose when you want to be reminded';
 			case 'profile.reminder.description': return 'We\'ll send you a notification to help you remember your dreams';
 			case 'profile.reminder.earlyMorning': return 'Early morning';
@@ -774,6 +789,7 @@ extension on Translations {
 			case 'profile.reminder.savedSuccess': return 'Reminder settings saved successfully';
 			case 'profile.deleteAccount.title': return 'Delete Account';
 			case 'profile.deleteAccount.message': return 'Are you sure you want to delete your account? This action cannot be undone and will permanently delete all your data including dreams, interpretations, and settings.';
+			case 'profile.deleteAccount.warning': return 'This action cannot be undone and will permanently delete all your data including dreams, interpretations, and settings.';
 			case 'profile.deleteAccount.confirm': return 'Yes, Delete';
 			case 'common.cancel': return 'Cancel';
 			case 'common.confirm': return 'Confirm';

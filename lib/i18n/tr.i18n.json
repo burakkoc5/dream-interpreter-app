@@ -1,6 +1,6 @@
 {
   "core": {
-    "appName": "Rüya Günlüğü",
+    "appName": "Dreamalyze",
     "mode": {
       "systemMode": "Sistem",
       "darkMode": "Karanlık Mod",
@@ -78,11 +78,14 @@
     "signUp": {
       "signUpText": "Hesap Oluştur",
       "signUpCaption": "Rüya Günlüğü'ne bugün katılın",
+      "subtitle": "Rüyalarınızı keşfetmek için bize katılın",
       "alreadyHaveAccount": "Zaten bir hesabınız var mı?"
     },
     "signIn": {
       "signInText": "Giriş Yap",
-      "forgotPassword": "Şifremi Unuttum?"
+      "forgotPassword": "Şifremi Unuttum?",
+      "subtitle": "Yapay zeka ile rüyalarınızı keşfedin",
+      "or": "VEYA"
     },
     "signOut": {
       "signOutText": "Çıkış Yap"
@@ -124,6 +127,7 @@
       "getInterpretation": "Yorumla",
       "noAttemptsLeft": "Bugün için kalan hakkınız yok. Daha fazla rüya yorumlamak için reklam izleyin.",
       "watchAdError": "Bugün daha fazla rüya yorumlamak için lütfen reklamı izleyin.",
+      "watchAdForInterpretation": "Reklam izleyerek yorum al",
       "dreamSaved": "Rüya başarıyla kaydedildi",
       "remainingAttempts": "Bugün kalan hakkınız"
     },
@@ -149,7 +153,9 @@
     "noResults": "Rüya bulunamadı",
     "delete": "Sil",
     "undoButton": "Geri Al",
-    "dreamDeleted": "Rüya silindi"
+    "dreamDeleted": "Rüya silindi",
+    "deleteConfirmation": "\"{title}\" rüyasını silmek istediğinizden emin misiniz?",
+    "deleteWarning": "Bu işlem geri alınamaz."
   },
   "dreamHistory": {
     "dreamHistory": "Geçmiş Rüyalar",
@@ -166,6 +172,7 @@
     "changePassword": "Şifre Değiştir",
     "profileNotFound": "Profil bulunamadı",
     "closeBackgroundAnimation": "Arka Plan Animasyonunu Kapat",
+    "displayNameUpdated": "Kullanıcı adı başarıyla güncellendi",
     "personalization": {
       "title": "Profilinizi Kişiselleştirin",
       "description": "Sizi daha iyi anlayarak daha kişiselleştirilmiş rüya yorumları sunmamıza yardımcı olun.",
@@ -243,10 +250,10 @@
     "turkish": "Türkçe",
     "german": "Almanca",
     "reminder": {
-      "setTime": "Rüya hatırlatma zamanını ayarlayın",
+      "setTime": "Hatırlatıcı ayarla",
       "chooseTime": "Hatırlatılmak istediğiniz zamanı seçin",
       "description": "Rüyalarınızı hatırlamanız için size bir bildirim göndereceğiz",
-      "earlyMorning": "Erken sabah",
+      "earlyMorning": "Sabah",
       "earlyMorningTime": "6:00 AM",
       "afternoon": "Öğleden sonra",
       "afternoonTime": "2:00 PM",
@@ -255,12 +262,13 @@
       "custom": "Özel",
       "setCustomTime": "Zamanınızı ayarlayın",
       "saveButton": "Hatırlatmayı Kaydet",
-      "skipButton": "Şimdilik Geç",
+      "skipButton": "Şimdilik Vazgeç",
       "savedSuccess": "Hatırlatma ayarları başarıyla kaydedildi"
     },
     "deleteAccount": {
       "title": "Hesabınızı Sil",
       "message": "Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tüm verilerinizi (rüyalar, yorumlar ve ayarlar dahil) kalıcı olarak silecektir.",
+      "warning": "Bu işlem geri alınamaz ve tüm verilerinizi (rüyalar, yorumlar ve ayarlar dahil) kalıcı olarak silecektir.",
       "confirm": "Evet, Sil"
     }
   },

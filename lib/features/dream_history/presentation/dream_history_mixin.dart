@@ -24,7 +24,6 @@ mixin DreamHistoryMixin<T extends StatefulWidget> on State<T> {
   void initState() {
     super.initState();
     final cubit = context.read<DreamHistoryCubit>();
-    debugPrint('DreamHistoryMixin - Initial load of dreams');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       cubit.loadDreams(refresh: true);
     });

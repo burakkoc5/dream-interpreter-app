@@ -51,7 +51,7 @@ class _TranslationsCoreDe implements TranslationsCoreEn {
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
-	@override String get appName => 'Traumtagebuch';
+	@override String get appName => 'Dreamalyze';
 	@override late final _TranslationsCoreModeDe mode = _TranslationsCoreModeDe._(_root);
 	@override late final _TranslationsCoreErrorsDe errors = _TranslationsCoreErrorsDe._(_root);
 	@override String get success => 'Erfolgreich';
@@ -125,6 +125,8 @@ class _TranslationsSearchDreamsDe implements TranslationsSearchDreamsEn {
 	@override String get delete => 'Löschen';
 	@override String get undoButton => 'Rückgängig';
 	@override String get dreamDeleted => 'Traum gelöscht';
+	@override String get deleteConfirmation => 'Sind Sie sicher, dass Sie "{title}" löschen möchten?';
+	@override String get deleteWarning => 'Diese Aktion kann nicht rückgängig gemacht werden.';
 }
 
 // Path: dreamHistory
@@ -155,6 +157,7 @@ class _TranslationsProfileDe implements TranslationsProfileEn {
 	@override String get changePassword => 'Passwort ändern';
 	@override String get profileNotFound => 'Profil nicht gefunden';
 	@override String get closeBackgroundAnimation => 'Hintergrundanimation schließen';
+	@override String get displayNameUpdated => 'Benutzername erfolgreich aktualisiert';
 	@override late final _TranslationsProfilePersonalizationDe personalization = _TranslationsProfilePersonalizationDe._(_root);
 	@override String get dreamStats => 'Traumstatistiken';
 	@override String get currentStreak => 'Aktuelle Serie';
@@ -296,6 +299,7 @@ class _TranslationsRegistrationSignUpDe implements TranslationsRegistrationSignU
 	// Translations
 	@override String get signUpText => 'Konto erstellen';
 	@override String get signUpCaption => 'Treten Sie noch heute dem Traumtagebuch bei';
+	@override String get subtitle => 'Begleiten Sie uns auf der Reise durch Ihre Träume';
 	@override String get alreadyHaveAccount => 'Haben Sie bereits ein Konto?';
 }
 
@@ -308,6 +312,8 @@ class _TranslationsRegistrationSignInDe implements TranslationsRegistrationSignI
 	// Translations
 	@override String get signInText => 'Anmelden';
 	@override String get forgotPassword => 'Passwort vergessen?';
+	@override String get subtitle => 'Erforschen Sie Ihre Träume mit KI';
+	@override String get or => 'ODER';
 }
 
 // Path: registration.signOut
@@ -367,6 +373,7 @@ class _TranslationsDreamEntryDreamFormDe implements TranslationsDreamEntryDreamF
 	@override String get noAttemptsLeft => 'Keine Versuche mehr für heute. Sehen Sie sich eine Werbung an, um mehr Träume zu interpretieren.';
 	@override String get watchAdError => 'Bitte sehen Sie sich die Werbung an, um heute mehr Träume zu interpretieren.';
 	@override String get dreamSaved => 'Traum erfolgreich gespeichert';
+	@override String get watchAdForInterpretation => 'Werbung ansehen, um yorum zu erhalten';
 	@override String get remainingAttempts => 'Verbleibende Versuche heute';
 }
 
@@ -414,7 +421,7 @@ class _TranslationsProfileReminderDe implements TranslationsProfileReminderEn {
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
-	@override String get setTime => 'Traum-Erinnerungszeit einstellen';
+	@override String get setTime => 'Erinnerung setzen';
 	@override String get chooseTime => 'Wählen Sie aus, wann Sie erinnert werden möchten';
 	@override String get description => 'Wir senden Ihnen eine Benachrichtigung, um Ihnen zu helfen, sich an Ihre Träume zu erinnern';
 	@override String get earlyMorning => 'Früher Morgen';
@@ -439,6 +446,7 @@ class _TranslationsProfileDeleteAccountDe implements TranslationsProfileDeleteAc
 	// Translations
 	@override String get title => 'Konto löschen';
 	@override String get message => 'Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden und wird alle Ihre Daten einschließlich Träume, Deutungen und Einstellungen permanent löschen.';
+	@override String get warning => 'Diese Aktion kann nicht rückgängig gemacht werden und wird alle Ihre Daten einschließlich Träume, Deutungen und Einstellungen permanent löschen.';
 	@override String get confirm => 'Ja, löschen';
 }
 
@@ -568,7 +576,7 @@ class _TranslationsProfilePersonalizationInterestOptionsDe implements Translatio
 extension on TranslationsDe {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'core.appName': return 'Traumtagebuch';
+			case 'core.appName': return 'Dreamalyze';
 			case 'core.mode.systemMode': return 'System';
 			case 'core.mode.darkMode': return 'Dunkler Modus';
 			case 'core.mode.lightMode': return 'Heller Modus';
@@ -625,9 +633,12 @@ extension on TranslationsDe {
 			case 'registration.confirmPassword.confirmPasswordMismatch': return 'Passwörter stimmen nicht überein';
 			case 'registration.signUp.signUpText': return 'Konto erstellen';
 			case 'registration.signUp.signUpCaption': return 'Treten Sie noch heute dem Traumtagebuch bei';
+			case 'registration.signUp.subtitle': return 'Begleiten Sie uns auf der Reise durch Ihre Träume';
 			case 'registration.signUp.alreadyHaveAccount': return 'Haben Sie bereits ein Konto?';
 			case 'registration.signIn.signInText': return 'Anmelden';
 			case 'registration.signIn.forgotPassword': return 'Passwort vergessen?';
+			case 'registration.signIn.subtitle': return 'Erforschen Sie Ihre Träume mit KI';
+			case 'registration.signIn.or': return 'ODER';
 			case 'registration.signOut.signOutText': return 'Abmelden';
 			case 'dreamEntry.newDream': return 'Neuer Traum';
 			case 'dreamEntry.saveDream': return 'Traum speichern';
@@ -660,6 +671,7 @@ extension on TranslationsDe {
 			case 'dreamEntry.dreamForm.noAttemptsLeft': return 'Keine Versuche mehr für heute. Sehen Sie sich eine Werbung an, um mehr Träume zu interpretieren.';
 			case 'dreamEntry.dreamForm.watchAdError': return 'Bitte sehen Sie sich die Werbung an, um heute mehr Träume zu interpretieren.';
 			case 'dreamEntry.dreamForm.dreamSaved': return 'Traum erfolgreich gespeichert';
+			case 'dreamEntry.dreamForm.watchAdForInterpretation': return 'Werbung ansehen, um yorum zu erhalten';
 			case 'dreamEntry.dreamForm.remainingAttempts': return 'Verbleibende Versuche heute';
 			case 'dreamEntry.interpretation.title': return 'Traumdeutung';
 			case 'dreamEntry.interpretation.interpretationText': return 'Deutung';
@@ -678,6 +690,8 @@ extension on TranslationsDe {
 			case 'searchDreams.delete': return 'Löschen';
 			case 'searchDreams.undoButton': return 'Rückgängig';
 			case 'searchDreams.dreamDeleted': return 'Traum gelöscht';
+			case 'searchDreams.deleteConfirmation': return 'Sind Sie sicher, dass Sie "{title}" löschen möchten?';
+			case 'searchDreams.deleteWarning': return 'Diese Aktion kann nicht rückgängig gemacht werden.';
 			case 'dreamHistory.dreamHistory': return 'Traumhistorie';
 			case 'dreamHistory.noDreams': return 'Keine Träume gespeichert';
 			case 'dreamHistory.noDreamsCaption': return 'Sie haben noch keine Träume gespeichert. Beginnen Sie noch heute damit.';
@@ -690,6 +704,7 @@ extension on TranslationsDe {
 			case 'profile.changePassword': return 'Passwort ändern';
 			case 'profile.profileNotFound': return 'Profil nicht gefunden';
 			case 'profile.closeBackgroundAnimation': return 'Hintergrundanimation schließen';
+			case 'profile.displayNameUpdated': return 'Benutzername erfolgreich aktualisiert';
 			case 'profile.personalization.title': return 'Personalisieren Sie Ihr Profil';
 			case 'profile.personalization.description': return 'Helfen Sie uns, Sie besser zu verstehen, um personalisierte Traumdeutungen anzubieten.';
 			case 'profile.personalization.gender': return 'Geschlecht';
@@ -754,7 +769,7 @@ extension on TranslationsDe {
 			case 'profile.english': return 'Englisch';
 			case 'profile.turkish': return 'Türkisch';
 			case 'profile.german': return 'Deutsch';
-			case 'profile.reminder.setTime': return 'Traum-Erinnerungszeit einstellen';
+			case 'profile.reminder.setTime': return 'Erinnerung setzen';
 			case 'profile.reminder.chooseTime': return 'Wählen Sie aus, wann Sie erinnert werden möchten';
 			case 'profile.reminder.description': return 'Wir senden Ihnen eine Benachrichtigung, um Ihnen zu helfen, sich an Ihre Träume zu erinnern';
 			case 'profile.reminder.earlyMorning': return 'Früher Morgen';
@@ -770,6 +785,7 @@ extension on TranslationsDe {
 			case 'profile.reminder.savedSuccess': return 'Erinnerungseinstellungen erfolgreich gespeichert';
 			case 'profile.deleteAccount.title': return 'Konto löschen';
 			case 'profile.deleteAccount.message': return 'Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden und wird alle Ihre Daten einschließlich Träume, Deutungen und Einstellungen permanent löschen.';
+			case 'profile.deleteAccount.warning': return 'Diese Aktion kann nicht rückgängig gemacht werden und wird alle Ihre Daten einschließlich Träume, Deutungen und Einstellungen permanent löschen.';
 			case 'profile.deleteAccount.confirm': return 'Ja, löschen';
 			case 'common.cancel': return 'Abbrechen';
 			case 'common.confirm': return 'Bestätigen';

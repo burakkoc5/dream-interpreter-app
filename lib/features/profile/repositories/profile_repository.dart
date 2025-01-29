@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dream/core/di/injection.dart';
-import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import '../models/profile_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,13 +13,11 @@ class ProfileRepository {
   ProfileRepository(this._firestore);
 
   Stream<Profile> getProfile(String userId) {
-    debugPrint('ProfileRepository: Getting profile for user $userId');
     return _firestore
         .collection('users')
         .doc(userId)
         .snapshots()
         .handleError((error, stackTrace) {
-      debugPrint('ProfileRepository: Error getting profile: $error');
       if (error is FirebaseException && error.code == 'permission-denied') {
         throw Exception('User not authenticated or email not verified');
       }
@@ -32,14 +29,12 @@ class ProfileRepository {
       try {
         return Profile.fromJson(doc.data()!);
       } catch (e) {
-        debugPrint('ProfileRepository: Error parsing profile: $e');
         rethrow;
       }
     });
   }
 
   Future<void> updateProfile(Profile profile) async {
-    debugPrint('ProfileRepository: Updating profile: ${profile.toJson()}');
     await _firestore
         .collection('users')
         .doc(profile.userId)
@@ -47,7 +42,6 @@ class ProfileRepository {
   }
 
   Future<void> updateProfilePreferences(Map<String, dynamic> data) async {
-    debugPrint('ProfileRepository: Updating profile preferences');
     final userId = _auth.currentUser?.uid;
     if (userId == null) throw Exception('User not authenticated');
 
@@ -59,9 +53,6 @@ class ProfileRepository {
     required String email,
   }) async {
     try {
-      debugPrint(
-          'ProfileRepository: Starting profile creation for user $userId');
-
       final now = DateTime.now();
       final data = {
         'userId': userId,
@@ -79,7 +70,7 @@ class ProfileRepository {
         'birthDate': null,
         'interests': <String>[],
         'hasCompletedPersonalization': false,
-        'remainingDailyAttempts': 2,
+        'remainingDailyAttempts': 1,
         'lastAttemptsResetDate': Timestamp.fromDate(now),
       };
 
@@ -88,11 +79,7 @@ class ProfileRepository {
           .collection('users')
           .doc(userId)
           .set(data, SetOptions(merge: true));
-
-      debugPrint(
-          'ProfileRepository: Profile created successfully for user $userId');
     } catch (e) {
-      debugPrint('ProfileRepository: Error creating profile: $e');
       rethrow;
     }
   }
@@ -112,6 +99,5 @@ class ProfileRepository {
         .collection('users')
         .doc(user.uid)
         .update({'displayName': newName});
-    debugPrint('ProfileRepository: Display name updated successfully');
   }
 }

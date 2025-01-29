@@ -51,7 +51,7 @@ class _TranslationsCoreTr implements TranslationsCoreEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get appName => 'Rüya Günlüğü';
+	@override String get appName => 'Dreamalyze';
 	@override late final _TranslationsCoreModeTr mode = _TranslationsCoreModeTr._(_root);
 	@override late final _TranslationsCoreErrorsTr errors = _TranslationsCoreErrorsTr._(_root);
 	@override String get success => 'Başarılı';
@@ -125,6 +125,8 @@ class _TranslationsSearchDreamsTr implements TranslationsSearchDreamsEn {
 	@override String get delete => 'Sil';
 	@override String get undoButton => 'Geri Al';
 	@override String get dreamDeleted => 'Rüya silindi';
+	@override String get deleteConfirmation => '"{title}" rüyasını silmek istediğinizden emin misiniz?';
+	@override String get deleteWarning => 'Bu işlem geri alınamaz.';
 }
 
 // Path: dreamHistory
@@ -155,6 +157,7 @@ class _TranslationsProfileTr implements TranslationsProfileEn {
 	@override String get changePassword => 'Şifre Değiştir';
 	@override String get profileNotFound => 'Profil bulunamadı';
 	@override String get closeBackgroundAnimation => 'Arka Plan Animasyonunu Kapat';
+	@override String get displayNameUpdated => 'Kullanıcı adı başarıyla güncellendi';
 	@override late final _TranslationsProfilePersonalizationTr personalization = _TranslationsProfilePersonalizationTr._(_root);
 	@override String get dreamStats => 'Rüya İstatistikleri';
 	@override String get currentStreak => 'Mevcut Seri';
@@ -296,6 +299,7 @@ class _TranslationsRegistrationSignUpTr implements TranslationsRegistrationSignU
 	// Translations
 	@override String get signUpText => 'Hesap Oluştur';
 	@override String get signUpCaption => 'Rüya Günlüğü\'ne bugün katılın';
+	@override String get subtitle => 'Rüyalarınızı keşfetmek için bize katılın';
 	@override String get alreadyHaveAccount => 'Zaten bir hesabınız var mı?';
 }
 
@@ -308,6 +312,8 @@ class _TranslationsRegistrationSignInTr implements TranslationsRegistrationSignI
 	// Translations
 	@override String get signInText => 'Giriş Yap';
 	@override String get forgotPassword => 'Şifremi Unuttum?';
+	@override String get subtitle => 'Yapay zeka ile rüyalarınızı keşfedin';
+	@override String get or => 'VEYA';
 }
 
 // Path: registration.signOut
@@ -366,6 +372,7 @@ class _TranslationsDreamEntryDreamFormTr implements TranslationsDreamEntryDreamF
 	@override String get getInterpretation => 'Yorumla';
 	@override String get noAttemptsLeft => 'Bugün için kalan hakkınız yok. Daha fazla rüya yorumlamak için reklam izleyin.';
 	@override String get watchAdError => 'Bugün daha fazla rüya yorumlamak için lütfen reklamı izleyin.';
+	@override String get watchAdForInterpretation => 'Reklam izleyerek yorum al';
 	@override String get dreamSaved => 'Rüya başarıyla kaydedildi';
 	@override String get remainingAttempts => 'Bugün kalan hakkınız';
 }
@@ -414,10 +421,10 @@ class _TranslationsProfileReminderTr implements TranslationsProfileReminderEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get setTime => 'Rüya hatırlatma zamanını ayarlayın';
+	@override String get setTime => 'Hatırlatıcı ayarla';
 	@override String get chooseTime => 'Hatırlatılmak istediğiniz zamanı seçin';
 	@override String get description => 'Rüyalarınızı hatırlamanız için size bir bildirim göndereceğiz';
-	@override String get earlyMorning => 'Erken sabah';
+	@override String get earlyMorning => 'Sabah';
 	@override String get earlyMorningTime => '6:00 AM';
 	@override String get afternoon => 'Öğleden sonra';
 	@override String get afternoonTime => '2:00 PM';
@@ -426,7 +433,7 @@ class _TranslationsProfileReminderTr implements TranslationsProfileReminderEn {
 	@override String get custom => 'Özel';
 	@override String get setCustomTime => 'Zamanınızı ayarlayın';
 	@override String get saveButton => 'Hatırlatmayı Kaydet';
-	@override String get skipButton => 'Şimdilik Geç';
+	@override String get skipButton => 'Şimdilik Vazgeç';
 	@override String get savedSuccess => 'Hatırlatma ayarları başarıyla kaydedildi';
 }
 
@@ -439,6 +446,7 @@ class _TranslationsProfileDeleteAccountTr implements TranslationsProfileDeleteAc
 	// Translations
 	@override String get title => 'Hesabınızı Sil';
 	@override String get message => 'Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tüm verilerinizi (rüyalar, yorumlar ve ayarlar dahil) kalıcı olarak silecektir.';
+	@override String get warning => 'Bu işlem geri alınamaz ve tüm verilerinizi (rüyalar, yorumlar ve ayarlar dahil) kalıcı olarak silecektir.';
 	@override String get confirm => 'Evet, Sil';
 }
 
@@ -568,7 +576,7 @@ class _TranslationsProfilePersonalizationInterestOptionsTr implements Translatio
 extension on TranslationsTr {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'core.appName': return 'Rüya Günlüğü';
+			case 'core.appName': return 'Dreamalyze';
 			case 'core.mode.systemMode': return 'Sistem';
 			case 'core.mode.darkMode': return 'Karanlık Mod';
 			case 'core.mode.lightMode': return 'Aydınlık Mod';
@@ -625,9 +633,12 @@ extension on TranslationsTr {
 			case 'registration.confirmPassword.confirmPasswordMismatch': return 'Şifreler uyuşmuyor';
 			case 'registration.signUp.signUpText': return 'Hesap Oluştur';
 			case 'registration.signUp.signUpCaption': return 'Rüya Günlüğü\'ne bugün katılın';
+			case 'registration.signUp.subtitle': return 'Rüyalarınızı keşfetmek için bize katılın';
 			case 'registration.signUp.alreadyHaveAccount': return 'Zaten bir hesabınız var mı?';
 			case 'registration.signIn.signInText': return 'Giriş Yap';
 			case 'registration.signIn.forgotPassword': return 'Şifremi Unuttum?';
+			case 'registration.signIn.subtitle': return 'Yapay zeka ile rüyalarınızı keşfedin';
+			case 'registration.signIn.or': return 'VEYA';
 			case 'registration.signOut.signOutText': return 'Çıkış Yap';
 			case 'dreamEntry.newDream': return 'Yeni Rüya';
 			case 'dreamEntry.saveDream': return 'Rüyayı Kaydet';
@@ -659,6 +670,7 @@ extension on TranslationsTr {
 			case 'dreamEntry.dreamForm.getInterpretation': return 'Yorumla';
 			case 'dreamEntry.dreamForm.noAttemptsLeft': return 'Bugün için kalan hakkınız yok. Daha fazla rüya yorumlamak için reklam izleyin.';
 			case 'dreamEntry.dreamForm.watchAdError': return 'Bugün daha fazla rüya yorumlamak için lütfen reklamı izleyin.';
+			case 'dreamEntry.dreamForm.watchAdForInterpretation': return 'Reklam izleyerek yorum al';
 			case 'dreamEntry.dreamForm.dreamSaved': return 'Rüya başarıyla kaydedildi';
 			case 'dreamEntry.dreamForm.remainingAttempts': return 'Bugün kalan hakkınız';
 			case 'dreamEntry.interpretation.title': return 'Rüya Yorumu';
@@ -678,6 +690,8 @@ extension on TranslationsTr {
 			case 'searchDreams.delete': return 'Sil';
 			case 'searchDreams.undoButton': return 'Geri Al';
 			case 'searchDreams.dreamDeleted': return 'Rüya silindi';
+			case 'searchDreams.deleteConfirmation': return '"{title}" rüyasını silmek istediğinizden emin misiniz?';
+			case 'searchDreams.deleteWarning': return 'Bu işlem geri alınamaz.';
 			case 'dreamHistory.dreamHistory': return 'Geçmiş Rüyalar';
 			case 'dreamHistory.noDreams': return 'Hiç rüya kaydedilmedi';
 			case 'dreamHistory.noDreamsCaption': return 'Henüz hiçbir rüya kaydetmediniz. Bugün rüyalarınızı kaydetmeye başlayın.';
@@ -690,6 +704,7 @@ extension on TranslationsTr {
 			case 'profile.changePassword': return 'Şifre Değiştir';
 			case 'profile.profileNotFound': return 'Profil bulunamadı';
 			case 'profile.closeBackgroundAnimation': return 'Arka Plan Animasyonunu Kapat';
+			case 'profile.displayNameUpdated': return 'Kullanıcı adı başarıyla güncellendi';
 			case 'profile.personalization.title': return 'Profilinizi Kişiselleştirin';
 			case 'profile.personalization.description': return 'Sizi daha iyi anlayarak daha kişiselleştirilmiş rüya yorumları sunmamıza yardımcı olun.';
 			case 'profile.personalization.gender': return 'Cinsiyet';
@@ -754,10 +769,10 @@ extension on TranslationsTr {
 			case 'profile.english': return 'İngilizce';
 			case 'profile.turkish': return 'Türkçe';
 			case 'profile.german': return 'Almanca';
-			case 'profile.reminder.setTime': return 'Rüya hatırlatma zamanını ayarlayın';
+			case 'profile.reminder.setTime': return 'Hatırlatıcı ayarla';
 			case 'profile.reminder.chooseTime': return 'Hatırlatılmak istediğiniz zamanı seçin';
 			case 'profile.reminder.description': return 'Rüyalarınızı hatırlamanız için size bir bildirim göndereceğiz';
-			case 'profile.reminder.earlyMorning': return 'Erken sabah';
+			case 'profile.reminder.earlyMorning': return 'Sabah';
 			case 'profile.reminder.earlyMorningTime': return '6:00 AM';
 			case 'profile.reminder.afternoon': return 'Öğleden sonra';
 			case 'profile.reminder.afternoonTime': return '2:00 PM';
@@ -766,10 +781,11 @@ extension on TranslationsTr {
 			case 'profile.reminder.custom': return 'Özel';
 			case 'profile.reminder.setCustomTime': return 'Zamanınızı ayarlayın';
 			case 'profile.reminder.saveButton': return 'Hatırlatmayı Kaydet';
-			case 'profile.reminder.skipButton': return 'Şimdilik Geç';
+			case 'profile.reminder.skipButton': return 'Şimdilik Vazgeç';
 			case 'profile.reminder.savedSuccess': return 'Hatırlatma ayarları başarıyla kaydedildi';
 			case 'profile.deleteAccount.title': return 'Hesabınızı Sil';
 			case 'profile.deleteAccount.message': return 'Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tüm verilerinizi (rüyalar, yorumlar ve ayarlar dahil) kalıcı olarak silecektir.';
+			case 'profile.deleteAccount.warning': return 'Bu işlem geri alınamaz ve tüm verilerinizi (rüyalar, yorumlar ve ayarlar dahil) kalıcı olarak silecektir.';
 			case 'profile.deleteAccount.confirm': return 'Evet, Sil';
 			case 'common.cancel': return 'İptal';
 			case 'common.confirm': return 'Onayla';

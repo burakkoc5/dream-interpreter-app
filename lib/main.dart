@@ -13,6 +13,7 @@ import 'package:dream/firebase_options.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:dream/shared/repositories/notification_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,43 +23,49 @@ import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dream/core/error/error_boundary.dart';
+import 'package:dream/core/services/logging_service.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() async {
-  // Filter out MESA debug logs
+void configureDebugPrints() {
   debugPrint = (String? message, {int? wrapWidth}) {
     if (message?.contains('MESA') ?? false) return;
     debugPrintSynchronously(message ?? '', wrapWidth: wrapWidth);
   };
+}
 
-  WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
-
-  // Initialize Firebase
+Future<void> initializeFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+}
 
-  // Initialize dependency injection
-  await configureDependencies();
+void configureCrashlytics() {
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
 
-  // Check if this is a fresh install
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+}
+
+Future<void> handleFirstInstall() async {
   final prefs = await SharedPreferences.getInstance();
   final hasRunBefore = prefs.getBool('has_run_before') ?? false;
 
   if (!hasRunBefore) {
-    // This is a fresh install, sign out any existing user
     await FirebaseAuth.instance.signOut();
     await prefs.setBool('has_run_before', true);
   }
+}
 
-  // Initialize notifications
-  final notificationRepository = getIt<NotificationRepository>();
-  await notificationRepository.initialize();
-
-  // Initialize localization with stored preference
+Future<void> initializeLocalization() async {
+  final prefs = await SharedPreferences.getInstance();
   final savedLanguage = prefs.getString('appLanguage');
+
   if (savedLanguage != null) {
     LocaleSettings.setLocale(AppLocale.values.firstWhere(
       (locale) => locale.languageCode == savedLanguage,
@@ -67,10 +74,32 @@ void main() async {
   } else {
     LocaleSettings.setLocale(AppLocale.en);
   }
+}
+
+void main() async {
+  configureDebugPrints();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+
+  await initializeFirebase();
+  configureCrashlytics();
+  await FirebaseCrashlytics.instance
+      .setCrashlyticsCollectionEnabled(!kDebugMode);
+
+  await configureDependencies();
+  await handleFirstInstall();
+
+  final notificationRepository = getIt<NotificationRepository>();
+  await notificationRepository.initialize();
+
+  await initializeLocalization();
 
   runApp(
     TranslationProvider(
-      child: MyApp(),
+      child: ErrorBoundary(
+        child: MyApp(),
+      ),
     ),
   );
 }
@@ -84,6 +113,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<LoggingService>(
+          create: (_) => getIt<LoggingService>(),
+        ),
         Provider<NotificationRepository>(
           create: (_) => getIt<NotificationRepository>(),
         ),

@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 /// Service handling Firebase authentication operations.
 @injectable
@@ -54,7 +53,6 @@ class FirebaseAuthService {
         }, SetOptions(merge: true));
       } catch (e) {
         // Don't fail the sign-in if Firestore update fails
-        debugPrint('Failed to update user document: $e');
       }
 
       return UserModel(
@@ -65,7 +63,6 @@ class FirebaseAuthService {
     } on FirebaseAuthException catch (e) {
       throw _handleFirebaseAuthError(e);
     } catch (e) {
-      debugPrint('Unexpected error during sign in: $e');
       throw AuthError.unknown;
     }
   }
@@ -84,8 +81,6 @@ class FirebaseAuthService {
       // Send email verification
       await userCredential.user!.sendEmailVerification();
 
-      debugPrint('User created: ${userCredential.user!.uid}');
-
       final now = DateTime.now();
       // Get the username part from email (everything before @)
       final defaultDisplayName = email.split('@').first;
@@ -102,8 +97,6 @@ class FirebaseAuthService {
         'preferences': {},
         'emailVerified': false,
       });
-
-      debugPrint('User created: ${userCredential.user!.uid}');
 
       return userCredential;
     } on FirebaseAuthException catch (e) {

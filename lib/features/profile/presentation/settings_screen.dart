@@ -1,4 +1,4 @@
-import 'package:dream/features/profile/widgets/settings_item_widget.dart';
+import 'package:dream/features/profile/presentation/widgets/settings_item_widget.dart';
 import 'package:dream/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';

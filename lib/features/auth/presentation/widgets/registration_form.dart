@@ -80,9 +80,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
             AppTextField(
               controller: _emailController,
               label: t.registration.email.emailText,
-              prefixIcon: Icons.email_outlined,
+              prefix: Icon(Icons.email_outlined),
               keyboardType: TextInputType.emailAddress,
-              autofillHints: const [AutofillHints.email],
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return t.registration.email.emailValidation;
@@ -97,12 +96,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
             AppTextField(
               controller: _passwordController,
               label: t.registration.password.passwordText,
-              prefixIcon: Icons.lock_outline,
-              suffixIcon:
-                  _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
-              onSuffixIconTap: _togglePasswordVisibility,
+              prefix: Icon(Icons.lock_outline),
+              suffix: IconButton(
+                icon: Icon(_isPasswordVisible
+                    ? Icons.visibility_off
+                    : Icons.visibility),
+                onPressed: _togglePasswordVisibility,
+              ),
               obscureText: !_isPasswordVisible,
-              autofillHints: const [AutofillHints.newPassword],
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return t.registration.password.passwordValidation;
@@ -118,11 +119,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
             AppTextField(
               controller: _confirmPasswordController,
               label: t.registration.confirmPassword.confirmPasswordText,
-              prefixIcon: Icons.lock_outline,
-              suffixIcon: _isConfirmPasswordVisible
-                  ? Icons.visibility_off
-                  : Icons.visibility,
-              onSuffixIconTap: _toggleConfirmPasswordVisibility,
+              prefix: Icon(Icons.lock_outline),
+              suffix: IconButton(
+                icon: Icon(_isConfirmPasswordVisible
+                    ? Icons.visibility_off
+                    : Icons.visibility),
+                onPressed: _toggleConfirmPasswordVisibility,
+              ),
               obscureText: !_isConfirmPasswordVisible,
               validator: (value) {
                 if (value != _passwordController.text) {

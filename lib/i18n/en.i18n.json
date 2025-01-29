@@ -1,6 +1,6 @@
 {
   "core": {
-    "appName": "Dream Journal",
+    "appName": "Dreamalyze",
     "mode": {
       "systemMode": "System",
       "darkMode": "Dark Mode",
@@ -78,18 +78,21 @@
     "signUp": {
       "signUpText": "Create Account",
       "signUpCaption": "Join Dream Journal today",
+      "subtitle": "Join us to explore your dreams",
       "alreadyHaveAccount": "Already have an account?"
     },
     "signIn": {
       "signInText": "Sign In",
-      "forgotPassword": "Forgot Password?"
+      "forgotPassword": "Forgot Password?",
+      "subtitle": "Explore your dreams with AI",
+      "or": "OR"
     },
     "signOut": {
       "signOutText": "Sign Out"
     }
   },
   "dreamEntry": {
-    "newDream": "New Dream",
+    "newDream": "Dreamalyze",
     "saveDream": "Save Dream",
     "discardDream": "Discard",
     "shareDream": "Share",
@@ -125,7 +128,8 @@
       "noAttemptsLeft": "No attempts left for today. Watch an ad to interpret more dreams.",
       "watchAdError": "Please watch the ad to interpret more dreams today.",
       "dreamSaved": "Dream saved successfully",
-      "remainingAttempts": "Remaining attempts today"
+      "remainingAttempts": "Remaining attempts today",
+      "watchAdForInterpretation": "Watch Ad for Interpretation"
     },
     "interpretation": {
       "title": "Dream Interpretation",
@@ -149,7 +153,9 @@
     "noResults": "No dreams found",
     "delete": "Delete",
     "undoButton": "Undo",
-    "dreamDeleted": "Dream deleted"
+    "dreamDeleted": "Dream deleted",
+    "deleteConfirmation": "Are you sure you want to delete \"{title}\"?",
+    "deleteWarning": "This action cannot be undone."
   },
   "dreamHistory": {
     "dreamHistory": "Past Dreams",
@@ -166,6 +172,7 @@
     "changePassword": "Change Password",
     "profileNotFound": "Profile not found",
     "closeBackgroundAnimation": "Close Background Animation",
+    "displayNameUpdated": "Display name updated successfully",
     "personalization": {
       "title": "Personalize Your Profile",
       "description": "Help us understand you better to provide more personalized dream interpretations.",
@@ -243,7 +250,7 @@
     "turkish": "Turkish",
     "german": "German",
     "reminder": {
-      "setTime": "Set dream reminder time",
+      "setTime": "Set reminder",
       "chooseTime": "Choose when you want to be reminded",
       "description": "We'll send you a notification to help you remember your dreams",
       "earlyMorning": "Early morning",
@@ -261,6 +268,7 @@
     "deleteAccount": {
       "title": "Delete Account",
       "message": "Are you sure you want to delete your account? This action cannot be undone and will permanently delete all your data including dreams, interpretations, and settings.",
+      "warning": "This action cannot be undone and will permanently delete all your data including dreams, interpretations, and settings.",
       "confirm": "Yes, Delete"
     }
   },

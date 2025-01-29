@@ -1,110 +1,123 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:dream/core/network/network_retry.dart';
+import 'package:dream/core/services/logging_service.dart';
 
 @injectable
 class StatsRepository {
   final FirebaseFirestore _firestore;
+  final NetworkRetry _networkRetry;
+  final LoggingService _logger;
 
-  StatsRepository(this._firestore);
-
-  DateTime? _parseDate(dynamic createdAt) {
-    if (createdAt == null) return null;
-
-    if (createdAt is Timestamp) {
-      return createdAt.toDate();
-    } else if (createdAt is String) {
-      return DateTime.tryParse(createdAt);
-    }
-    return null;
-  }
+  StatsRepository(
+    this._firestore,
+    LoggingService logger,
+  )   : _logger = logger,
+        _networkRetry = NetworkRetry(logger);
 
   Stream<Map<String, dynamic>> getUserStats(String userId) {
-    debugPrint('Fetching stats for userId: $userId');
+    _logger.log('Starting stats calculation',
+        level: LogLevel.info, additionalData: {'userId': userId});
+    return _networkRetry.retryWithFallback(
+      () async {
+        final userDreams = await _firestore
+            .collection('dreams')
+            .where('userId', isEqualTo: userId)
+            .get();
 
-    // Combine dreams and streak data streams
-    final dreamsStream = _firestore
-        .collection('dreams')
-        .where('userId', isEqualTo: userId)
-        .snapshots();
-
-    final streakStream =
-        _firestore.collection('streaks').doc(userId).snapshots();
-
-    return Rx.combineLatest2(
-      dreamsStream,
-      streakStream,
-      (QuerySnapshot dreamsSnapshot, DocumentSnapshot streakSnapshot) {
-        debugPrint('Number of documents: ${dreamsSnapshot.docs.length}');
-
-        // Get streak data
-        final streakData = streakSnapshot.data() as Map<String, dynamic>?;
-        final currentStreak = streakData?['currentStreak'] ?? 0;
-        final longestStreak = streakData?['longestStreak'] ?? 0;
-
-        if (dreamsSnapshot.docs.isEmpty) {
-          return {
-            'totalDreams': 0,
-            'weeklyDreams': 0,
-            'completionRate': 0.0,
-            'currentStreak': currentStreak,
-            'longestStreak': longestStreak,
-          };
-        }
-
-        final dreams = dreamsSnapshot.docs;
         final now = DateTime.now();
-        final weekAgo = now.subtract(const Duration(days: 7));
+        final weekStart = now
+            .subtract(Duration(days: now.weekday - 1))
+            .copyWith(hour: 0, minute: 0, second: 0, millisecond: 0);
 
-        try {
-          int totalDreams = dreams.length;
-          int weeklyDreams = dreams.where((doc) {
-            final data = doc.data() as Map<String, dynamic>;
-            final createdAt = data['createdAt'];
-            final dreamDate = _parseDate(createdAt);
-            return dreamDate != null && dreamDate.isAfter(weekAgo);
-          }).length;
+        int weeklyDreams = 0;
+        List<DateTime> dreamDates = [];
 
-          int dreamsWithInterpretation = dreams.where((doc) {
-            final data = doc.data() as Map<String, dynamic>;
-            final interpretation = data['interpretation'];
-            return interpretation != null &&
-                interpretation is String &&
-                interpretation.trim().isNotEmpty;
-          }).length;
+        for (var dream in userDreams.docs) {
+          final createdAt = dream.data()['createdAt'];
+          DateTime dreamDate;
+          if (createdAt is Timestamp) {
+            dreamDate = createdAt.toDate();
+          } else if (createdAt is String) {
+            dreamDate = DateTime.parse(createdAt);
+          } else {
+            continue; // Skip if date is invalid
+          }
 
-          double completionRate =
-              totalDreams > 0 ? dreamsWithInterpretation / totalDreams : 0.0;
-
-          completionRate = double.parse(completionRate.toStringAsFixed(2));
-
-          debugPrint('Stats calculated successfully:');
-          debugPrint('Total dreams: $totalDreams');
-          debugPrint('Weekly dreams: $weeklyDreams');
-          debugPrint('Completion rate: $completionRate');
-          debugPrint('Current streak: $currentStreak');
-          debugPrint('Longest streak: $longestStreak');
-
-          return {
-            'totalDreams': totalDreams,
-            'weeklyDreams': weeklyDreams,
-            'completionRate': completionRate,
-            'currentStreak': currentStreak,
-            'longestStreak': longestStreak,
-          };
-        } catch (e) {
-          debugPrint('Error calculating stats: $e');
-          return {
-            'totalDreams': 0,
-            'weeklyDreams': 0,
-            'completionRate': 0.0,
-            'currentStreak': currentStreak,
-            'longestStreak': longestStreak,
-            'error': e.toString(),
-          };
+          dreamDates.add(dreamDate);
+          if (dreamDate.isAfter(weekStart)) {
+            weeklyDreams++;
+          }
         }
+
+        // Sort dream dates from newest to oldest
+        dreamDates.sort((a, b) => b.compareTo(a));
+
+        // Calculate streaks
+        int currentStreak = 0;
+        int longestStreak = 0;
+        int tempStreak = 0;
+        DateTime? lastDate;
+
+        if (dreamDates.isNotEmpty) {
+          // Initialize with the first date
+          lastDate = dreamDates[0];
+          tempStreak = 1;
+          currentStreak = 1;
+          longestStreak = 1;
+
+          // Check if the most recent dream is from today or yesterday
+          final today = DateTime.now()
+              .copyWith(hour: 0, minute: 0, second: 0, millisecond: 0);
+          final mostRecentDreamDate =
+              lastDate.copyWith(hour: 0, minute: 0, second: 0, millisecond: 0);
+          final isActiveStreak =
+              today.difference(mostRecentDreamDate).inDays <= 1;
+
+          // If the streak is not active (no dream today or yesterday), reset current streak
+          if (!isActiveStreak) {
+            currentStreak = 0;
+          }
+
+          // Calculate streaks for the rest of the dates
+          for (int i = 1; i < dreamDates.length; i++) {
+            final currentDate = dreamDates[i];
+            final difference = lastDate!.difference(currentDate).inDays;
+
+            if (difference == 1) {
+              // Consecutive day
+              tempStreak++;
+              if (tempStreak > longestStreak) {
+                longestStreak = tempStreak;
+              }
+              if (isActiveStreak) {
+                currentStreak = tempStreak;
+              }
+            } else if (difference > 1) {
+              // Break in streak
+              tempStreak = 1;
+            }
+            lastDate = currentDate;
+          }
+        }
+
+        return {
+          'totalDreams': userDreams.size,
+          'weeklyDreams': weeklyDreams,
+          'completionRate':
+              userDreams.size > 0 ? weeklyDreams / userDreams.size : 0.0,
+          'currentStreak': currentStreak,
+          'longestStreak': longestStreak,
+        };
       },
-    );
+      {
+        'totalDreams': 0,
+        'weeklyDreams': 0,
+        'completionRate': 0.0,
+        'currentStreak': 0,
+        'longestStreak': 0,
+      },
+      operationName: 'calculateUserStats',
+    ).asStream();
   }
 }

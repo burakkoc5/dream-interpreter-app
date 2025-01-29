@@ -41,7 +41,7 @@ class _DreamSearchWidgetState extends State<DreamSearchWidget> {
       child: AppTextField(
         controller: _searchController,
         hint: t.searchDreams.searchDreams,
-        prefixIcon: Icons.search,
+        prefix: Icon(Icons.search),
         onChanged: _onSearchChanged,
       ),
     );

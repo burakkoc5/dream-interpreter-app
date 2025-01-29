@@ -1,4 +1,6 @@
 import 'package:dream/core/routing/app_route_names.dart';
+import 'package:dream/i18n/strings.g.dart';
+import 'package:dream/shared/widgets/app_button.dart' as app_button;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -36,7 +38,9 @@ class EmailVerificationDialog extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                isSignIn ? 'Email Not Verified' : 'Verify Your Email',
+                isSignIn
+                    ? t.core.emailVerificationDialog.notVerifiedTitle
+                    : t.core.emailVerificationDialog.verifyTitle,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -45,8 +49,9 @@ class EmailVerificationDialog extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 isSignIn
-                    ? 'Please verify your email before signing in. Check your inbox for the verification link.'
-                    : 'A verification email has been sent to $email. Please verify your email to continue.',
+                    ? t.core.emailVerificationDialog.notVerifiedMessage
+                    : t.core.emailVerificationDialog
+                        .verifyMessage(email: email),
                 style: theme.textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
@@ -62,8 +67,8 @@ class EmailVerificationDialog extends StatelessWidget {
                 ),
                 child: Text(
                   isSignIn
-                      ? 'Need a new verification email?'
-                      : 'Check your inbox and spam folder for the verification link.',
+                      ? t.core.emailVerificationDialog.needVerification
+                      : t.core.emailVerificationDialog.checkInbox,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: isSignIn
                         ? theme.colorScheme.error
@@ -79,18 +84,19 @@ class EmailVerificationDialog extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Expanded(
-                      child: OutlinedButton(
+                      child: app_button.AppButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text('Cancel'),
+                        text: t.core.emailVerificationDialog.cancel,
+                        style: app_button.ButtonStyle.outlined,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: FilledButton(
+                      child: app_button.AppButton(
                         onPressed: onResendEmail,
-                        child: const Text('Resend'),
+                        text: t.core.emailVerificationDialog.resend,
                       ),
                     ),
                   ],
@@ -98,12 +104,12 @@ class EmailVerificationDialog extends StatelessWidget {
               else
                 SizedBox(
                   width: double.infinity,
-                  child: FilledButton(
+                  child: app_button.AppButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                       context.go(AppRoute.login);
                     },
-                    child: const Text('Go to Login'),
+                    text: t.core.emailVerificationDialog.goToLogin,
                   ),
                 ),
             ],

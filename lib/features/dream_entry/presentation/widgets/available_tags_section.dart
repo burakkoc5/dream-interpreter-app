@@ -20,7 +20,6 @@ class AvailableTagsSection extends StatelessWidget {
 
     if (state.availableTags.isEmpty) return const SizedBox.shrink();
 
-    debugPrint(state.tagCounts.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

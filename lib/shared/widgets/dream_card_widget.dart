@@ -180,109 +180,8 @@ class _DreamCardState extends State<DreamCard>
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  // Date and mood rating in a column
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Date
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.calendar_today,
-                                            size: 16,
-                                            color: theme.colorScheme.primary
-                                                .withValues(alpha: 0.6),
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            _formatDate(widget.date),
-                                            style: theme.textTheme.bodySmall
-                                                ?.copyWith(
-                                              color: theme.colorScheme.onSurface
-                                                  .withValues(alpha: 0.6),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      // Mood Rating
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.mood,
-                                            size: 16,
-                                            color: theme.colorScheme.primary
-                                                .withValues(alpha: 0.6),
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Row(
-                                            children: List.generate(5, (index) {
-                                              return Icon(
-                                                index < widget.moodRating
-                                                    ? Icons.star
-                                                    : Icons.star_border,
-                                                size: 12,
-                                                color: theme.colorScheme.primary
-                                                    .withValues(alpha: 0.6),
-                                              );
-                                            }),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  // Action buttons
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(
-                                          widget.isFavourite
-                                              ? Icons.favorite
-                                              : Icons.favorite_border,
-                                          color: widget.isFavourite
-                                              ? Colors.red
-                                              : theme.colorScheme.primary
-                                                  .withValues(alpha: 0.8),
-                                          size: 20,
-                                        ),
-                                        onPressed: widget.onFavoriteToggle,
-                                        padding: const EdgeInsets.all(8),
-                                        constraints: const BoxConstraints(),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.share_outlined,
-                                          color: theme.colorScheme.primary
-                                              .withValues(alpha: 0.8),
-                                          size: 20,
-                                        ),
-                                        onPressed: () => _shareDream(
-                                          widget.title,
-                                          widget.dreamContent,
-                                          widget.interpretation,
-                                        ),
-                                        padding: const EdgeInsets.all(8),
-                                        constraints: const BoxConstraints(),
-                                      ),
-                                      if (widget.onDelete != null) ...[
-                                        const SizedBox(width: 8),
-                                        IconButton(
-                                          icon: Icon(
-                                            Icons.delete_outline,
-                                            color: theme.colorScheme.error
-                                                .withValues(alpha: 0.8),
-                                            size: 20,
-                                          ),
-                                          onPressed: widget.onDelete,
-                                          padding: const EdgeInsets.all(8),
-                                          constraints: const BoxConstraints(),
-                                        ),
-                                      ],
-                                    ],
-                                  ),
+                                  _buildDateAndMoodSection(theme),
+                                  _buildActionButtons(theme),
                                 ],
                               ),
                             ],
@@ -297,6 +196,118 @@ class _DreamCardState extends State<DreamCard>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDateAndMoodSection(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildDateRow(theme),
+        const SizedBox(height: 4),
+        _buildMoodRatingRow(theme),
+      ],
+    );
+  }
+
+  Widget _buildDateRow(ThemeData theme) {
+    return Row(
+      children: [
+        Icon(
+          Icons.calendar_today,
+          size: 16,
+          color: theme.colorScheme.primary.withValues(alpha: 0.6),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          _formatDate(widget.date),
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMoodRatingRow(ThemeData theme) {
+    return Row(
+      children: [
+        Icon(
+          Icons.mood,
+          size: 16,
+          color: theme.colorScheme.primary.withValues(alpha: 0.6),
+        ),
+        const SizedBox(width: 4),
+        Row(
+          children: List.generate(5, (index) {
+            return Icon(
+              index < widget.moodRating ? Icons.star : Icons.star_border,
+              size: 12,
+              color: theme.colorScheme.primary.withValues(alpha: 0.6),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButtons(ThemeData theme) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _buildFavoriteButton(theme),
+        const SizedBox(width: 8),
+        _buildShareButton(theme),
+        if (widget.onDelete != null) ...[
+          const SizedBox(width: 8),
+          _buildDeleteButton(theme),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildFavoriteButton(ThemeData theme) {
+    return IconButton(
+      icon: Icon(
+        widget.isFavourite ? Icons.favorite : Icons.favorite_border,
+        color: widget.isFavourite
+            ? Colors.red
+            : theme.colorScheme.primary.withValues(alpha: 0.8),
+        size: 20,
+      ),
+      onPressed: widget.onFavoriteToggle,
+      padding: const EdgeInsets.all(8),
+      constraints: const BoxConstraints(),
+    );
+  }
+
+  Widget _buildShareButton(ThemeData theme) {
+    return IconButton(
+      icon: Icon(
+        Icons.share_outlined,
+        color: theme.colorScheme.primary.withValues(alpha: 0.8),
+        size: 20,
+      ),
+      onPressed: () => _shareDream(
+        widget.title,
+        widget.dreamContent,
+        widget.interpretation,
+      ),
+      padding: const EdgeInsets.all(8),
+      constraints: const BoxConstraints(),
+    );
+  }
+
+  Widget _buildDeleteButton(ThemeData theme) {
+    return IconButton(
+      icon: Icon(
+        Icons.delete_outline,
+        color: theme.colorScheme.error.withValues(alpha: 0.8),
+        size: 20,
+      ),
+      onPressed: widget.onDelete,
+      padding: const EdgeInsets.all(8),
+      constraints: const BoxConstraints(),
     );
   }
 

@@ -26,6 +26,7 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
   void initState() {
     super.initState();
     _checkAndPreloadAd();
+    _checkAndUpdateAttempts();
   }
 
   @override
@@ -38,7 +39,6 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
   void _checkAndPreloadAd() {
     final profile = context.read<ProfileCubit>().state.profile;
     if (profile != null && profile.remainingDailyAttempts == 1) {
-      debugPrint('One attempt remaining, preloading ad...');
       _loadRewardedAd();
     }
   }
@@ -46,7 +46,6 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
   void _loadRewardedAd() {
     if (_isLoadingAd) return;
 
-    debugPrint('Starting to load rewarded ad...');
     setState(() => _isLoadingAd = true);
 
     RewardedAd.load(
@@ -54,14 +53,12 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
-          debugPrint('Rewarded ad loaded successfully');
           setState(() {
             _rewardedAd = ad;
             _isLoadingAd = false;
           });
         },
         onAdFailedToLoad: (error) {
-          debugPrint('Failed to load rewarded ad: ${error.message}');
           setState(() => _isLoadingAd = false);
         },
       ),
@@ -69,29 +66,43 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
   }
 
   Future<bool> _showRewardedAd() async {
-    if (_rewardedAd == null) {
-      debugPrint('Cannot show rewarded ad: ad is null');
-      return false;
-    }
+    if (_rewardedAd == null) return false;
 
     try {
-      debugPrint('Attempting to show rewarded ad...');
       Completer<bool> adCompleter = Completer<bool>();
 
       await _rewardedAd?.show(
         onUserEarnedReward: (_, __) {
-          debugPrint('User earned reward from ad');
           adCompleter.complete(true);
         },
       );
 
       _rewardedAd = null;
-      final result = await adCompleter.future;
-      debugPrint('Ad show result: $result');
-      return result;
+      return await adCompleter.future;
     } catch (e) {
-      debugPrint('Error showing rewarded ad: $e');
       return false;
+    }
+  }
+
+  Future<void> _checkAndUpdateAttempts() async {
+    final profileCubit = context.read<ProfileCubit>();
+    final profile = profileCubit.state.profile;
+
+    if (profile == null) return;
+
+    final now = DateTime.now();
+    final lastReset = profile.lastAttemptsResetDate;
+
+    if (lastReset == null || !_isSameDay(lastReset, now)) {
+      await profileCubit.updateProfilePreferences({
+        'remainingDailyAttempts': 1,
+        'lastAttemptsResetDate': Timestamp.fromDate(now),
+      });
+      return;
+    }
+
+    if (profile.remainingDailyAttempts == 0) {
+      _loadRewardedAd();
     }
   }
 
@@ -99,71 +110,33 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
     final profileCubit = context.read<ProfileCubit>();
     final profile = profileCubit.state.profile;
 
-    if (profile == null) {
-      debugPrint('Profile is null, cannot check attempts');
-      return false;
-    }
+    if (profile == null) return false;
 
-    // Reset attempts if it's a new day
-    final now = DateTime.now();
-    final lastReset = profile.lastAttemptsResetDate;
-    debugPrint('Last reset date: $lastReset');
-    debugPrint('Current remaining attempts: ${profile.remainingDailyAttempts}');
-
-    if (lastReset == null || !_isSameDay(lastReset, now)) {
-      debugPrint('Resetting daily attempts (new day)');
-      await profileCubit.updateProfilePreferences({
-        'remainingDailyAttempts': 2,
-        'lastAttemptsResetDate': Timestamp.fromDate(now),
-      });
-      return true;
-    }
-
-    // Check remaining attempts
     if (profile.remainingDailyAttempts > 0) {
-      debugPrint(
-          'Using one attempt, ${profile.remainingDailyAttempts - 1} remaining');
       final newAttempts = profile.remainingDailyAttempts - 1;
       await profileCubit.updateProfilePreferences({
         'remainingDailyAttempts': newAttempts,
-        'lastAttemptsResetDate': Timestamp.fromDate(lastReset),
+        'lastAttemptsResetDate':
+            Timestamp.fromDate(profile.lastAttemptsResetDate ?? DateTime.now()),
       });
-
-      // If this was the last attempt, preload ad for next time
-      if (newAttempts == 1) {
-        debugPrint('One attempt remaining after update, preloading ad...');
-        _loadRewardedAd();
-      }
       return true;
     }
 
-    // No attempts left, show ad
-    debugPrint('No attempts left, preparing to show ad');
     if (_rewardedAd == null) {
-      debugPrint('No ad loaded, starting load process');
       _loadRewardedAd();
 
-      // Wait for ad to load
-      debugPrint('Waiting for ad to load...');
       while (_rewardedAd == null && mounted) {
         await Future.delayed(const Duration(milliseconds: 100));
       }
 
-      if (_rewardedAd == null) {
-        debugPrint('Failed to load ad after waiting');
-        return false;
-      }
-      debugPrint('Ad loaded successfully after waiting');
+      if (_rewardedAd == null) return false;
     }
 
     final watchedAd = await _showRewardedAd();
-    debugPrint('Ad watch result: $watchedAd');
-    if (!watchedAd) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(t.dreamEntry.dreamForm.watchAdError)),
-        );
-      }
+    if (!watchedAd && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(t.dreamEntry.dreamForm.watchAdError)),
+      );
       return false;
     }
 
@@ -267,14 +240,38 @@ class _DreamFormWidgetState extends State<DreamFormWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.auto_awesome, size: 20),
-                  const SizedBox(width: 8),
-                  Text(
-                    t.dreamEntry.dreamForm.getInterpretation,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  Column(
+                    children: [
+                      Text(
+                        t.dreamEntry.dreamForm.getInterpretation,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: colorScheme.onPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      if (context.select((ProfileCubit cubit) =>
+                              cubit.state.profile?.remainingDailyAttempts ??
+                              0) ==
+                          0)
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.ondemand_video,
+                              size: 12,
+                              color: colorScheme.onPrimary,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              t.dreamEntry.dreamForm.watchAdForInterpretation,
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                color: colorScheme.onError,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 8,
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
                   ),
                 ],
               ),

@@ -102,12 +102,10 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
                               theme.colorScheme.surface.withValues(alpha: 0.9),
                             ]
                           : [
-                              theme.colorScheme.primary.withValues(alpha: 0.15),
-                              theme.colorScheme.surface.withValues(alpha: 0.2),
-                              theme.colorScheme.surfaceContainerHighest
-                                  .withValues(alpha: 0.18),
-                              theme.colorScheme.secondary
-                                  .withValues(alpha: 0.15),
+                              theme.colorScheme.surface.withValues(alpha: 0.95),
+                              theme.colorScheme.surface.withValues(alpha: 0.9),
+                              theme.colorScheme.surface.withValues(alpha: 0.85),
+                              theme.colorScheme.surface.withValues(alpha: 0.95),
                             ],
                       stops: const [0.0, 0.3, 0.7, 1.0],
                     ),

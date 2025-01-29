@@ -40,7 +40,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                t.registration.password.resetPassword.resetPasswordCaption,
+                t.registration.password.resetPassword.resetPasswordSuccess,
               ),
               backgroundColor: Theme.of(context).colorScheme.primary,
               behavior: SnackBarBehavior.floating,
@@ -55,7 +55,8 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(e.toString()),
+              content: Text(
+                  t.registration.password.resetPassword.resetPasswordError),
               backgroundColor: Theme.of(context).colorScheme.error,
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
@@ -161,9 +162,8 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                           AppTextField(
                             controller: _emailController,
                             label: t.registration.email.emailText,
-                            prefixIcon: Icons.email_outlined,
+                            prefix: Icon(Icons.email_outlined),
                             keyboardType: TextInputType.emailAddress,
-                            autofillHints: const [AutofillHints.email],
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return t.registration.email.emailValidation;

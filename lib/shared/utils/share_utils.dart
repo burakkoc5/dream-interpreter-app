@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../widgets/dream_share_card.dart';
 import 'package:dream/features/profile/models/profile_model.dart';
+import 'package:dream/features/profile/models/streak_model.dart';
 
 class ShareUtils {
   static Future<void> shareDreamAsImage({
@@ -16,6 +17,7 @@ class ShareUtils {
     required DateTime date,
     required int moodRating,
     Profile? profile,
+    StreakModel? streak,
   }) async {
     // Create a GlobalKey to access the RepaintBoundary
     final boundaryKey = GlobalKey();
@@ -32,6 +34,7 @@ class ShareUtils {
           date: date,
           moodRating: moodRating,
           profile: profile,
+          streak: streak?.currentStreak ?? 0,
         ),
       ),
     );

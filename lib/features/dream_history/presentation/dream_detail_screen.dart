@@ -52,8 +52,7 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
           backgroundColor: Colors.transparent,
           body: Stack(
             children: [
-              AnimatedBackground(),
-
+              const AnimatedBackground(),
               // Main content
               CustomScrollView(
                 controller: _scrollController,
@@ -129,7 +128,7 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
                                   color: isDarkMode
                                       ? theme.colorScheme.error
                                       : theme.colorScheme.error
-                                          .withOpacity(0.9),
+                                          .withValues(alpha: 0.9),
                                 ),
                                 onPressed: () {
                                   showDialog(
@@ -153,7 +152,7 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
                                         style:
                                             theme.textTheme.bodyLarge?.copyWith(
                                           color: theme.colorScheme.onSurface
-                                              .withOpacity(0.8),
+                                              .withValues(alpha: 0.8),
                                         ),
                                       ),
                                       actions: [
@@ -469,8 +468,16 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
           filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
           child: Container(
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface
-                  .withValues(alpha: isDarkMode ? 0.4 : 0.7),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  theme.colorScheme.surface
+                      .withValues(alpha: isDarkMode ? 0.7 : 0.8),
+                  theme.colorScheme.surface
+                      .withValues(alpha: isDarkMode ? 0.5 : 0.6),
+                ],
+              ),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
                 color: theme.colorScheme.primary
@@ -479,38 +486,40 @@ class _DreamDetailScreenState extends State<DreamDetailScreen>
               ),
             ),
             padding: const EdgeInsets.all(20),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary
-                        .withValues(alpha: isDarkMode ? 0.2 : 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.mood,
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primary
+                            .withValues(alpha: isDarkMode ? 0.2 : 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.mood,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
                     Text(
-                      t.dreamEntry.moodRating,
+                      'Mood Rating',
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: theme.colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    MoodRatingWidget(
-                      rating: widget.dream.moodRating,
-                      isInteractive: false,
-                      size: 28,
-                    ),
                   ],
+                ),
+                const SizedBox(height: 16),
+                Center(
+                  child: MoodRatingWidget(
+                    rating: widget.dream.moodRating,
+                    isInteractive: false,
+                    size: 32,
+                  ),
                 ),
               ],
             ),
