@@ -64,7 +64,6 @@ Future<_i174.GetIt> init(
     environmentFilter,
   );
   final registerModule = _$RegisterModule();
-  gh.factory<_i342.OpenAIService>(() => _i342.OpenAIService());
   gh.factory<_i246.TimeZoneRepository>(() => _i246.TimeZoneRepository());
   gh.factory<_i368.AndroidNotificationSettings>(
       () => _i368.AndroidNotificationSettings());
@@ -90,6 +89,8 @@ Future<_i174.GetIt> init(
       () => _i223.ThemeCubit(gh<_i460.SharedPreferences>()));
   gh.factory<_i547.OnboardingCubit>(
       () => _i547.OnboardingCubit(gh<_i460.SharedPreferences>()));
+  gh.factory<_i342.OpenAIService>(
+      () => _i342.OpenAIService(gh<_i58.LanguageCubit>()));
   gh.singleton<_i520.LoggingService>(
       () => _i520.LoggingService(gh<_i141.FirebaseCrashlytics>()));
   gh.factory<_i155.ProfileRepository>(

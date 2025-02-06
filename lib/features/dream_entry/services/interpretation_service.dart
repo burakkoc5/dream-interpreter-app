@@ -16,7 +16,7 @@ class InterpretationService {
     try {
       final profile = getIt<ProfileCubit>().state.profile;
 
-      final interpretation = await _openAIService.generateMockInterpretation(
+      final interpretation = await _openAIService.generateInterpretation(
         dreamContent,
         gender: profile?.gender,
         horoscope: profile?.horoscope,

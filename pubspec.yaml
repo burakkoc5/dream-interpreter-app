@@ -75,7 +75,6 @@ dependencies:
   uuid: ^4.0.0
 
   share_plus: ^10.1.4
-  speech_to_text: ^6.5.1
   flutter_local_notifications: ^18.0.1
   timezone: ^0.10.0
   flutter_timezone: ^4.0.0
@@ -85,6 +84,7 @@ dependencies:
   iconsax_flutter: ^1.0.0
   rxdart: ^0.27.7
   path_provider: ^2.1.5
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -113,11 +113,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  optimize-android: true
-  tree-shake-icons: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/
     - assets/images/
     - assets/images/onboarding/

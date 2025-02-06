@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:injectable/injectable.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
 import '../exceptions/interpretation_exception.dart';
+import 'package:dream/config/language/language_cubit.dart';
 
 /// Service responsible for interacting with OpenAI API
 @injectable
@@ -9,8 +13,10 @@ class OpenAIService {
   final String apiKey;
   final String model = 'gpt-4';
   final String baseUrl = 'https://api.openai.com/v1/chat/completions';
+  final LanguageCubit _languageCubit;
 
-  OpenAIService() : apiKey = '';
+  OpenAIService(this._languageCubit)
+      : apiKey = dotenv.env['OPEN_API_KEY'] ?? '';
 
   /// Generates dream interpretation using OpenAI API
   Future<String> generateInterpretation(
@@ -23,6 +29,15 @@ class OpenAIService {
     List<String>? interests,
   }) async {
     try {
+      final currentLanguage = _languageCubit.state;
+      if (apiKey.isEmpty) {
+        throw InterpretationException(
+            'OpenAI API key is not configured. Please check your .env file.');
+      }
+
+      debugPrint(
+          'Making API request with key starting with: ${apiKey.substring(0, 4)}...');
+
       // Build personal context string
       final List<String> personalContext = [];
       if (gender != null) personalContext.add('Gender: $gender');
@@ -39,71 +54,75 @@ class OpenAIService {
         personalContext.add('Interests: ${interests.join(", ")}');
       }
 
+      final requestBody = jsonEncode({
+        'model': model,
+        'messages': [
+          {
+            'role': 'system',
+            'content':
+                '''IMPORTANT: You must provide your entire response in ${currentLanguage.languageCode} language.
+
+            You are a wise and empathetic dream interpreter who provides personalized dream 
+            interpretations with a storyteller's touch. Your interpretations should flow 
+            naturally like a conversation, weaving together symbols, meanings, and personal 
+            context into an engaging narrative.
+            
+            Maintain a warm, insightful tone throughout the interpretation, as if you're having 
+            a deep, meaningful conversation with the dreamer. After the main interpretation, 
+            naturally transition into suggesting practical insights or actions while maintaining 
+            the same engaging tone.
+
+            Remember: The entire response MUST be in ${currentLanguage.languageCode} language.'''
+          },
+          {
+            'role': 'user',
+            'content': '''[Response language: ${currentLanguage.languageCode}]
+
+            Personal Context:
+            ${personalContext.join('\n')}
+            
+            Please interpret this dream with deep insight and personal connection:
+            
+            Dream: $dreamContent
+            
+            Weave together the symbolic meanings, personal circumstances, and potential life 
+            connections into a flowing narrative. Then, naturally transition into suggesting 
+            some practical insights or actions that might be helpful for the dreamer.
+
+            Important: Provide your complete response in ${currentLanguage.languageCode} language.
+            '''
+          }
+        ],
+        'temperature': 0.7,
+      });
+
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
           'Authorization': 'Bearer $apiKey',
+          HttpHeaders.acceptCharsetHeader: 'utf-8',
         },
-        body: jsonEncode({
-          'model': model,
-          'messages': [
-            {
-              'role': 'system',
-              'content':
-                  '''You are a dream interpretation expert who provides personalized interpretations based on the dreamer's personal context.
-              Consider how their personal circumstances, life stage, and interests might influence the dream's meaning.'''
-            },
-            {
-              'role': 'user',
-              'content': '''
-              Personal Context:
-              ${personalContext.join('\n')}
-              
-              Analyze the following dream and provide a personalized interpretation:
-              
-              Dream: $dreamContent
-              
-              Please provide:
-              1. Key symbols and their meanings (considering personal context)
-              2. Overall interpretation (tailored to the individual's circumstances)
-              3. Potential life connections (relating to their current life situation)
-              4. Actionable insights (based on their interests and life stage)
-              '''
-            }
-          ],
-          'temperature': 0.7,
-        }),
+        body: requestBody,
       );
 
+      debugPrint('API Response Status Code: ${response.statusCode}');
+      debugPrint('API Response Body: ${utf8.decode(response.bodyBytes)}');
+
+      if (response.statusCode == 401) {
+        throw InterpretationException(
+            'Authentication failed: Please check if your OpenAI API key is valid and properly configured in .env file.');
+      }
+
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = jsonDecode(utf8.decode(response.bodyBytes));
         return data['choices'][0]['message']['content'];
       } else {
         throw InterpretationException(
-            'API Error: ${response.statusCode} - ${response.body}');
+            'API Error: ${response.statusCode} - ${utf8.decode(response.bodyBytes)}');
       }
     } catch (e) {
       throw InterpretationException('Failed to generate interpretation: $e');
     }
-  }
-
-  Future<String> generateMockInterpretation(
-    String dreamContent, {
-    String? gender,
-    String? horoscope,
-    String? occupation,
-    String? relationshipStatus,
-    DateTime? birthDate,
-    List<String>? interests,
-  }) async {
-    return Future.delayed(Duration(seconds: 2), () {
-      return '''
-      Key symbols: Water, boat, lighthouse (interpreted in context of ${occupation ?? 'your'} career journey)
-      Overall interpretation: Given your ${relationshipStatus ?? 'current'} status and interest in ${interests?.firstOrNull ?? 'personal growth'}, this dream suggests you are navigating through a significant life transition.
-      Potential life connections: As a ${horoscope ?? 'person'} in ${occupation ?? 'your field'}, the dream may reflect your professional aspirations and emotional journey.
-      Actionable insights: Consider exploring ${interests?.firstOrNull ?? 'meditation'} to help navigate this period of change.
-      ''';
-    });
   }
 }
