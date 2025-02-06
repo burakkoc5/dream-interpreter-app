@@ -54,14 +54,101 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOutCubic,
       );
     } else {
-      _completeOnboarding();
+      _onFinish();
     }
   }
 
-  Future<void> _completeOnboarding() async {
-    await context.read<OnboardingCubit>().completeOnboarding();
-    if (!mounted) return;
-    context.go(AppRoute.login);
+  void _onFinish() async {
+    final confirmed = await _showDataCollectionConsent();
+    if (!confirmed) return;
+
+    if (mounted) {
+      context.read<OnboardingCubit>().completeOnboarding();
+      context.go(AppRoute.dreamEntry);
+    }
+  }
+
+  Future<bool> _showDataCollectionConsent() async {
+    final theme = Theme.of(context);
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Data Collection Consent',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'To provide you with the best dream journaling experience, we collect and process the following data:',
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 16),
+              _buildConsentItem(
+                theme,
+                '• Dream entries and interpretations for providing personalized insights',
+              ),
+              _buildConsentItem(
+                theme,
+                '• Profile information for customizing your experience',
+              ),
+              _buildConsentItem(
+                theme,
+                '• App usage data for improving our services',
+              ),
+              _buildConsentItem(
+                theme,
+                '• Device information for analytics and troubleshooting',
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'You can manage your data privacy settings and withdraw consent at any time through the app settings.',
+                style: theme.textTheme.bodyMedium,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              'Decline',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: theme.colorScheme.error,
+              ),
+            ),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(
+              'Accept',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: theme.colorScheme.onPrimary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    return result ?? false;
+  }
+
+  Widget _buildConsentItem(ThemeData theme, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Text(
+        text,
+        style: theme.textTheme.bodyMedium?.copyWith(
+          height: 1.4,
+        ),
+      ),
+    );
   }
 
   Color _colorFromString(String colorString) {

@@ -185,6 +185,20 @@ class SettingsItemWidget extends StatelessWidget {
               _buildDivider(context),
               _buildSettingItem(
                 context,
+                icon: Icons.privacy_tip_outlined,
+                title: 'Privacy Policy',
+                onTap: () => _showPrivacyPolicy(context),
+              ),
+              _buildDivider(context),
+              _buildSettingItem(
+                context,
+                icon: Icons.security,
+                title: 'Data Privacy Settings',
+                onTap: () => _showDataPrivacySettings(context),
+              ),
+              _buildDivider(context),
+              _buildSettingItem(
+                context,
                 icon: Icons.lock,
                 title: t.profile.changePassword,
                 onTap: () => context.push(AppRoute.changePassword),
@@ -305,6 +319,199 @@ class SettingsItemWidget extends StatelessWidget {
     if (confirmed == true && context.mounted) {
       await context.read<AuthCubit>().deleteAccount(context);
     }
+  }
+
+  Future<void> _showPrivacyPolicy(BuildContext context) async {
+    final theme = Theme.of(context);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Privacy Policy',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Data Collection and Usage',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'We collect and process the following data:\n'
+                '• Dream entries and interpretations\n'
+                '• Profile information you provide\n'
+                '• App usage statistics\n'
+                '• Device information for analytics',
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Advertising',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'We use rewarded ads that you can choose to watch for additional dream interpretations. These ads are provided by Google AdMob and follow their privacy policies.',
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Data Protection',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Your data is securely stored and protected. We implement appropriate security measures to prevent unauthorized access.',
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Your Rights',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'You have the right to:\n'
+                '• Access your data\n'
+                '• Request data deletion\n'
+                '• Opt out of data collection\n'
+                '• Export your data',
+                style: theme.textTheme.bodyMedium,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              t.common.confirm,
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: theme.colorScheme.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showDataPrivacySettings(BuildContext context) async {
+    final theme = Theme.of(context);
+    final profile = context.read<ProfileCubit>().state.profile;
+    if (profile == null) return;
+
+    bool analyticsEnabled = profile.preferences['analyticsEnabled'] ?? true;
+    bool personalizationEnabled =
+        profile.preferences['personalizationEnabled'] ?? true;
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text(
+            'Data Privacy Settings',
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SwitchListTile(
+                title: Text(
+                  'Analytics Collection',
+                  style: theme.textTheme.titleMedium,
+                ),
+                subtitle: Text(
+                  'Allow collection of app usage data to improve our services',
+                  style: theme.textTheme.bodySmall,
+                ),
+                value: analyticsEnabled,
+                onChanged: (value) {
+                  setState(() => analyticsEnabled = value);
+                },
+              ),
+              SwitchListTile(
+                title: Text(
+                  'Personalization',
+                  style: theme.textTheme.titleMedium,
+                ),
+                subtitle: Text(
+                  'Allow data processing for personalized dream interpretations',
+                  style: theme.textTheme.bodySmall,
+                ),
+                value: personalizationEnabled,
+                onChanged: (value) {
+                  setState(() => personalizationEnabled = value);
+                },
+              ),
+              const SizedBox(height: 16),
+              OutlinedButton(
+                onPressed: () => _exportUserData(context),
+                child: Text(
+                  'Export My Data',
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                t.common.cancel,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+            ),
+            FilledButton(
+              onPressed: () {
+                context.read<ProfileCubit>().updateProfilePreferences({
+                  'analyticsEnabled': analyticsEnabled,
+                  'personalizationEnabled': personalizationEnabled,
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                t.common.confirm,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _exportUserData(BuildContext context) async {
+    // TODO: Implement data export functionality
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content:
+            Text('Your data export will be emailed to you within 24 hours.'),
+      ),
+    );
   }
 
   Widget _buildSettingItem(
