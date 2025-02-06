@@ -53,8 +53,7 @@ android {
         
         // Add namespace for Google Mobile Ads
         manifestPlaceholders = [
-            'ADMOB_APP_ID': 'ca-app-pub-3940256099942544~3347511713', // This is the test app ID
-            'applicationName': 'io.flutter.app.FlutterApplication'
+            'ADMOB_APP_ID': 'ca-app-pub-3050203180638875~3585229669' // This is the test app ID
         ]
     }
 

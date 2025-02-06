@@ -14,7 +14,7 @@ class LoadingScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -24,7 +24,7 @@ class LoadingScreen extends StatelessWidget {
                 Text(
                   title!,
                   style: theme.textTheme.headlineMedium?.copyWith(
-                    color: colorScheme.onBackground,
+                    color: colorScheme.onSurface,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

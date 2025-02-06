@@ -77,34 +77,146 @@ Future<void> initializeLocalization() async {
   }
 }
 
+Future<void> initializeApp() async {
+  try {
+    try {
+      await dotenv.load(fileName: ".env");
+      debugPrint('✓ Environment variables loaded');
+    } catch (e) {
+      debugPrint('❌ Failed to load environment variables: $e');
+      // Continue even if .env fails - we have fallback values
+    }
+
+    try {
+      WidgetsFlutterBinding.ensureInitialized();
+      debugPrint('✓ Flutter binding initialized');
+    } catch (e) {
+      debugPrint('❌ Failed to initialize Flutter binding: $e');
+      rethrow;
+    }
+
+    try {
+      await MobileAds.instance.initialize();
+      debugPrint('✓ Mobile ads initialized');
+    } catch (e) {
+      debugPrint('❌ Failed to initialize Mobile Ads: $e');
+      // Continue even if ads fail
+    }
+
+    try {
+      await initializeFirebase();
+      debugPrint('✓ Firebase initialized');
+    } catch (e) {
+      debugPrint('❌ Failed to initialize Firebase: $e');
+      rethrow;
+    }
+
+    try {
+      configureCrashlytics();
+      await FirebaseCrashlytics.instance
+          .setCrashlyticsCollectionEnabled(!kDebugMode);
+      debugPrint('✓ Crashlytics configured');
+    } catch (e) {
+      debugPrint('❌ Failed to configure Crashlytics: $e');
+      // Continue even if Crashlytics fails
+    }
+
+    try {
+      await configureDependencies();
+      debugPrint('✓ Dependencies configured');
+    } catch (e) {
+      debugPrint('❌ Failed to configure dependencies: $e');
+      rethrow;
+    }
+
+    try {
+      await handleFirstInstall();
+      debugPrint('✓ First install handled');
+    } catch (e) {
+      debugPrint('❌ Failed to handle first install: $e');
+      // Continue even if first install handling fails
+    }
+
+    try {
+      final notificationRepository = getIt<NotificationRepository>();
+      await notificationRepository.initialize();
+      debugPrint('✓ Notifications initialized');
+    } catch (e) {
+      debugPrint('❌ Failed to initialize notifications: $e');
+      // Continue even if notifications fail
+    }
+
+    try {
+      await initializeLocalization();
+      debugPrint('✓ Localization initialized');
+    } catch (e) {
+      debugPrint('❌ Failed to initialize localization: $e');
+      // Continue even if localization fails
+    }
+  } catch (e, stack) {
+    debugPrint('❌ Fatal error during initialization: $e');
+    if (!kDebugMode) {
+      await FirebaseCrashlytics.instance.recordError(e, stack);
+    }
+    rethrow;
+  }
+}
+
 void main() async {
-  configureDebugPrints();
+  try {
+    configureDebugPrints();
+    await initializeApp();
 
-  await dotenv.load(fileName: ".env");
-
-  WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
-
-  await initializeFirebase();
-  configureCrashlytics();
-  await FirebaseCrashlytics.instance
-      .setCrashlyticsCollectionEnabled(!kDebugMode);
-
-  await configureDependencies();
-  await handleFirstInstall();
-
-  final notificationRepository = getIt<NotificationRepository>();
-  await notificationRepository.initialize();
-
-  await initializeLocalization();
-
-  runApp(
-    TranslationProvider(
-      child: ErrorBoundary(
-        child: MyApp(),
+    runApp(
+      TranslationProvider(
+        child: ErrorBoundary(
+          child: MyApp(),
+        ),
       ),
-    ),
-  );
+    );
+  } catch (e, stack) {
+    debugPrint('Fatal error during app startup: $e');
+    if (!kDebugMode) {
+      await FirebaseCrashlytics.instance.recordError(e, stack);
+    }
+    runApp(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, color: Colors.red, size: 48),
+                  SizedBox(height: 16),
+                  Text(
+                    'Failed to start the app',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  if (kDebugMode) ...[
+                    SizedBox(height: 8),
+                    Text(
+                      e.toString(),
+                      style: TextStyle(fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      main();
+                    },
+                    child: Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
